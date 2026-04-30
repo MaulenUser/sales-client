@@ -1,0 +1,22 @@
+{
+  "generated_at": "2026-04-10T12:00:00Z",
+  "totals": {
+    "requests": 247,
+    "total_tokens": 1842600,
+    "input_tokens": 1534800,
+    "output_tokens": 307800,
+    "audio_input_tokens": 412000
+  },
+  "by_stage": [
+    { "name": "transcription", "requests": 54, "total_tokens": 412000, "input_tokens": 412000, "output_tokens": 0 },
+    { "name": "call_features", "requests": 54, "total_tokens": 648000, "input_tokens": 540000, "output_tokens": 108000 },
+    { "name": "whatsapp_features", "requests": 28, "total_tokens": 252000, "input_tokens": 210000, "output_tokens": 42000 },
+    { "name": "aggregate", "requests": 1, "total_tokens": 86400, "input_tokens": 72000, "output_tokens": 14400 },
+    { "name": "report", "requests": 1, "total_tokens": 444200, "input_tokens": 300800, "output_tokens": 143400 }
+  ],
+  "by_model": [
+    { "name": "whisper-1", "requests": 54, "total_tokens": 412000, "input_tokens": 412000, "output_tokens": 0 },
+    { "name": "gpt-4o-mini", "requests": 82, "total_tokens": 900000, "input_tokens": 750000, "output_tokens": 150000 },
+    { "name": "gpt-4o", "requests": 2, "total_tokens": 530600, "input_tokens": 372800, "output_tokens": 157800 }
+  ]
+}

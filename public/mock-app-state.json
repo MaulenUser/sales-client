@@ -1,0 +1,165 @@
+{
+  "setup": {
+    "business_profile": {
+      "company_name": "ООО Sapaplast",
+      "website_url": "sapaplast.kz",
+      "instagram_url": "https://instagram.com/sapaplast",
+      "main_offer": "Пластиковые трубы",
+      "price_list": "Пластиковые трубы, фитинги, монтажные комплекты",
+      "average_ticket_kzt": "250000"
+    },
+    "integrations": [
+      {
+        "status": "connected",
+        "label": "Bitrix24 CRM",
+        "description": "Синхронизация работает стабильно"
+      }
+    ],
+    "analysis_launcher": {
+      "available_managers": [
+        { "id": "8", "label": "Жасуан Менеджер", "interaction_count": 28 },
+        { "id": "18", "label": "Жандос Менеджер", "interaction_count": 41 },
+        { "id": "98", "label": "Альханов Ruslan / директор Алматы", "interaction_count": 9 },
+        { "id": "124", "label": "Логист склад Алматы", "interaction_count": 0 },
+        { "id": "131", "label": "Кладовщик выдача", "interaction_count": 0 }
+      ],
+      "available_categories": [
+        { "id": "0", "label": "Главная первая воронка", "interaction_count": 78, "deal_count": 92 },
+        { "id": "1", "label": "Повторные продажи", "interaction_count": 24, "deal_count": 30 }
+      ],
+      "date_range": {
+        "from": "2026-03-01",
+        "to": "2026-04-19"
+      },
+      "date_field_label": "Дата завершения",
+      "default_filters": {
+        "employee_scope": "all",
+        "manager_ids": [],
+        "category_ids": ["0"],
+        "period_from": "2026-03-11",
+        "period_to": "2026-04-07"
+      }
+    }
+  },
+  "history": {
+    "latest_run_id": "run-mock-20260419-01",
+    "summary": {
+      "total_runs": 4,
+      "latest_cost_kzt": 5879,
+      "latest_target_rate": 51.7,
+      "latest_need_identified_rate": 62.1
+    },
+    "runs": [
+      {
+        "id": "run-mock-20260419-01",
+        "title": "AI аудит: Все сотрудники / Главная первая воронка",
+        "created_at": "2026-04-19T11:15:00Z",
+        "scope_label": "Все сотрудники / Главная первая воронка",
+        "filters": {
+          "period_from": "2026-03-11",
+          "period_to": "2026-04-07",
+          "manager_ids": [],
+          "category_ids": ["0"],
+          "channels": ["call", "whatsapp"]
+        },
+        "quote": {
+          "estimated_cost_kzt": 5879,
+          "estimated_tokens": 40035
+        },
+        "metric_snapshot": {
+          "target_rate": 51.7,
+          "actionable_rate": 55.2,
+          "need_identified_rate": 62.1,
+          "next_step_rate": 20.7
+        },
+        "summary_path": "./mock-aggregate-summary.json",
+        "interaction_path": "./mock-interaction-index.json",
+        "report_path": "./mock-sales-report.md"
+      },
+      {
+        "id": "run-mock-20260416-01",
+        "title": "AI аудит: Менеджер #18 / Главная первая воронка",
+        "created_at": "2026-04-16T10:20:00Z",
+        "scope_label": "Менеджер #18 / Главная первая воронка",
+        "filters": {
+          "period_from": "2026-03-10",
+          "period_to": "2026-04-06",
+          "manager_ids": ["18"],
+          "responsible_ids": ["18"],
+          "category_ids": ["0"],
+          "channels": ["call", "whatsapp"]
+        },
+        "quote": {
+          "estimated_cost_kzt": 4320,
+          "estimated_tokens": 29840
+        },
+        "metric_snapshot": {
+          "target_rate": 49.1,
+          "actionable_rate": 51.6,
+          "need_identified_rate": 57.4,
+          "next_step_rate": 18.3
+        },
+        "summary_path": "./mock-aggregate-summary.json",
+        "interaction_path": "./mock-interaction-index.json",
+        "report_path": "./mock-sales-report.md"
+      },
+      {
+        "id": "run-mock-20260410-01",
+        "title": "AI аудит: Все сотрудники / Повторные продажи",
+        "created_at": "2026-04-10T09:40:00Z",
+        "scope_label": "Все сотрудники / Повторные продажи",
+        "filters": {
+          "period_from": "2026-03-01",
+          "period_to": "2026-03-31",
+          "manager_ids": [],
+          "category_ids": ["1"],
+          "channels": ["call", "whatsapp"]
+        },
+        "quote": {
+          "estimated_cost_kzt": 3890,
+          "estimated_tokens": 24110
+        },
+        "metric_snapshot": {
+          "target_rate": 46.8,
+          "actionable_rate": 48.2,
+          "need_identified_rate": 53.9,
+          "next_step_rate": 16.1
+        },
+        "summary_path": "./mock-aggregate-summary.json",
+        "interaction_path": "./mock-interaction-index.json",
+        "report_path": "./mock-sales-report.md"
+      },
+      {
+        "id": "run-mock-20260401-01",
+        "title": "AI аудит: Менеджер #8 / Главная первая воронка",
+        "created_at": "2026-04-01T12:05:00Z",
+        "scope_label": "Менеджер #8 / Главная первая воронка",
+        "filters": {
+          "period_from": "2026-02-20",
+          "period_to": "2026-03-20",
+          "manager_ids": ["8"],
+          "responsible_ids": ["8"],
+          "category_ids": ["0"],
+          "channels": ["call", "whatsapp"]
+        },
+        "quote": {
+          "estimated_cost_kzt": 3560,
+          "estimated_tokens": 22150
+        },
+        "metric_snapshot": {
+          "target_rate": 43.0,
+          "actionable_rate": 44.7,
+          "need_identified_rate": 48.4,
+          "next_step_rate": 15.0
+        },
+        "summary_path": "./mock-aggregate-summary.json",
+        "interaction_path": "./mock-interaction-index.json",
+        "report_path": "./mock-sales-report.md"
+      }
+    ]
+  },
+  "latest_run": {
+    "id": "run-mock-20260419-01",
+    "title": "AI аудит: Все сотрудники / Главная первая воронка"
+  }
+}

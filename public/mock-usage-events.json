@@ -1,0 +1,14 @@
+[
+  { "event_at": "2026-04-10T10:01:00Z", "stage": "transcription", "model": "whisper-1", "input_tokens": 8200, "output_tokens": 0, "total_tokens": 8200 },
+  { "event_at": "2026-04-10T10:03:00Z", "stage": "call_features", "model": "gpt-4o-mini", "input_tokens": 10400, "output_tokens": 2100, "total_tokens": 12500 },
+  { "event_at": "2026-04-10T10:05:00Z", "stage": "transcription", "model": "whisper-1", "input_tokens": 7600, "output_tokens": 0, "total_tokens": 7600 },
+  { "event_at": "2026-04-10T10:06:00Z", "stage": "call_features", "model": "gpt-4o-mini", "input_tokens": 9800, "output_tokens": 1900, "total_tokens": 11700 },
+  { "event_at": "2026-04-10T10:14:00Z", "stage": "whatsapp_features", "model": "gpt-4o-mini", "input_tokens": 7200, "output_tokens": 1400, "total_tokens": 8600 },
+  { "event_at": "2026-04-10T10:18:00Z", "stage": "whatsapp_features", "model": "gpt-4o-mini", "input_tokens": 8100, "output_tokens": 1600, "total_tokens": 9700 },
+  { "event_at": "2026-04-10T10:35:00Z", "stage": "aggregate", "model": "gpt-4o-mini", "input_tokens": 72000, "output_tokens": 14400, "total_tokens": 86400 },
+  { "event_at": "2026-04-10T10:42:00Z", "stage": "report", "model": "gpt-4o", "input_tokens": 300800, "output_tokens": 143400, "total_tokens": 444200 },
+  { "event_at": "2026-04-10T11:00:00Z", "stage": "call_features", "model": "gpt-4o-mini", "input_tokens": 11200, "output_tokens": 2300, "total_tokens": 13500 },
+  { "event_at": "2026-04-10T11:04:00Z", "stage": "transcription", "model": "whisper-1", "input_tokens": 9400, "output_tokens": 0, "total_tokens": 9400 },
+  { "event_at": "2026-04-10T11:15:00Z", "stage": "whatsapp_features", "model": "gpt-4o-mini", "input_tokens": 6800, "output_tokens": 1300, "total_tokens": 8100 },
+  { "event_at": "2026-04-10T11:30:00Z", "stage": "call_features", "model": "gpt-4o-mini", "input_tokens": 10100, "output_tokens": 2000, "total_tokens": 12100 }
+]

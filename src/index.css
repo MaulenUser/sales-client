@@ -1,0 +1,282 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 8 11 18;
+    --foreground: 255 255 255;
+    --card: 15 19 30;
+    --card-foreground: 255 255 255;
+    --sidebar: 8 11 18;
+    --sidebar-foreground: 180 195 215;
+    --muted: 20 25 42;
+    --muted-foreground: 110 128 158;
+    --primary: 52 168 90;
+    --primary-foreground: 255 255 255;
+    --secondary: 8 36 18;
+    --secondary-foreground: 74 222 128;
+    --accent: 0 210 255;
+    --accent-foreground: 8 11 18;
+    --border: 30 36 58;
+    --input: 15 19 30;
+    --ring: 52 168 90;
+    --destructive: 240 86 86;
+    --destructive-foreground: 255 255 255;
+    --chart-1: 52 168 90;
+    --chart-2: 74 222 128;
+    --chart-3: 0 210 255;
+    --chart-4: 246 192 60;
+    --chart-5: 240 86 86;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideLeft {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar { width: 3px; height: 3px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(52,168,90,0.3);
+  }
+
+  .animate-fade-up   { animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+  .animate-fade-up-1 { animation: fadeUp 0.5s 0.08s cubic-bezier(0.16,1,0.3,1) both; }
+  .animate-fade-up-2 { animation: fadeUp 0.5s 0.16s cubic-bezier(0.16,1,0.3,1) both; }
+  .animate-fade-up-3 { animation: fadeUp 0.5s 0.24s cubic-bezier(0.16,1,0.3,1) both; }
+  .animate-fade-up-4 { animation: fadeUp 0.5s 0.32s cubic-bezier(0.16,1,0.3,1) both; }
+  .animate-fade-in   { animation: fadeIn 0.35s ease both; }
+}
+
+@layer components {
+
+  /* ── Cards ────────────────────────── */
+  .widget-card {
+    @apply bg-card border border-border rounded-2xl;
+  }
+
+  .metric-card {
+    @apply widget-card p-6 flex flex-col justify-between relative overflow-hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .metric-card:hover {
+    transform: translateY(-2px);
+  }
+
+  /* ── Navigation ───────────────────── */
+  .nav-link {
+    @apply w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-normal relative;
+    color: rgba(255,255,255,0.5);
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+
+  .nav-link:hover {
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.85);
+  }
+
+  .nav-link.active {
+    background: rgba(52,168,90,0.1);
+    color: rgb(52,168,90);
+    box-shadow: inset 2px 0 0 rgb(52,168,90);
+  }
+
+  .nav-link.nav-link--primary {
+    @apply font-medium rounded-xl px-4 py-3;
+    background: linear-gradient(135deg, rgba(52,168,90,0.22) 0%, rgba(24,140,60,0.16) 100%);
+    color: rgb(74,222,128);
+    border: 1px solid rgba(52,168,90,0.2);
+    transition: all 0.2s ease;
+  }
+
+  .nav-link.nav-link--primary:hover {
+    background: linear-gradient(135deg, rgba(52,168,90,0.3) 0%, rgba(24,140,60,0.22) 100%);
+    color: rgb(74,222,128);
+    border-color: rgba(52,168,90,0.3);
+  }
+
+  .nav-link.nav-link--primary.active {
+    background: linear-gradient(135deg, rgba(52,168,90,0.28) 0%, rgba(24,140,60,0.2) 100%);
+    color: rgb(74,222,128);
+    box-shadow: none;
+  }
+
+  .menu-section-label {
+    @apply text-[9px] font-semibold font-mono uppercase;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.14em;
+  }
+
+  /* ── Buttons ──────────────────────── */
+  .cta-button {
+    @apply inline-flex items-center justify-center px-5 py-2.5 rounded-xl font-semibold font-mono text-[11px] uppercase text-white;
+    letter-spacing: 0.06em;
+    background: linear-gradient(135deg, rgba(52,168,90,0.9), rgba(24,140,60,0.9));
+    box-shadow: 0 4px 20px rgba(52,168,90,0.25);
+    transition: all 0.2s ease;
+  }
+
+  .cta-button:hover {
+    box-shadow: 0 6px 28px rgba(52,168,90,0.4);
+    transform: translateY(-1px);
+  }
+
+  .row-button {
+    @apply text-left;
+    color: rgba(255,255,255,0.5);
+    transition: color 0.15s ease;
+  }
+  .row-button:hover { color: rgba(255,255,255,0.9); }
+
+  /* ── Section labels ───────────────── */
+  .insight-kicker {
+    @apply text-[10px] font-semibold font-mono uppercase mb-4;
+    color: rgba(255,255,255,0.22);
+    letter-spacing: 0.14em;
+  }
+
+  .kpi-section-label {
+    @apply text-[10px] font-semibold font-mono uppercase mb-4;
+    color: rgba(255,255,255,0.22);
+    letter-spacing: 0.14em;
+  }
+
+  /* ── Alert ────────────────────────── */
+  .calls-alert {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    border-radius: 14px;
+    gap: 16px;
+    background: linear-gradient(135deg, rgba(234,179,8,0.06) 0%, rgba(234,179,8,0.02) 100%);
+    border: 1px solid rgba(234,179,8,0.12);
+    flex-wrap: wrap;
+  }
+
+  .calls-alert__copy { @apply flex flex-col gap-1 flex-1; }
+  .calls-alert__copy strong { font-weight: 500; color: rgba(255,255,255,0.9); }
+  .calls-alert__copy .muted { font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* ── Leader / Risk cards ──────────── */
+  .leader-card {
+    @apply widget-card p-5;
+  }
+  .leader-card__head { @apply flex items-center justify-between gap-4 mb-4; }
+  .leader-card__hint { font-size: 10px; color: rgba(255,255,255,0.35); line-height: 1.5; margin-top: 4px; }
+  .leader-card__value { font-size: 28px; font-weight: 300; letter-spacing: -0.02em; text-align: right; }
+  .leader-card__rate  { font-size: 9px; color: rgba(255,255,255,0.3); text-align: right; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+  .leader-card__stats { @apply flex flex-wrap gap-4 pt-3 border-t border-border; font-size: 10px; color: rgba(255,255,255,0.35); }
+  .leader-card__stats strong { color: rgba(255,255,255,0.85); font-weight: 500; }
+
+  .risk-card { @apply widget-card p-4; }
+  .risk-card--danger  { border-color: rgba(240,86,86,0.2); background: rgba(240,86,86,0.02); }
+  .risk-card--warning { border-color: rgba(246,192,60,0.2); background: rgba(246,192,60,0.02); }
+  .risk-card__head { @apply flex justify-between items-start gap-3 mb-2; }
+  .risk-card__head strong { color: rgba(255,255,255,0.85); font-size: 13px; font-weight: 500; }
+  .risk-card p { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.6; }
+
+  /* ── Badges ───────────────────────── */
+  .severity {
+    @apply inline-flex items-center px-2 py-0.5 rounded-md text-[8px] font-semibold font-mono uppercase border;
+    letter-spacing: 0.1em;
+  }
+  .severity--danger  { background: rgba(240,86,86,0.1); border-color: rgba(240,86,86,0.2); color: rgb(240,86,86); }
+  .severity--warning { background: rgba(246,192,60,0.1); border-color: rgba(246,192,60,0.2); color: rgb(246,192,60); }
+
+  /* ── Layout helpers ───────────────── */
+  .flow-grid { @apply grid grid-cols-2 @3xl:grid-cols-4 gap-4; }
+
+  .detail-block { @apply rounded-2xl border border-border p-5 mt-4; background: rgba(255,255,255,0.02); }
+  .detail-block h3 { @apply text-[9px] font-semibold font-mono uppercase mb-4; color: rgba(255,255,255,0.25); letter-spacing: 0.18em; }
+
+  .detail-meta { @apply text-[9px] font-mono uppercase mt-2; color: rgba(255,255,255,0.25); letter-spacing: 0.12em; }
+
+  .insight-banner__copy { @apply flex flex-col gap-2 flex-1; }
+  .insight-banner__copy strong { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.85); }
+  .insight-banner__copy p { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.6; }
+
+  .empty-state { @apply p-8 text-center; color: rgba(255,255,255,0.25); font-size: 13px; }
+
+  /* ── Data tables ──────────────────── */
+  .data-table-wrapper {
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.015);
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .data-table { @apply w-full; border-collapse: collapse; }
+
+  .data-table thead th {
+    @apply text-left font-semibold font-mono uppercase;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.3);
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .data-table tbody td {
+    padding: 14px 16px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    white-space: nowrap;
+  }
+
+  .data-table tbody tr {
+    transition: background 0.15s ease;
+    cursor: pointer;
+  }
+
+  .data-table tbody tr:hover td {
+    background: rgba(255,255,255,0.025);
+  }
+
+  .data-table tbody tr:last-child td { border-bottom: none; }
+}
+
+/* Glassmorphism overrides */
+.widget-card {
+  background: linear-gradient(145deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.01) 100%) !important;
+  border-color: rgba(255,255,255,0.06) !important;
+}
+
+.metric-card:hover {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+}
+
+.leader-card,
+.risk-card {
+  background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%) !important;
+  border-color: rgba(255,255,255,0.06) !important;
+}

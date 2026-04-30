@@ -1,0 +1,2181 @@
+{
+  "generated_at": "2026-04-19T12:10:00Z",
+  "analysis_scope": {
+    "mode": "analysis_run",
+    "label": "Все сотрудники / Главная первая воронка",
+    "period": {
+      "from": "2026-03-11",
+      "to": "2026-04-07",
+      "days": 28
+    },
+    "filters": {
+      "manager_ids": [],
+      "channels": [
+        "call",
+        "whatsapp"
+      ],
+      "category_ids": [
+        "0"
+      ]
+    }
+  },
+  "business_profile": {
+    "company_name": "",
+    "website_url": "",
+    "instagram_url": "",
+    "main_offer": "",
+    "price_list": "",
+    "average_ticket_kzt": 0,
+    "target_audience": "",
+    "advantages": "",
+    "promotions": "",
+    "industry": "",
+    "sales_context": "",
+    "owner_goal": "",
+    "key_services": [],
+    "updated_at": ""
+  },
+  "billing_quote": {
+    "rule_version": "mvp_kz_v1",
+    "filters": {
+      "title": "AI аудит: Все сотрудники / Главная первая воронка",
+      "period_from": "2026-03-11",
+      "period_to": "2026-04-07",
+      "manager_ids": [],
+      "channels": [
+        "call",
+        "whatsapp"
+      ],
+      "category_ids": [
+        "0"
+      ],
+      "scope_label": "Все сотрудники / Главная первая воронка",
+      "scope_mode": "whole_team"
+    },
+    "interaction_count": 29,
+    "call_count": 9,
+    "chat_count": 20,
+    "message_count": 154,
+    "matched_deal_count": 23,
+    "manager_count": 3,
+    "period_days": 28,
+    "estimated_tokens": 40035,
+    "estimated_cost_kzt": 5879,
+    "breakdown": [
+      {
+        "label": "Базовый запуск",
+        "value": 3000,
+        "unit": "KZT"
+      },
+      {
+        "label": "Звонки",
+        "value": 405,
+        "unit": "KZT"
+      },
+      {
+        "label": "Чаты",
+        "value": 400,
+        "unit": "KZT"
+      },
+      {
+        "label": "Сделки в выборке",
+        "value": 184,
+        "unit": "KZT"
+      },
+      {
+        "label": "Менеджеры",
+        "value": 1050,
+        "unit": "KZT"
+      },
+      {
+        "label": "Период",
+        "value": 840,
+        "unit": "KZT"
+      }
+    ],
+    "charge_policy_note": "Новый фильтр = новое списание. Даже если уже был анализ по всему отделу, отдельный срез по менеджеру считается новым запуском.",
+    "warning": "Фильтр по воронке недоступен для текущего экспорта: у обращений нет CATEGORY_ID, поэтому оценка посчитана по всем доступным обращениям выбранного периода."
+  },
+  "inputs": {
+    "interaction_rows": 29,
+    "deals_rows": 23,
+    "activity_rows": 393,
+    "call_rows": 9,
+    "whatsapp_rows": 20
+  },
+  "crm_context": {
+    "total_deals": 23,
+    "won_deals": 0,
+    "lost_deals": 2,
+    "open_deals": 21,
+    "won_amount_kzt": 0,
+    "whatsapp_deals": 19,
+    "deal_stage_distribution": [
+      {
+        "name": "NEW",
+        "count": 9,
+        "rate": 39.1
+      },
+      {
+        "name": "PREPARATION",
+        "count": 9,
+        "rate": 39.1
+      },
+      {
+        "name": "LOSE",
+        "count": 2,
+        "rate": 8.7
+      },
+      {
+        "name": "EXECUTING",
+        "count": 1,
+        "rate": 4.3
+      },
+      {
+        "name": "PREPAYMENT_INVOICE",
+        "count": 1,
+        "rate": 4.3
+      },
+      {
+        "name": "UC_FIZQTM",
+        "count": 1,
+        "rate": 4.3
+      }
+    ],
+    "deal_source_distribution": [
+      {
+        "name": "WhatsApp title",
+        "count": 19,
+        "rate": 100.0
+      }
+    ]
+  },
+  "overall": {
+    "total_interactions": 29,
+    "channel_distribution": [
+      {
+        "name": "whatsapp",
+        "count": 20,
+        "rate": 69.0
+      },
+      {
+        "name": "call",
+        "count": 9,
+        "rate": 31.0
+      }
+    ],
+    "target_interactions": 15,
+    "target_rate": 51.7,
+    "high_signal_interactions": 15,
+    "actionable_interactions": 16,
+    "actionable_rate": 55.2
+  },
+  "distributions": {
+    "relevance": [
+      {
+        "name": "target_client",
+        "count": 15,
+        "rate": 51.7
+      },
+      {
+        "name": "not_target_client",
+        "count": 14,
+        "rate": 48.3
+      }
+    ],
+    "outcome": [
+      {
+        "name": "not_target_client",
+        "count": 8,
+        "rate": 27.6
+      },
+      {
+        "name": "follow_up",
+        "count": 7,
+        "rate": 24.1
+      },
+      {
+        "name": "awaiting_response",
+        "count": 5,
+        "rate": 17.2
+      },
+      {
+        "name": "technical_or_short",
+        "count": 4,
+        "rate": 13.8
+      },
+      {
+        "name": "callback_requested",
+        "count": 2,
+        "rate": 6.9
+      },
+      {
+        "name": "qualified_interest",
+        "count": 2,
+        "rate": 6.9
+      },
+      {
+        "name": "not_interested",
+        "count": 1,
+        "rate": 3.4
+      }
+    ],
+    "client_interest": [
+      {
+        "name": "medium",
+        "count": 15,
+        "rate": 51.7
+      },
+      {
+        "name": "low",
+        "count": 7,
+        "rate": 24.1
+      },
+      {
+        "name": "unknown",
+        "count": 4,
+        "rate": 13.8
+      },
+      {
+        "name": "high",
+        "count": 3,
+        "rate": 10.3
+      }
+    ],
+    "client_emotion": [
+      {
+        "name": "neutral",
+        "count": 24,
+        "rate": 82.8
+      },
+      {
+        "name": "unknown",
+        "count": 4,
+        "rate": 13.8
+      },
+      {
+        "name": "positive",
+        "count": 1,
+        "rate": 3.4
+      }
+    ],
+    "primary_topics_top": [
+      {
+        "name": "Бухгалтерское сопровождение",
+        "count": 3,
+        "rate": 10.3
+      },
+      {
+        "name": "Бухгалтерское сопровождение для ИП и ТОО",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Ведение ИП",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Доступ к онлайн-банкингу",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Запрос бухгалтерских услуг",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Запрос информации о доверенности для онлайн-банкинга",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Запрос на получение коммерческого предложения",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Запрос на услугу \"Бухгалтерия под ключ\".",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Коды ГСВС и окэд",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Консультация по бухгалтерии для маркетплейса",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Консультация по налогам и бухгалтерии",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Консультация по открытию ТО и выбору налогового режима",
+        "count": 1,
+        "rate": 3.4
+      }
+    ],
+    "client_requests_top": [
+      {
+        "name": "Мне нужна консультация",
+        "count": 2,
+        "rate": 6.9
+      },
+      {
+        "name": "Вы работаете ли вы с банком?",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Запрос на консультацию по открытию ТО или ЕП и выбору налогового режима.",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Запрос о наличии мобильной версии у руководителя.",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Запросил информацию о получении доступа к онлайн-банкингу и о документе довериности.",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Интересует бухгалтерское сопровождение, можно перезвонить?",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Интересуюсь бухгалтерским сопровождением.",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Как получить доступ к онлайн-банкингу?",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Какой вариант открытия ИП или ТОО оптимальный с налоговой точки зрения?",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Клиент интересуется бухгалтерским сопровождением для ИП и ТОО.",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Клиент интересуется, входит ли в стоимость 70 000 ведение бухгалтерии и сдача годового отчета.",
+        "count": 1,
+        "rate": 3.4
+      },
+      {
+        "name": "Клиент не ответил на сообщения менеджера, вопросы осталось без ответа.",
+        "count": 1,
+        "rate": 3.4
+      }
+    ],
+    "tags_top": [
+      {
+        "name": "бухгалтерия",
+        "count": 11,
+        "rate": 16.7
+      },
+      {
+        "name": "ИП",
+        "count": 3,
+        "rate": 4.5
+      },
+      {
+        "name": "ТОО",
+        "count": 2,
+        "rate": 3.0
+      },
+      {
+        "name": "банк",
+        "count": 2,
+        "rate": 3.0
+      },
+      {
+        "name": "доверенность",
+        "count": 2,
+        "rate": 3.0
+      },
+      {
+        "name": "информация",
+        "count": 2,
+        "rate": 3.0
+      },
+      {
+        "name": "клиент",
+        "count": 2,
+        "rate": 3.0
+      },
+      {
+        "name": "консультация",
+        "count": 2,
+        "rate": 3.0
+      },
+      {
+        "name": "налоги",
+        "count": 2,
+        "rate": 3.0
+      },
+      {
+        "name": "Годовой отчет",
+        "count": 1,
+        "rate": 1.5
+      },
+      {
+        "name": "Услуги бухгалтерии",
+        "count": 1,
+        "rate": 1.5
+      },
+      {
+        "name": "бизнес",
+        "count": 1,
+        "rate": 1.5
+      },
+      {
+        "name": "бухгалтерские услуги",
+        "count": 1,
+        "rate": 1.5
+      },
+      {
+        "name": "договор",
+        "count": 1,
+        "rate": 1.5
+      },
+      {
+        "name": "документы",
+        "count": 1,
+        "rate": 1.5
+      }
+    ],
+    "objections_top": []
+  },
+  "qualification": {
+    "need_identified": {
+      "total": 29,
+      "yes_count": 18,
+      "no_count": 8,
+      "unknown_count": 3,
+      "yes_rate": 62.1,
+      "no_rate": 27.6
+    },
+    "budget_discussed": {
+      "total": 29,
+      "yes_count": 1,
+      "no_count": 7,
+      "unknown_count": 21,
+      "yes_rate": 3.4,
+      "no_rate": 24.1
+    },
+    "timeline_discussed": {
+      "total": 29,
+      "yes_count": 0,
+      "no_count": 4,
+      "unknown_count": 25,
+      "yes_rate": 0.0,
+      "no_rate": 13.8
+    },
+    "decision_maker_identified": {
+      "total": 29,
+      "yes_count": 10,
+      "no_count": 8,
+      "unknown_count": 11,
+      "yes_rate": 34.5,
+      "no_rate": 27.6
+    }
+  },
+  "sales_process": {
+    "manager_introduced_self": {
+      "total": 29,
+      "yes_count": 8,
+      "no_count": 20,
+      "unknown_count": 1,
+      "yes_rate": 27.6,
+      "no_rate": 69.0
+    },
+    "manager_asked_questions": {
+      "total": 29,
+      "yes_count": 12,
+      "no_count": 15,
+      "unknown_count": 2,
+      "yes_rate": 41.4,
+      "no_rate": 51.7
+    },
+    "manager_presented_service": {
+      "total": 29,
+      "yes_count": 13,
+      "no_count": 15,
+      "unknown_count": 1,
+      "yes_rate": 44.8,
+      "no_rate": 51.7
+    },
+    "manager_mentioned_promotion_or_usp": {
+      "code": "manager_mentioned_promotion_or_usp",
+      "label": "Упоминание акций / УТП",
+      "total": 29,
+      "yes_count": 0,
+      "no_count": 15,
+      "unknown_count": 14,
+      "yes_rate": 0.0,
+      "no_rate": 51.7
+    },
+    "manager_rushed_to_pitch": {
+      "total": 29,
+      "yes_count": 0,
+      "no_count": 27,
+      "unknown_count": 2,
+      "yes_rate": 0.0,
+      "no_rate": 93.1
+    },
+    "manager_agreed_next_step": {
+      "total": 29,
+      "yes_count": 6,
+      "no_count": 6,
+      "unknown_count": 17,
+      "yes_rate": 20.7,
+      "no_rate": 20.7
+    }
+  },
+  "quality_flags": {
+    "short_or_low_content": {
+      "total": 29,
+      "true_count": 11,
+      "false_count": 18,
+      "true_rate": 37.9
+    },
+    "non_sales_interaction": {
+      "total": 29,
+      "true_count": 12,
+      "false_count": 17,
+      "true_rate": 41.4
+    },
+    "fragmented_or_unclear": {
+      "total": 29,
+      "true_count": 10,
+      "false_count": 19,
+      "true_rate": 34.5
+    }
+  },
+  "channels": {
+    "call": {
+      "total_interactions": 9,
+      "relevance_distribution": [
+        {
+          "name": "not_target_client",
+          "count": 6,
+          "rate": 66.7
+        },
+        {
+          "name": "target_client",
+          "count": 3,
+          "rate": 33.3
+        }
+      ],
+      "outcome_distribution": [
+        {
+          "name": "not_target_client",
+          "count": 3,
+          "rate": 33.3
+        },
+        {
+          "name": "follow_up",
+          "count": 2,
+          "rate": 22.2
+        },
+        {
+          "name": "technical_or_short",
+          "count": 2,
+          "rate": 22.2
+        },
+        {
+          "name": "callback_requested",
+          "count": 1,
+          "rate": 11.1
+        },
+        {
+          "name": "not_interested",
+          "count": 1,
+          "rate": 11.1
+        }
+      ],
+      "topic_distribution_top": [
+        {
+          "name": "Бухгалтерское сопровождение",
+          "count": 1,
+          "rate": 11.1
+        },
+        {
+          "name": "Ведение ИП",
+          "count": 1,
+          "rate": 11.1
+        },
+        {
+          "name": "Консультация по открытию ТО и выбору налогового режима",
+          "count": 1,
+          "rate": 11.1
+        },
+        {
+          "name": "Неизвестно",
+          "count": 1,
+          "rate": 11.1
+        },
+        {
+          "name": "Непонятная беседа без явного запроса.",
+          "count": 1,
+          "rate": 11.1
+        },
+        {
+          "name": "Ответ на входящий звонок",
+          "count": 1,
+          "rate": 11.1
+        },
+        {
+          "name": "Составление договора для ИП.",
+          "count": 1,
+          "rate": 11.1
+        },
+        {
+          "name": "Сотрудничество с банком",
+          "count": 1,
+          "rate": 11.1
+        },
+        {
+          "name": "Технический вопрос по изменению доступа к системе.",
+          "count": 1,
+          "rate": 11.1
+        }
+      ],
+      "tag_distribution_top": [
+        {
+          "name": "бухгалтерия",
+          "count": 3,
+          "rate": 15.8
+        },
+        {
+          "name": "ИП",
+          "count": 1,
+          "rate": 5.3
+        },
+        {
+          "name": "банк",
+          "count": 1,
+          "rate": 5.3
+        },
+        {
+          "name": "договор",
+          "count": 1,
+          "rate": 5.3
+        },
+        {
+          "name": "дорожная разметка",
+          "count": 1,
+          "rate": 5.3
+        },
+        {
+          "name": "консультация",
+          "count": 1,
+          "rate": 5.3
+        },
+        {
+          "name": "краткий",
+          "count": 1,
+          "rate": 5.3
+        },
+        {
+          "name": "налоговый режим",
+          "count": 1,
+          "rate": 5.3
+        },
+        {
+          "name": "непонятный",
+          "count": 1,
+          "rate": 5.3
+        },
+        {
+          "name": "непродажный",
+          "count": 1,
+          "rate": 5.3
+        },
+        {
+          "name": "непродажный звонок",
+          "count": 1,
+          "rate": 5.3
+        },
+        {
+          "name": "непрямой",
+          "count": 1,
+          "rate": 5.3
+        }
+      ],
+      "client_interest_distribution": [
+        {
+          "name": "low",
+          "count": 3,
+          "rate": 33.3
+        },
+        {
+          "name": "medium",
+          "count": 3,
+          "rate": 33.3
+        },
+        {
+          "name": "unknown",
+          "count": 2,
+          "rate": 22.2
+        },
+        {
+          "name": "high",
+          "count": 1,
+          "rate": 11.1
+        }
+      ],
+      "direction_distribution": [
+        {
+          "name": "unknown",
+          "count": 9,
+          "rate": 100.0
+        }
+      ],
+      "owner_type_distribution": [
+        {
+          "name": "2",
+          "count": 8,
+          "rate": 88.9
+        },
+        {
+          "name": "3",
+          "count": 1,
+          "rate": 11.1
+        }
+      ],
+      "matched_deal_stage_distribution": [
+        {
+          "name": "NEW",
+          "count": 3,
+          "rate": 42.9
+        },
+        {
+          "name": "EXECUTING",
+          "count": 1,
+          "rate": 14.3
+        },
+        {
+          "name": "LOSE",
+          "count": 1,
+          "rate": 14.3
+        },
+        {
+          "name": "PREPARATION",
+          "count": 1,
+          "rate": 14.3
+        },
+        {
+          "name": "UC_FIZQTM",
+          "count": 1,
+          "rate": 14.3
+        }
+      ],
+      "matched_deal_source_distribution": [],
+      "audio_or_transcript_unclear": {
+        "total": 9,
+        "true_count": 2,
+        "false_count": 7,
+        "true_rate": 22.2
+      }
+    },
+    "whatsapp": {
+      "total_interactions": 20,
+      "relevance_distribution": [
+        {
+          "name": "target_client",
+          "count": 12,
+          "rate": 60.0
+        },
+        {
+          "name": "not_target_client",
+          "count": 8,
+          "rate": 40.0
+        }
+      ],
+      "outcome_distribution": [
+        {
+          "name": "awaiting_response",
+          "count": 5,
+          "rate": 25.0
+        },
+        {
+          "name": "follow_up",
+          "count": 5,
+          "rate": 25.0
+        },
+        {
+          "name": "not_target_client",
+          "count": 5,
+          "rate": 25.0
+        },
+        {
+          "name": "qualified_interest",
+          "count": 2,
+          "rate": 10.0
+        },
+        {
+          "name": "technical_or_short",
+          "count": 2,
+          "rate": 10.0
+        },
+        {
+          "name": "callback_requested",
+          "count": 1,
+          "rate": 5.0
+        }
+      ],
+      "topic_distribution_top": [
+        {
+          "name": "Бухгалтерское сопровождение",
+          "count": 2,
+          "rate": 10.0
+        },
+        {
+          "name": "Бухгалтерское сопровождение для ИП и ТОО",
+          "count": 1,
+          "rate": 5.0
+        },
+        {
+          "name": "Доступ к онлайн-банкингу",
+          "count": 1,
+          "rate": 5.0
+        },
+        {
+          "name": "Запрос бухгалтерских услуг",
+          "count": 1,
+          "rate": 5.0
+        },
+        {
+          "name": "Запрос информации о доверенности для онлайн-банкинга",
+          "count": 1,
+          "rate": 5.0
+        },
+        {
+          "name": "Запрос на получение коммерческого предложения",
+          "count": 1,
+          "rate": 5.0
+        },
+        {
+          "name": "Запрос на услугу \"Бухгалтерия под ключ\".",
+          "count": 1,
+          "rate": 5.0
+        },
+        {
+          "name": "Коды ГСВС и окэд",
+          "count": 1,
+          "rate": 5.0
+        },
+        {
+          "name": "Консультация по бухгалтерии для маркетплейса",
+          "count": 1,
+          "rate": 5.0
+        },
+        {
+          "name": "Консультация по налогам и бухгалтерии",
+          "count": 1,
+          "rate": 5.0
+        }
+      ],
+      "tag_distribution_top": [
+        {
+          "name": "бухгалтерия",
+          "count": 8,
+          "rate": 17.0
+        },
+        {
+          "name": "ИП",
+          "count": 2,
+          "rate": 4.3
+        },
+        {
+          "name": "ТОО",
+          "count": 2,
+          "rate": 4.3
+        },
+        {
+          "name": "доверенность",
+          "count": 2,
+          "rate": 4.3
+        },
+        {
+          "name": "информация",
+          "count": 2,
+          "rate": 4.3
+        },
+        {
+          "name": "клиент",
+          "count": 2,
+          "rate": 4.3
+        },
+        {
+          "name": "налоги",
+          "count": 2,
+          "rate": 4.3
+        },
+        {
+          "name": "Годовой отчет",
+          "count": 1,
+          "rate": 2.1
+        },
+        {
+          "name": "Услуги бухгалтерии",
+          "count": 1,
+          "rate": 2.1
+        },
+        {
+          "name": "банк",
+          "count": 1,
+          "rate": 2.1
+        },
+        {
+          "name": "бизнес",
+          "count": 1,
+          "rate": 2.1
+        },
+        {
+          "name": "бухгалтерские услуги",
+          "count": 1,
+          "rate": 2.1
+        }
+      ],
+      "client_interest_distribution": [
+        {
+          "name": "medium",
+          "count": 12,
+          "rate": 60.0
+        },
+        {
+          "name": "low",
+          "count": 4,
+          "rate": 20.0
+        },
+        {
+          "name": "high",
+          "count": 2,
+          "rate": 10.0
+        },
+        {
+          "name": "unknown",
+          "count": 2,
+          "rate": 10.0
+        }
+      ],
+      "stage_distribution": [
+        {
+          "name": "LOSE",
+          "count": 10,
+          "rate": 50.0
+        },
+        {
+          "name": "EXECUTING",
+          "count": 6,
+          "rate": 30.0
+        },
+        {
+          "name": "NEW",
+          "count": 2,
+          "rate": 10.0
+        },
+        {
+          "name": "FINAL_INVOICE",
+          "count": 1,
+          "rate": 5.0
+        },
+        {
+          "name": "UC_RO3B30",
+          "count": 1,
+          "rate": 5.0
+        }
+      ],
+      "chats_with_files": {
+        "total": 20,
+        "true_count": 8,
+        "false_count": 12,
+        "true_rate": 40.0
+      },
+      "avg_messages_per_chat": 7.7,
+      "fragmented_chat": {
+        "total": 20,
+        "true_count": 8,
+        "false_count": 12,
+        "true_rate": 40.0
+      }
+    }
+  },
+  "managers": [
+    {
+      "manager_id": "18",
+      "manager_label": "Менеджер #18",
+      "interactions": 20,
+      "call_count": 0,
+      "whatsapp_count": 20,
+      "target_count": 12,
+      "target_rate": 60.0,
+      "qualified_count": 2,
+      "actionable_count": 13,
+      "actionable_rate": 65.0,
+      "non_target_count": 8,
+      "short_count": 5,
+      "top_topics": [
+        {
+          "name": "Бухгалтерское сопровождение",
+          "count": 2,
+          "rate": 10.0
+        },
+        {
+          "name": "Бухгалтерское сопровождение для ИП и ТОО",
+          "count": 1,
+          "rate": 5.0
+        },
+        {
+          "name": "Доступ к онлайн-банкингу",
+          "count": 1,
+          "rate": 5.0
+        }
+      ],
+      "total_deals": 19,
+      "in_work_deals": 17,
+      "won_deals": 0,
+      "won_amount_kzt": 0,
+      "lost_deals": 2,
+      "response_speed": {
+        "manager_id": "18",
+        "manager_label": "Менеджер #18",
+        "deal_count": 19,
+        "measured_deals": 8,
+        "unmeasured_deals": 11,
+        "average_minutes": 4733.3,
+        "median_minutes": 1796.6,
+        "sla_15m_rate": 12.5,
+        "sla_60m_rate": 12.5
+      },
+      "task_discipline": {
+        "manager_id": "18",
+        "manager_label": "Менеджер #18",
+        "in_work_deals": 17,
+        "deals_with_active_tasks": 1,
+        "deals_without_tasks": 16,
+        "deals_with_overdue_tasks": 0,
+        "active_task_count": 1,
+        "without_tasks_rate": 94.1,
+        "overdue_tasks_rate": 0.0
+      },
+      "sales_stage_compliance": {
+        "manager_id": "18",
+        "manager_label": "Менеджер #18",
+        "stages": [
+          {
+            "code": "manager_introduced_self",
+            "label": "Установление контакта",
+            "total": 20,
+            "yes_count": 6,
+            "no_count": 14,
+            "unknown_count": 0,
+            "yes_rate": 30.0,
+            "no_rate": 70.0
+          },
+          {
+            "code": "need_identified",
+            "label": "Выявление потребности",
+            "total": 20,
+            "yes_count": 15,
+            "no_count": 3,
+            "unknown_count": 2,
+            "yes_rate": 75.0,
+            "no_rate": 15.0
+          },
+          {
+            "code": "manager_presented_service",
+            "label": "Презентация продукта",
+            "total": 20,
+            "yes_count": 9,
+            "no_count": 11,
+            "unknown_count": 0,
+            "yes_rate": 45.0,
+            "no_rate": 55.0
+          },
+          {
+            "code": "manager_mentioned_promotion_or_usp",
+            "label": "Упоминание акций / УТП",
+            "total": 20,
+            "yes_count": 0,
+            "no_count": 11,
+            "unknown_count": 9,
+            "yes_rate": 0.0,
+            "no_rate": 55.0
+          },
+          {
+            "code": "manager_agreed_next_step",
+            "label": "Попытка закрытия / следующий шаг",
+            "total": 20,
+            "yes_count": 3,
+            "no_count": 3,
+            "unknown_count": 14,
+            "yes_rate": 15.0,
+            "no_rate": 15.0
+          }
+        ],
+        "average_rate": 33.0
+      },
+      "lost_reasons_top": [
+        {
+          "name": "Нецелевой лид / не тот запрос",
+          "count": 2,
+          "rate": 100.0
+        }
+      ],
+      "rating": {
+        "value": 2.0,
+        "max": 10,
+        "score_100": 19.7,
+        "components": [
+          {
+            "label": "CRM-результат",
+            "score_100": 0.0,
+            "weight": 0.3
+          },
+          {
+            "label": "Этапы продаж",
+            "score_100": 33.0,
+            "weight": 0.4
+          },
+          {
+            "label": "Скорость реакции",
+            "score_100": 0.0,
+            "weight": 0.15
+          },
+          {
+            "label": "CRM-дисциплина",
+            "score_100": 43.5,
+            "weight": 0.15
+          }
+        ]
+      }
+    },
+    {
+      "manager_id": "8",
+      "manager_label": "Менеджер #8",
+      "interactions": 8,
+      "call_count": 8,
+      "whatsapp_count": 0,
+      "target_count": 3,
+      "target_rate": 37.5,
+      "qualified_count": 0,
+      "actionable_count": 3,
+      "actionable_rate": 37.5,
+      "non_target_count": 5,
+      "short_count": 5,
+      "top_topics": [
+        {
+          "name": "Бухгалтерское сопровождение",
+          "count": 1,
+          "rate": 12.5
+        },
+        {
+          "name": "Ведение ИП",
+          "count": 1,
+          "rate": 12.5
+        },
+        {
+          "name": "Консультация по открытию ТО и выбору налогового режима",
+          "count": 1,
+          "rate": 12.5
+        }
+      ],
+      "total_deals": 4,
+      "in_work_deals": 4,
+      "won_deals": 0,
+      "won_amount_kzt": 0,
+      "lost_deals": 0,
+      "response_speed": {
+        "manager_id": "8",
+        "manager_label": "Менеджер #8",
+        "deal_count": 4,
+        "measured_deals": 1,
+        "unmeasured_deals": 3,
+        "average_minutes": 1.6,
+        "median_minutes": 1.6,
+        "sla_15m_rate": 100.0,
+        "sla_60m_rate": 100.0
+      },
+      "task_discipline": {
+        "manager_id": "8",
+        "manager_label": "Менеджер #8",
+        "in_work_deals": 4,
+        "deals_with_active_tasks": 0,
+        "deals_without_tasks": 4,
+        "deals_with_overdue_tasks": 0,
+        "active_task_count": 0,
+        "without_tasks_rate": 100.0,
+        "overdue_tasks_rate": 0.0
+      },
+      "sales_stage_compliance": {
+        "manager_id": "8",
+        "manager_label": "Менеджер #8",
+        "stages": [
+          {
+            "code": "manager_introduced_self",
+            "label": "Установление контакта",
+            "total": 8,
+            "yes_count": 2,
+            "no_count": 5,
+            "unknown_count": 1,
+            "yes_rate": 25.0,
+            "no_rate": 62.5
+          },
+          {
+            "code": "need_identified",
+            "label": "Выявление потребности",
+            "total": 8,
+            "yes_count": 3,
+            "no_count": 4,
+            "unknown_count": 1,
+            "yes_rate": 37.5,
+            "no_rate": 50.0
+          },
+          {
+            "code": "manager_presented_service",
+            "label": "Презентация продукта",
+            "total": 8,
+            "yes_count": 4,
+            "no_count": 3,
+            "unknown_count": 1,
+            "yes_rate": 50.0,
+            "no_rate": 37.5
+          },
+          {
+            "code": "manager_mentioned_promotion_or_usp",
+            "label": "Упоминание акций / УТП",
+            "total": 8,
+            "yes_count": 0,
+            "no_count": 3,
+            "unknown_count": 5,
+            "yes_rate": 0.0,
+            "no_rate": 37.5
+          },
+          {
+            "code": "manager_agreed_next_step",
+            "label": "Попытка закрытия / следующий шаг",
+            "total": 8,
+            "yes_count": 3,
+            "no_count": 2,
+            "unknown_count": 3,
+            "yes_rate": 37.5,
+            "no_rate": 25.0
+          }
+        ],
+        "average_rate": 30.0
+      },
+      "lost_reasons_top": [],
+      "rating": {
+        "value": 4.4,
+        "max": 10,
+        "score_100": 44.2,
+        "components": [
+          {
+            "label": "CRM-результат",
+            "score_100": 37.5,
+            "weight": 0.3
+          },
+          {
+            "label": "Этапы продаж",
+            "score_100": 30.0,
+            "weight": 0.4
+          },
+          {
+            "label": "Скорость реакции",
+            "score_100": 100.0,
+            "weight": 0.15
+          },
+          {
+            "label": "CRM-дисциплина",
+            "score_100": 40.0,
+            "weight": 0.15
+          }
+        ]
+      }
+    },
+    {
+      "manager_id": "98",
+      "manager_label": "Менеджер #98",
+      "interactions": 1,
+      "call_count": 1,
+      "whatsapp_count": 0,
+      "target_count": 0,
+      "target_rate": 0.0,
+      "qualified_count": 0,
+      "actionable_count": 0,
+      "actionable_rate": 0.0,
+      "non_target_count": 1,
+      "short_count": 1,
+      "top_topics": [
+        {
+          "name": "Составление договора для ИП.",
+          "count": 1,
+          "rate": 100.0
+        }
+      ],
+      "total_deals": 0,
+      "in_work_deals": 0,
+      "won_deals": 0,
+      "won_amount_kzt": 0,
+      "lost_deals": 0,
+      "response_speed": {
+        "manager_id": "98",
+        "manager_label": "Менеджер #98",
+        "deal_count": 0,
+        "measured_deals": 0,
+        "unmeasured_deals": 0,
+        "average_minutes": 0.0,
+        "median_minutes": 0.0,
+        "sla_15m_rate": 0.0,
+        "sla_60m_rate": 0.0
+      },
+      "task_discipline": {
+        "manager_id": "98",
+        "manager_label": "Менеджер #98",
+        "in_work_deals": 0,
+        "deals_with_active_tasks": 0,
+        "deals_without_tasks": 0,
+        "deals_with_overdue_tasks": 0,
+        "active_task_count": 0,
+        "without_tasks_rate": 0.0,
+        "overdue_tasks_rate": 0.0
+      },
+      "sales_stage_compliance": {
+        "manager_id": "98",
+        "manager_label": "Менеджер #98",
+        "stages": [
+          {
+            "code": "manager_introduced_self",
+            "label": "Установление контакта",
+            "total": 1,
+            "yes_count": 0,
+            "no_count": 1,
+            "unknown_count": 0,
+            "yes_rate": 0.0,
+            "no_rate": 100.0
+          },
+          {
+            "code": "need_identified",
+            "label": "Выявление потребности",
+            "total": 1,
+            "yes_count": 0,
+            "no_count": 1,
+            "unknown_count": 0,
+            "yes_rate": 0.0,
+            "no_rate": 100.0
+          },
+          {
+            "code": "manager_presented_service",
+            "label": "Презентация продукта",
+            "total": 1,
+            "yes_count": 0,
+            "no_count": 1,
+            "unknown_count": 0,
+            "yes_rate": 0.0,
+            "no_rate": 100.0
+          },
+          {
+            "code": "manager_mentioned_promotion_or_usp",
+            "label": "Упоминание акций / УТП",
+            "total": 1,
+            "yes_count": 0,
+            "no_count": 1,
+            "unknown_count": 0,
+            "yes_rate": 0.0,
+            "no_rate": 100.0
+          },
+          {
+            "code": "manager_agreed_next_step",
+            "label": "Попытка закрытия / следующий шаг",
+            "total": 1,
+            "yes_count": 0,
+            "no_count": 1,
+            "unknown_count": 0,
+            "yes_rate": 0.0,
+            "no_rate": 100.0
+          }
+        ],
+        "average_rate": 0.0
+      },
+      "lost_reasons_top": [],
+      "rating": {
+        "value": 0.0,
+        "max": 10,
+        "score_100": 0.0,
+        "components": [
+          {
+            "label": "CRM-результат",
+            "score_100": 0.0,
+            "weight": 0.3
+          },
+          {
+            "label": "Этапы продаж",
+            "score_100": 0.0,
+            "weight": 0.4
+          }
+        ]
+      }
+    }
+  ],
+  "examples": {
+    "target_examples": [
+      {
+        "channel": "call",
+        "interaction_id": "call-004",
+        "manager_id": "18",
+        "primary_topic": "Услуги бухгалтера для ИП",
+        "outcome_status": "qualified_interest",
+        "relevance": "target_client",
+        "summary": "Клиент хочет бухгалтерское сопровождение и готов обсудить коммерческое предложение."
+      },
+      {
+        "channel": "whatsapp",
+        "interaction_id": "wa-004",
+        "manager_id": "18",
+        "primary_topic": "Бухгалтерские услуги для швейного цеха",
+        "outcome_status": "awaiting_response",
+        "relevance": "target_client",
+        "summary": "Клиент изучает предложение и ожидает обратной связи менеджера."
+      },
+      {
+        "channel": "call",
+        "interaction_id": "call-007",
+        "manager_id": "8",
+        "primary_topic": "Регистрация ИП и бухгалтерия",
+        "outcome_status": "follow_up",
+        "relevance": "target_client",
+        "summary": "Менеджер согласовал следующий шаг, клиент ждёт расчёт стоимости."
+      }
+    ],
+    "non_target_examples": [
+      {
+        "channel": "call",
+        "interaction_id": "call:758",
+        "manager_id": "8",
+        "primary_topic": "Сотрудничество с банком",
+        "outcome_status": "not_target_client",
+        "relevance": "not_target_client",
+        "summary": "Клиент из банка Центр Кредит интересуется сотрудничеством, но услуги компании ориентированы на юридических лиц.",
+        "file_path": "C:\\Users\\momir\\OneDrive\\Рабочий стол\\A12\\export-audio-bitrix\\export\\call-features\\features\\activity_758__record_372.json"
+      },
+      {
+        "channel": "call",
+        "interaction_id": "call:776",
+        "manager_id": "8",
+        "primary_topic": "Неизвестно",
+        "outcome_status": "technical_or_short",
+        "relevance": "not_target_client",
+        "summary": "Звонок не содержит содержательной информации для анализа.",
+        "file_path": "C:\\Users\\momir\\OneDrive\\Рабочий стол\\A12\\export-audio-bitrix\\export\\call-features\\features\\activity_776__record_378.json"
+      },
+      {
+        "channel": "call",
+        "interaction_id": "call:782",
+        "manager_id": "98",
+        "primary_topic": "Составление договора для ИП.",
+        "outcome_status": "not_target_client",
+        "relevance": "not_target_client",
+        "summary": "Клиент обратился по вопросу составления договора на услуги ИП.",
+        "file_path": "C:\\Users\\momir\\OneDrive\\Рабочий стол\\A12\\export-audio-bitrix\\export\\call-features\\features\\activity_782__record_380.json"
+      },
+      {
+        "channel": "call",
+        "interaction_id": "call:786",
+        "manager_id": "8",
+        "primary_topic": "Непонятная беседа без явного запроса.",
+        "outcome_status": "not_target_client",
+        "relevance": "not_target_client",
+        "summary": "Непонятный звонок, в основном состоящий из разговоров, не относящихся к продажам.",
+        "file_path": "C:\\Users\\momir\\OneDrive\\Рабочий стол\\A12\\export-audio-bitrix\\export\\call-features\\features\\activity_786__record_382.json"
+      }
+    ],
+    "actionable_examples": [
+      {
+        "channel": "call",
+        "interaction_id": "call-008",
+        "manager_id": "18",
+        "primary_topic": "Фиксация следующего шага",
+        "outcome_status": "callback_requested",
+        "relevance": "target_client",
+        "summary": "Клиент просил перезвонить через два дня; менеджеру нужно зафиксировать задачу и контрольный срок."
+      },
+      {
+        "channel": "whatsapp",
+        "interaction_id": "wa-002",
+        "manager_id": "8",
+        "primary_topic": "Запрос коммерческого предложения",
+        "outcome_status": "follow_up",
+        "relevance": "target_client",
+        "summary": "Есть прямой интерес к услуге, но менеджер не закрыл на конкретное действие."
+      }
+    ],
+    "awaiting_response_examples": [
+      {
+        "channel": "call",
+        "interaction_id": "call-002",
+        "manager_id": "18",
+        "primary_topic": "Запрос на услугу \"Бухгалтерия\"",
+        "outcome_status": "awaiting_response",
+        "relevance": "target_client",
+        "summary": "Клиент проявил интерес к услуге, менеджер пообещал предложение и ожидает обратной связи."
+      },
+      {
+        "channel": "whatsapp",
+        "interaction_id": "wa-003",
+        "manager_id": "18",
+        "primary_topic": "Запрос информации о мобильной версии",
+        "outcome_status": "awaiting_response",
+        "relevance": "target_client",
+        "summary": "Клиент отправил уточняющий вопрос, менеджер ответил благодарностью; нужно вернуть диалог к сути запроса."
+      },
+      {
+        "channel": "whatsapp",
+        "interaction_id": "wa-001",
+        "manager_id": "8",
+        "primary_topic": "Услуги бухгалтера для ИП",
+        "outcome_status": "awaiting_response",
+        "relevance": "target_client",
+        "summary": "Клиент ждет финальное предложение по услуге \"Бухгалтерия\"."
+      }
+    ]
+  },
+  "report_snapshot": {
+    "department_rating": {
+      "value": 1.9,
+      "max": 10,
+      "score_100": 18.8,
+      "components": [
+        {
+          "label": "CRM",
+          "score_100": 0.0,
+          "weight": 0.2
+        },
+        {
+          "label": "Этапы продаж",
+          "score_100": 31.0,
+          "weight": 0.2
+        },
+        {
+          "label": "Скорость реакции",
+          "score_100": 0.0,
+          "weight": 0.15
+        },
+        {
+          "label": "Дисциплина",
+          "score_100": 42.9,
+          "weight": 0.15
+        },
+        {
+          "label": "Переписки",
+          "score_100": 18.8,
+          "weight": 0.15
+        },
+        {
+          "label": "Звонки",
+          "score_100": 18.8,
+          "weight": 0.15
+        }
+      ]
+    },
+    "dashboard": {
+      "department": {
+        "total_deals": 23,
+        "in_work_deals": 21,
+        "won_deals": 0,
+        "won_amount_kzt": 0,
+        "lost_deals": 2,
+        "closed_deals": 2,
+        "closed_win_rate": 0.0
+      },
+      "by_manager": [
+        {
+          "manager_id": "18",
+          "manager_label": "Менеджер #18",
+          "total_deals": 19,
+          "in_work_deals": 17,
+          "won_deals": 0,
+          "won_amount_kzt": 0,
+          "lost_deals": 2,
+          "rating": {
+            "value": 2.0,
+            "max": 10,
+            "score_100": 19.7,
+            "components": [
+              {
+                "label": "CRM-результат",
+                "score_100": 0.0,
+                "weight": 0.3
+              },
+              {
+                "label": "Этапы продаж",
+                "score_100": 33.0,
+                "weight": 0.4
+              },
+              {
+                "label": "Скорость реакции",
+                "score_100": 0.0,
+                "weight": 0.15
+              },
+              {
+                "label": "CRM-дисциплина",
+                "score_100": 43.5,
+                "weight": 0.15
+              }
+            ]
+          }
+        },
+        {
+          "manager_id": "8",
+          "manager_label": "Менеджер #8",
+          "total_deals": 4,
+          "in_work_deals": 4,
+          "won_deals": 0,
+          "won_amount_kzt": 0,
+          "lost_deals": 0,
+          "rating": {
+            "value": 4.4,
+            "max": 10,
+            "score_100": 44.2,
+            "components": [
+              {
+                "label": "CRM-результат",
+                "score_100": 37.5,
+                "weight": 0.3
+              },
+              {
+                "label": "Этапы продаж",
+                "score_100": 30.0,
+                "weight": 0.4
+              },
+              {
+                "label": "Скорость реакции",
+                "score_100": 100.0,
+                "weight": 0.15
+              },
+              {
+                "label": "CRM-дисциплина",
+                "score_100": 40.0,
+                "weight": 0.15
+              }
+            ]
+          }
+        },
+        {
+          "manager_id": "98",
+          "manager_label": "Менеджер #98",
+          "total_deals": 0,
+          "in_work_deals": 0,
+          "won_deals": 0,
+          "won_amount_kzt": 0,
+          "lost_deals": 0,
+          "rating": {
+            "value": 0.0,
+            "max": 10,
+            "score_100": 0.0,
+            "components": [
+              {
+                "label": "CRM-результат",
+                "score_100": 0.0,
+                "weight": 0.3
+              },
+              {
+                "label": "Этапы продаж",
+                "score_100": 0.0,
+                "weight": 0.4
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "top_department_problems": [
+      {
+        "title": "Медленная обработка новых лидов",
+        "detail": "Среднее время первого CRM-касания: 4207.5 мин.",
+        "score": 100.0
+      },
+      {
+        "title": "Проседает соблюдение этапов продаж",
+        "detail": "Самый слабый этап: Упоминание акций / УТП (0.0%).",
+        "score": 100.0
+      },
+      {
+        "title": "Сделки в работе остаются без задач",
+        "detail": "Без активных задач 20 из 21 сделок в работе.",
+        "score": 95.2
+      }
+    ],
+    "top_department_growth_points": [
+      {
+        "title": "Устранение частых причин слива",
+        "detail": "Главная причина сейчас: Нецелевой лид / не тот запрос.",
+        "score": 100.0
+      },
+      {
+        "title": "CRM-дисциплина по открытым сделкам",
+        "detail": "Без задач или с просрочками сейчас 20 сделок.",
+        "score": 95.2
+      },
+      {
+        "title": "Выравнивание этапов продаж по скрипту",
+        "detail": "Среднее соблюдение этапов сейчас 31.0%. Здесь быстрый резерв роста качества.",
+        "score": 69.0
+      }
+    ],
+    "response_speed": {
+      "department": {
+        "manager_id": "department",
+        "manager_label": "Менеджер #department",
+        "deal_count": 23,
+        "measured_deals": 9,
+        "unmeasured_deals": 14,
+        "average_minutes": 4207.5,
+        "median_minutes": 1554.5,
+        "sla_15m_rate": 22.2,
+        "sla_60m_rate": 22.2,
+        "method": "От даты создания сделки до первого коммуникационного CRM-касания."
+      },
+      "by_manager": [
+        {
+          "manager_id": "8",
+          "manager_label": "Менеджер #8",
+          "deal_count": 4,
+          "measured_deals": 1,
+          "unmeasured_deals": 3,
+          "average_minutes": 1.6,
+          "median_minutes": 1.6,
+          "sla_15m_rate": 100.0,
+          "sla_60m_rate": 100.0
+        },
+        {
+          "manager_id": "18",
+          "manager_label": "Менеджер #18",
+          "deal_count": 19,
+          "measured_deals": 8,
+          "unmeasured_deals": 11,
+          "average_minutes": 4733.3,
+          "median_minutes": 1796.6,
+          "sla_15m_rate": 12.5,
+          "sla_60m_rate": 12.5
+        },
+        {
+          "manager_id": "98",
+          "manager_label": "Менеджер #98",
+          "deal_count": 0,
+          "measured_deals": 0,
+          "unmeasured_deals": 0,
+          "average_minutes": 0.0,
+          "median_minutes": 0.0,
+          "sla_15m_rate": 0.0,
+          "sla_60m_rate": 0.0
+        }
+      ]
+    },
+    "task_discipline": {
+      "department": {
+        "manager_id": "department",
+        "manager_label": "Менеджер #department",
+        "in_work_deals": 21,
+        "deals_with_active_tasks": 1,
+        "deals_without_tasks": 20,
+        "deals_with_overdue_tasks": 0,
+        "active_task_count": 1,
+        "without_tasks_rate": 95.2,
+        "overdue_tasks_rate": 0.0
+      },
+      "by_manager": [
+        {
+          "manager_id": "8",
+          "manager_label": "Менеджер #8",
+          "in_work_deals": 4,
+          "deals_with_active_tasks": 0,
+          "deals_without_tasks": 4,
+          "deals_with_overdue_tasks": 0,
+          "active_task_count": 0,
+          "without_tasks_rate": 100.0,
+          "overdue_tasks_rate": 0.0
+        },
+        {
+          "manager_id": "18",
+          "manager_label": "Менеджер #18",
+          "in_work_deals": 17,
+          "deals_with_active_tasks": 1,
+          "deals_without_tasks": 16,
+          "deals_with_overdue_tasks": 0,
+          "active_task_count": 1,
+          "without_tasks_rate": 94.1,
+          "overdue_tasks_rate": 0.0
+        },
+        {
+          "manager_id": "98",
+          "manager_label": "Менеджер #98",
+          "in_work_deals": 0,
+          "deals_with_active_tasks": 0,
+          "deals_without_tasks": 0,
+          "deals_with_overdue_tasks": 0,
+          "active_task_count": 0,
+          "without_tasks_rate": 0.0,
+          "overdue_tasks_rate": 0.0
+        }
+      ]
+    },
+    "sales_stage_compliance": {
+      "department": {
+        "stages": [
+          {
+            "code": "manager_introduced_self",
+            "label": "Установление контакта",
+            "total": 29,
+            "yes_count": 8,
+            "no_count": 20,
+            "unknown_count": 1,
+            "yes_rate": 27.6,
+            "no_rate": 69.0
+          },
+          {
+            "code": "need_identified",
+            "label": "Выявление потребности",
+            "total": 29,
+            "yes_count": 18,
+            "no_count": 8,
+            "unknown_count": 3,
+            "yes_rate": 62.1,
+            "no_rate": 27.6
+          },
+          {
+            "code": "manager_presented_service",
+            "label": "Презентация продукта",
+            "total": 29,
+            "yes_count": 13,
+            "no_count": 15,
+            "unknown_count": 1,
+            "yes_rate": 44.8,
+            "no_rate": 51.7
+          },
+          {
+            "code": "manager_mentioned_promotion_or_usp",
+            "label": "Упоминание акций / УТП",
+            "total": 29,
+            "yes_count": 0,
+            "no_count": 15,
+            "unknown_count": 14,
+            "yes_rate": 0.0,
+            "no_rate": 51.7
+          },
+          {
+            "code": "manager_agreed_next_step",
+            "label": "Попытка закрытия / следующий шаг",
+            "total": 29,
+            "yes_count": 6,
+            "no_count": 6,
+            "unknown_count": 17,
+            "yes_rate": 20.7,
+            "no_rate": 20.7
+          }
+        ],
+        "average_rate": 31.0
+      },
+      "by_manager": [
+        {
+          "manager_id": "8",
+          "manager_label": "Менеджер #8",
+          "stages": [
+            {
+              "code": "manager_introduced_self",
+              "label": "Установление контакта",
+              "total": 8,
+              "yes_count": 2,
+              "no_count": 5,
+              "unknown_count": 1,
+              "yes_rate": 25.0,
+              "no_rate": 62.5
+            },
+            {
+              "code": "need_identified",
+              "label": "Выявление потребности",
+              "total": 8,
+              "yes_count": 3,
+              "no_count": 4,
+              "unknown_count": 1,
+              "yes_rate": 37.5,
+              "no_rate": 50.0
+            },
+            {
+              "code": "manager_presented_service",
+              "label": "Презентация продукта",
+              "total": 8,
+              "yes_count": 4,
+              "no_count": 3,
+              "unknown_count": 1,
+              "yes_rate": 50.0,
+              "no_rate": 37.5
+            },
+            {
+              "code": "manager_mentioned_promotion_or_usp",
+              "label": "Упоминание акций / УТП",
+              "total": 8,
+              "yes_count": 0,
+              "no_count": 3,
+              "unknown_count": 5,
+              "yes_rate": 0.0,
+              "no_rate": 37.5
+            },
+            {
+              "code": "manager_agreed_next_step",
+              "label": "Попытка закрытия / следующий шаг",
+              "total": 8,
+              "yes_count": 3,
+              "no_count": 2,
+              "unknown_count": 3,
+              "yes_rate": 37.5,
+              "no_rate": 25.0
+            }
+          ],
+          "average_rate": 30.0
+        },
+        {
+          "manager_id": "18",
+          "manager_label": "Менеджер #18",
+          "stages": [
+            {
+              "code": "manager_introduced_self",
+              "label": "Установление контакта",
+              "total": 20,
+              "yes_count": 6,
+              "no_count": 14,
+              "unknown_count": 0,
+              "yes_rate": 30.0,
+              "no_rate": 70.0
+            },
+            {
+              "code": "need_identified",
+              "label": "Выявление потребности",
+              "total": 20,
+              "yes_count": 15,
+              "no_count": 3,
+              "unknown_count": 2,
+              "yes_rate": 75.0,
+              "no_rate": 15.0
+            },
+            {
+              "code": "manager_presented_service",
+              "label": "Презентация продукта",
+              "total": 20,
+              "yes_count": 9,
+              "no_count": 11,
+              "unknown_count": 0,
+              "yes_rate": 45.0,
+              "no_rate": 55.0
+            },
+            {
+              "code": "manager_mentioned_promotion_or_usp",
+              "label": "Упоминание акций / УТП",
+              "total": 20,
+              "yes_count": 0,
+              "no_count": 11,
+              "unknown_count": 9,
+              "yes_rate": 0.0,
+              "no_rate": 55.0
+            },
+            {
+              "code": "manager_agreed_next_step",
+              "label": "Попытка закрытия / следующий шаг",
+              "total": 20,
+              "yes_count": 3,
+              "no_count": 3,
+              "unknown_count": 14,
+              "yes_rate": 15.0,
+              "no_rate": 15.0
+            }
+          ],
+          "average_rate": 33.0
+        },
+        {
+          "manager_id": "98",
+          "manager_label": "Менеджер #98",
+          "stages": [
+            {
+              "code": "manager_introduced_self",
+              "label": "Установление контакта",
+              "total": 1,
+              "yes_count": 0,
+              "no_count": 1,
+              "unknown_count": 0,
+              "yes_rate": 0.0,
+              "no_rate": 100.0
+            },
+            {
+              "code": "need_identified",
+              "label": "Выявление потребности",
+              "total": 1,
+              "yes_count": 0,
+              "no_count": 1,
+              "unknown_count": 0,
+              "yes_rate": 0.0,
+              "no_rate": 100.0
+            },
+            {
+              "code": "manager_presented_service",
+              "label": "Презентация продукта",
+              "total": 1,
+              "yes_count": 0,
+              "no_count": 1,
+              "unknown_count": 0,
+              "yes_rate": 0.0,
+              "no_rate": 100.0
+            },
+            {
+              "code": "manager_mentioned_promotion_or_usp",
+              "label": "Упоминание акций / УТП",
+              "total": 1,
+              "yes_count": 0,
+              "no_count": 1,
+              "unknown_count": 0,
+              "yes_rate": 0.0,
+              "no_rate": 100.0
+            },
+            {
+              "code": "manager_agreed_next_step",
+              "label": "Попытка закрытия / следующий шаг",
+              "total": 1,
+              "yes_count": 0,
+              "no_count": 1,
+              "unknown_count": 0,
+              "yes_rate": 0.0,
+              "no_rate": 100.0
+            }
+          ],
+          "average_rate": 0.0
+        }
+      ]
+    },
+    "loss_reasons": {
+      "department": {
+        "lost_deals": 2,
+        "reasons_top": [
+          {
+            "name": "Нецелевой лид / не тот запрос",
+            "count": 2,
+            "rate": 100.0
+          }
+        ]
+      },
+      "by_manager": [
+        {
+          "manager_id": "8",
+          "manager_label": "Менеджер #8",
+          "lost_deals": 0,
+          "reasons_top": []
+        },
+        {
+          "manager_id": "18",
+          "manager_label": "Менеджер #18",
+          "lost_deals": 2,
+          "reasons_top": [
+            {
+              "name": "Нецелевой лид / не тот запрос",
+              "count": 2,
+              "rate": 100.0
+            }
+          ]
+        },
+        {
+          "manager_id": "98",
+          "manager_label": "Менеджер #98",
+          "lost_deals": 0,
+          "reasons_top": []
+        }
+      ]
+    },
+    "failed_deal_analysis": {
+      "recovery_candidates": [
+        {
+          "deal_id": "1542",
+          "deal_title": "Бухгалтерские услуги для ИП",
+          "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1542/",
+          "manager_id": "18",
+          "manager_label": "Менеджер #18",
+          "reason": "Клиент не дал категорический отказ",
+          "comment": "Клиент попросил время подумать. Рекомендуется follow-up в течение 24 часов: уточнить вопросы и предложить пакет со скидкой на первый месяц.",
+          "amount_kzt": 280000,
+          "score": 94,
+          "interaction_id": "call-004"
+        },
+        {
+          "deal_id": "1608",
+          "deal_title": "Услуги бухгалтера для ИП",
+          "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1608/",
+          "manager_id": "8",
+          "manager_label": "Менеджер #8",
+          "reason": "Диалог оборвался без финального шага",
+          "comment": "В переписке клиент проявил интерес и отправил документы. Нужен короткий дожим: зафиксировать дедлайн и предложить старт работ в ближайшие 2 дня.",
+          "amount_kzt": 190000,
+          "score": 87,
+          "interaction_id": "wa-002"
+        },
+        {
+          "deal_id": "1619",
+          "deal_title": "Консультация по налоговой отчетности",
+          "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1619/",
+          "manager_id": "18",
+          "manager_label": "Менеджер #18",
+          "reason": "Недозвон после заинтересованного контакта",
+          "comment": "До провала клиент подтверждал готовность обсуждать условия. Рекомендуется повторный контакт через WhatsApp с конкретным оффером и временем звонка.",
+          "amount_kzt": 145000,
+          "score": 79,
+          "interaction_id": "wa-004"
+        }
+      ]
+    },
+    "missed_revenue": {
+      "lost_deals": 2,
+      "average_conversion_rate": 0.0,
+      "average_ticket_kzt": 0,
+      "estimated_missed_revenue_kzt": 0,
+      "formula": "Проигранные сделки × средняя конверсия × средний чек"
+    },
+    "action_guide": [
+      "Повысить контроль скорости реакции на заявки + внедрить систему штрафов.",
+      "Внедрить KPI для работы в CRM (обязательные задачи, отсутствие просрочек).",
+      "Провести обучение/тренинг по скриптам и этапам продаж.",
+      "Провести опросы: у покупателей — почему купили, у отказников — почему не заплатили.",
+      "Фокус на плане звонков/продаж + ежедневный замер показателей (звонки, встречи, продажи).",
+      "Личная мотивация: индивидуальные беседы о целях и декомпозиция заработка для каждого менеджера.",
+      "Перераспределение лидов: больше заявок лучшим продавцам, меньше — отстающим.",
+      "Повысить экспертность менеджеров по продукту.",
+      "Работа над позитивом и энергией в коллективе.",
+      "Трансляция заботы о клиенте и намерения помочь в голосе.",
+      "Поднятие уровня энергии через спорт, зарядки и игры."
+    ]
+  },
+  "data_quality_notes": [
+    "Менеджеры пока отображаются как CRM ID, потому что в текущем экспорте нет справочника пользователей с именами.",
+    "В анализ попали 9 звонков и 20 чатов WhatsApp.",
+    "Звонков с неопределенным направлением: 9.",
+    "Управленческие выводы по причинам слива строятся по AI-разбору диалогов, а не по отдельному полю CRM с официальной причиной проигрыша.",
+    "Скорость реакции измерена по 9 из 23 сделок: для остальных в выгрузке нет явного первого коммуникационного касания.",
+    "Не заполнено описание услуг или товаров компании, поэтому часть выводов может быть менее точной.",
+    "Не добавлен прайс услуг или товаров, поэтому оценка презентации цены и офферов ограничена.",
+    "Не указан средний чек, поэтому расчет упущенной выгоды строится только на фактических суммах сделок или остается нулевым.",
+    "Не описаны преимущества компании, поэтому блок по УТП и акциям опирается только на содержание диалогов."
+  ]
+}
