@@ -3,7 +3,9 @@
     "allow": [
       "Bash(git init *)",
       "Bash(git remote *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(git push *)",
+      "WebFetch(domain:sapaplast.bitrix24.kz)"
     ]
   }
 }

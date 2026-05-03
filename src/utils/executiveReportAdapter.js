@@ -291,18 +291,25 @@ function adaptGrowthPoints(report) {
 export function buildExecutiveReportRun(report) {
   if (!report) return null;
   const scope = report.scope || {};
+  const scopeLabel =
+    scope.mode === "sales_audit"
+      ? "AI + Postgres аудит продаж"
+      : scope.mode === "bitrix"
+      ? "Bitrix CRM"
+      : "Проанализированные сделки";
   return {
     id: EXECUTIVE_RUN_ID,
-    title: "Executive sales report",
+    title: scope.mode === "sales_audit" ? "Sales audit report" : "Executive sales report",
     created_at: report.generated_at || new Date().toISOString(),
     source: "executive_report",
     executive_report: report,
-    scope_label: scope.mode === "bitrix" ? "Bitrix CRM" : "Проанализированные сделки",
+    scope_label: scopeLabel,
     filters: {
       period_from: scope.date_from || "",
       period_to: scope.date_to || "",
       category_ids: ensureArray(scope.category_ids).map(String),
       responsible_id: scope.responsible_id || null,
+      responsible_ids: ensureArray(scope.responsible_ids).map(String),
       channels: ["call", "whatsapp"],
     },
   };
@@ -347,7 +354,12 @@ export function buildSummaryFromExecutiveReport(report, baseSummary = {}) {
     analysis_scope: {
       ...(baseSummary?.analysis_scope || {}),
       mode: report?.scope?.mode || "analyzed",
-      label: report?.scope?.mode === "bitrix" ? "Bitrix CRM" : "Проанализированные сделки",
+      label:
+        report?.scope?.mode === "sales_audit"
+          ? "AI + Postgres аудит продаж"
+          : report?.scope?.mode === "bitrix"
+          ? "Bitrix CRM"
+          : "Проанализированные сделки",
       filters: {
         category_ids: ensureArray(report?.scope?.category_ids).map(String),
         responsible_id: report?.scope?.responsible_id || null,

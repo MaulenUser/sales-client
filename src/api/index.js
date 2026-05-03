@@ -254,12 +254,12 @@ export function getPendingExecutiveReportJob() {
   return readStoredExecutiveReportJob();
 }
 
-async function pollExecutiveReportJob(jobId) {
+async function pollExecutiveReportJob(jobId, endpoint = "/sales-audit") {
   const startedAt = Date.now();
   const pollMs = Math.max(1000, LIVE_EXECUTIVE_JOB_POLL_MS);
 
   while (true) {
-    const job = await fetchLiveJson(`/executive-report/jobs/${encodeURIComponent(jobId)}`, {
+    const job = await fetchLiveJson(`${endpoint}/jobs/${encodeURIComponent(jobId)}`, {
       timeoutMs: LIVE_TIMEOUT_MS,
     });
 
@@ -288,7 +288,7 @@ async function pollExecutiveReportJob(jobId) {
 
 function buildExecutiveReportResponse(response, appState, jobId = null) {
   return fetchExecutiveReport().then((fallbackReport) => {
-    const report = response?.executive_report || fallbackReport;
+    const report = response?.executive_report || response?.report || fallbackReport;
     if (!report) {
       throw new Error("Анализ завершился, но итоговый executive-report.json не найден");
     }
@@ -301,7 +301,7 @@ function buildExecutiveReportResponse(response, appState, jobId = null) {
       summary: buildSummaryFromExecutiveReport(report),
       backend: {
         status: response?.status || "ok",
-        source: "executive_pipeline",
+        source: response?.storage === "postgres" ? "sales_audit" : "executive_pipeline",
         job_id: jobId,
       },
     };
@@ -311,7 +311,7 @@ function buildExecutiveReportResponse(response, appState, jobId = null) {
 export async function resumePendingExecutiveReportBuild(appState) {
   const pending = getPendingExecutiveReportJob();
   if (!pending?.job_id) return null;
-  const response = await pollExecutiveReportJob(pending.job_id);
+  const response = await pollExecutiveReportJob(pending.job_id, pending.endpoint || "/sales-audit");
   return buildExecutiveReportResponse(response, appState, pending.job_id);
 }
 
@@ -645,7 +645,7 @@ async function postLiveExecutiveReportBuild(payload, appState) {
   form.set("include_whatsapp_audio", payload?.include_whatsapp_audio ? "true" : "false");
   form.set("wait", "false");
 
-  const startResponse = await fetchLiveJson("/executive-report/run", {
+  const startResponse = await fetchLiveJson("/sales-audit/run", {
     method: "POST",
     timeoutMs: LIVE_TIMEOUT_MS,
     headers: {
@@ -658,6 +658,7 @@ async function postLiveExecutiveReportBuild(payload, appState) {
     storeExecutiveReportJob({
       job_id: startResponse.job_id,
       tenant_id: startResponse.tenant_id || getCurrentTenantId(),
+      endpoint: "/sales-audit",
       status: startResponse.status || "started",
       started_at: new Date().toISOString(),
       request: {
@@ -670,7 +671,7 @@ async function postLiveExecutiveReportBuild(payload, appState) {
   }
 
   const response = startResponse?.job_id
-    ? await pollExecutiveReportJob(startResponse.job_id)
+    ? await pollExecutiveReportJob(startResponse.job_id, "/sales-audit")
     : startResponse;
   return buildExecutiveReportResponse(response, appState, startResponse?.job_id || null);
 }
@@ -815,6 +816,11 @@ export async function fetchAuditScope({ categoryIds, periodFrom, periodTo }) {
 
 export async function fetchExecutiveReport() {
   if (!isLiveConfigured()) return null;
+  try {
+    return await fetchLiveJson("/sales-audit/report");
+  } catch {
+    // Older backend versions only expose the executive report endpoint.
+  }
   try {
     return await fetchLiveJson("/executive-report/latest");
   } catch {
