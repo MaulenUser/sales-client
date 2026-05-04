@@ -4,10 +4,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans:     ["Outfit", "sans-serif"],
+        sans:     ["Inter", "Outfit", "sans-serif"],
         mono:     ["JetBrains Mono", "monospace"],
-        serif:    ["Outfit", "sans-serif"],
-        headline: ["Outfit", "sans-serif"],
+        serif:    ["Inter", "Outfit", "sans-serif"],
+        headline: ["Inter", "Outfit", "sans-serif"],
       },
       colors: {
         background: "rgb(var(--background) / <alpha-value>)",

@@ -18,23 +18,24 @@ export default function MiniCard({ label, value, note, tone = "cyan" }) {
       display: "flex", flexDirection: "column", gap: 6,
     }}>
       <p style={{
-        fontSize: 9, fontWeight: 600, letterSpacing: "0.16em",
-        color: "rgba(255,255,255,0.35)", textTransform: "uppercase",
+        fontSize: 11, fontWeight: 600, letterSpacing: "0.1em",
+        color: "rgba(255,255,255,0.5)", textTransform: "uppercase",
         fontFamily: "'JetBrains Mono', monospace", margin: 0,
       }}>
         {label}
       </p>
       <p style={{
-        fontSize: 22, fontWeight: 300, letterSpacing: "-0.02em",
-        color: "#fff", lineHeight: 1, margin: 0,
+        fontSize: 24, fontWeight: 400, letterSpacing: "-0.025em",
+        color: "#fff", lineHeight: 1.05, margin: 0,
         fontVariantNumeric: "tabular-nums",
+        fontFamily: "'Inter', 'Outfit', sans-serif",
       }}>
         {value}
       </p>
       {note && (
         <p style={{
-          fontSize: 11, color: NOTE_COLOR[tone] ?? "rgba(255,255,255,0.35)",
-          fontFamily: "'JetBrains Mono', monospace", margin: 0, lineHeight: 1.4,
+          fontSize: 12, color: NOTE_COLOR[tone] ?? "rgba(255,255,255,0.5)",
+          fontFamily: "'JetBrains Mono', monospace", margin: 0, lineHeight: 1.5,
         }}>
           {note}
         </p>

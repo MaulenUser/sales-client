@@ -54,21 +54,23 @@ export default function Header() {
     >
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{
-          fontSize: 10, fontWeight: 600, letterSpacing: "0.15em",
-          color: "rgb(52,168,90)", marginBottom: 8,
+          fontSize: 11, fontWeight: 600, letterSpacing: "0.12em",
+          color: "rgb(52,168,90)", marginBottom: 10,
           fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase",
         }}>
           {meta.eyebrow}
         </div>
         <h1 style={{
-          fontSize: 30, fontWeight: 300, margin: "0 0 10px",
-          letterSpacing: "-0.02em", lineHeight: 1.2, color: "#fff",
+          fontSize: 32, fontWeight: 500, margin: "0 0 10px",
+          letterSpacing: "-0.025em", lineHeight: 1.15, color: "#fff",
+          fontFamily: "'Inter', 'Outfit', sans-serif",
         }}>
           {meta.title}
         </h1>
         <p style={{
-          fontSize: 13, color: "rgba(255,255,255,0.4)",
-          maxWidth: 520, lineHeight: 1.6, margin: 0,
+          fontSize: 14, color: "rgba(255,255,255,0.58)",
+          maxWidth: 560, lineHeight: 1.65, margin: 0,
+          fontFamily: "'Inter', 'Outfit', sans-serif",
         }}>
           {meta.subtitle}
         </p>
@@ -76,9 +78,9 @@ export default function Header() {
 
       <div style={{ display: "flex", alignItems: "center", gap: 14, flexShrink: 0 }}>
         <div style={{
-          fontSize: 11, color: "rgba(255,255,255,0.25)",
+          fontSize: 12, color: "rgba(255,255,255,0.4)",
           fontFamily: "'JetBrains Mono', monospace",
-          textAlign: "right", lineHeight: 1.6,
+          textAlign: "right", lineHeight: 1.7,
         }}>
           {generatedAt ? (
             <>

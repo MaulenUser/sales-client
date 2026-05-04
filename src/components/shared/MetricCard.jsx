@@ -68,8 +68,8 @@ export default function MetricCard({
       }} />
 
       <div style={{
-        fontSize: compact ? 10 : 11, fontWeight: 600, letterSpacing: "0.08em",
-        color: "rgba(255,255,255,0.4)", textTransform: "uppercase",
+        fontSize: compact ? 11 : 12, fontWeight: 600, letterSpacing: "0.07em",
+        color: "rgba(255,255,255,0.55)", textTransform: "uppercase",
         fontFamily: "'JetBrains Mono', monospace",
         marginBottom: compact ? 10 : 16,
       }}>
@@ -77,20 +77,21 @@ export default function MetricCard({
       </div>
 
       <div style={{
-        fontSize, fontWeight, color: "#fff",
+        fontSize, fontWeight: isNumericish ? 400 : 500, color: "#fff",
         lineHeight: 1.1, marginBottom: 8,
-        letterSpacing: isNumericish ? "-0.02em" : "-0.01em",
+        letterSpacing: isNumericish ? "-0.025em" : "-0.01em",
         wordBreak: "break-word",
+        fontFamily: "'Inter', 'Outfit', sans-serif",
       }}>
         {value}
       </div>
 
       {note && (
         <div style={{
-          fontSize: compact ? 11 : 12, color: noteColor,
+          fontSize: compact ? 12 : 13, color: noteColor,
           fontFamily: "'JetBrains Mono', monospace",
           fontWeight: 400,
-          lineHeight: compact ? 1.35 : 1.4,
+          lineHeight: compact ? 1.45 : 1.5,
         }}>
           {note}
         </div>

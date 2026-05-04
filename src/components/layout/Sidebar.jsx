@@ -58,7 +58,7 @@ export default function Sidebar() {
       <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "8px 12px", marginBottom: 24 }}>
         <Logo />
         <div>
-          <div style={{ fontSize: 14, fontWeight: 600, letterSpacing: "0.02em", color: "#fff" }}>
+          <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em", color: "#fff" }}>
             AISales Auditor
           </div>
         </div>
@@ -68,8 +68,8 @@ export default function Sidebar() {
         {NAV.map(({ section, links }) => (
           <div key={section} style={{ marginBottom: 8 }}>
             <div style={{
-              fontSize: 9, fontWeight: 600, letterSpacing: "0.14em",
-              color: "rgba(255,255,255,0.2)", padding: "12px 12px 6px",
+              fontSize: 11, fontWeight: 600, letterSpacing: "0.1em",
+              color: "rgba(255,255,255,0.32)", padding: "12px 12px 6px",
               fontFamily: "'JetBrains Mono', monospace",
               textTransform: "uppercase",
             }}>

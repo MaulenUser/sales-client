@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -36,8 +36,13 @@
 
   body {
     margin: 0;
+    font-family: "Inter", "Outfit", sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 }
 
@@ -93,7 +98,7 @@
 
   /* ── Navigation ───────────────────── */
   .nav-link {
-    @apply w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[13px] font-normal relative;
+    @apply w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[14px] font-normal relative;
     color: rgba(255,255,255,0.5);
     transition: color 0.15s ease, background 0.15s ease;
   }
@@ -130,9 +135,9 @@
   }
 
   .menu-section-label {
-    @apply text-[9px] font-semibold font-mono uppercase;
-    color: rgba(255,255,255,0.2);
-    letter-spacing: 0.14em;
+    @apply text-[11px] font-semibold font-mono uppercase;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.12em;
   }
 
   /* ── Buttons ──────────────────────── */
@@ -158,15 +163,15 @@
 
   /* ── Section labels ───────────────── */
   .insight-kicker {
-    @apply text-[10px] font-semibold font-mono uppercase mb-4;
-    color: rgba(255,255,255,0.22);
-    letter-spacing: 0.14em;
+    @apply text-[11px] font-semibold font-mono uppercase mb-4;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.12em;
   }
 
   .kpi-section-label {
-    @apply text-[10px] font-semibold font-mono uppercase mb-4;
-    color: rgba(255,255,255,0.22);
-    letter-spacing: 0.14em;
+    @apply text-[11px] font-semibold font-mono uppercase mb-4;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.12em;
   }
 
   /* ── Alert ────────────────────────── */
@@ -183,31 +188,31 @@
   }
 
   .calls-alert__copy { @apply flex flex-col gap-1 flex-1; }
-  .calls-alert__copy strong { font-weight: 500; color: rgba(255,255,255,0.9); }
-  .calls-alert__copy .muted { font-size: 12px; color: rgba(255,255,255,0.4); }
+  .calls-alert__copy strong { font-weight: 600; color: rgba(255,255,255,0.95); }
+  .calls-alert__copy .muted { font-size: 13px; color: rgba(255,255,255,0.55); }
 
   /* ── Leader / Risk cards ──────────── */
   .leader-card {
     @apply widget-card p-5;
   }
   .leader-card__head { @apply flex items-center justify-between gap-4 mb-4; }
-  .leader-card__hint { font-size: 10px; color: rgba(255,255,255,0.35); line-height: 1.5; margin-top: 4px; }
-  .leader-card__value { font-size: 28px; font-weight: 300; letter-spacing: -0.02em; text-align: right; }
-  .leader-card__rate  { font-size: 9px; color: rgba(255,255,255,0.3); text-align: right; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
-  .leader-card__stats { @apply flex flex-wrap gap-4 pt-3 border-t border-border; font-size: 10px; color: rgba(255,255,255,0.35); }
-  .leader-card__stats strong { color: rgba(255,255,255,0.85); font-weight: 500; }
+  .leader-card__hint { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.55; margin-top: 4px; }
+  .leader-card__value { font-size: 30px; font-weight: 400; letter-spacing: -0.02em; text-align: right; }
+  .leader-card__rate  { font-size: 10px; color: rgba(255,255,255,0.4); text-align: right; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+  .leader-card__stats { @apply flex flex-wrap gap-4 pt-3 border-t border-border; font-size: 12px; color: rgba(255,255,255,0.5); }
+  .leader-card__stats strong { color: rgba(255,255,255,0.9); font-weight: 600; }
 
   .risk-card { @apply widget-card p-4; }
   .risk-card--danger  { border-color: rgba(240,86,86,0.2); background: rgba(240,86,86,0.02); }
   .risk-card--warning { border-color: rgba(246,192,60,0.2); background: rgba(246,192,60,0.02); }
   .risk-card__head { @apply flex justify-between items-start gap-3 mb-2; }
-  .risk-card__head strong { color: rgba(255,255,255,0.85); font-size: 13px; font-weight: 500; }
-  .risk-card p { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.6; }
+  .risk-card__head strong { color: rgba(255,255,255,0.92); font-size: 14px; font-weight: 600; }
+  .risk-card p { font-size: 13px; color: rgba(255,255,255,0.58); line-height: 1.65; }
 
   /* ── Badges ───────────────────────── */
   .severity {
-    @apply inline-flex items-center px-2 py-0.5 rounded-md text-[8px] font-semibold font-mono uppercase border;
-    letter-spacing: 0.1em;
+    @apply inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold font-mono uppercase border;
+    letter-spacing: 0.08em;
   }
   .severity--danger  { background: rgba(240,86,86,0.1); border-color: rgba(240,86,86,0.2); color: rgb(240,86,86); }
   .severity--warning { background: rgba(246,192,60,0.1); border-color: rgba(246,192,60,0.2); color: rgb(246,192,60); }
@@ -216,15 +221,15 @@
   .flow-grid { @apply grid grid-cols-2 @3xl:grid-cols-4 gap-4; }
 
   .detail-block { @apply rounded-2xl border border-border p-5 mt-4; background: rgba(255,255,255,0.02); }
-  .detail-block h3 { @apply text-[9px] font-semibold font-mono uppercase mb-4; color: rgba(255,255,255,0.25); letter-spacing: 0.18em; }
+  .detail-block h3 { @apply text-[11px] font-semibold font-mono uppercase mb-4; color: rgba(255,255,255,0.38); letter-spacing: 0.14em; }
 
-  .detail-meta { @apply text-[9px] font-mono uppercase mt-2; color: rgba(255,255,255,0.25); letter-spacing: 0.12em; }
+  .detail-meta { @apply text-[10px] font-mono uppercase mt-2; color: rgba(255,255,255,0.38); letter-spacing: 0.1em; }
 
   .insight-banner__copy { @apply flex flex-col gap-2 flex-1; }
-  .insight-banner__copy strong { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.85); }
-  .insight-banner__copy p { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.6; }
+  .insight-banner__copy strong { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.92); }
+  .insight-banner__copy p { font-size: 13px; color: rgba(255,255,255,0.58); line-height: 1.65; }
 
-  .empty-state { @apply p-8 text-center; color: rgba(255,255,255,0.25); font-size: 13px; }
+  .empty-state { @apply p-8 text-center; color: rgba(255,255,255,0.42); font-size: 14px; }
 
   /* ── Data tables ──────────────────── */
   .data-table-wrapper {
@@ -238,17 +243,18 @@
 
   .data-table thead th {
     @apply text-left font-semibold font-mono uppercase;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    color: rgba(255,255,255,0.3);
-    padding: 12px 16px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.45);
+    padding: 13px 16px;
     border-bottom: 1px solid rgba(255,255,255,0.06);
   }
 
   .data-table tbody td {
-    padding: 14px 16px;
-    font-size: 13px;
-    color: rgba(255,255,255,0.6);
+    padding: 15px 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.75);
     border-bottom: 1px solid rgba(255,255,255,0.04);
     white-space: nowrap;
   }
