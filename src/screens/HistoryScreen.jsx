@@ -43,7 +43,9 @@ export default function HistoryScreen() {
   const activateRunData = useStore((s) => s.activateRunData);
 
   const history = appState?.history || {};
-  const runs = ensureArray(history.runs);
+  const runs = ensureArray(history.runs).filter(
+    (run) => !String(run?.id || run?.run_id || "").startsWith("run-mock-"),
+  );
   const launcher = appState?.setup?.analysis_launcher || {};
 
   const openRunReport = async (runId) => {

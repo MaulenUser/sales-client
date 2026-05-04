@@ -291,6 +291,7 @@ function adaptGrowthPoints(report) {
 export function buildExecutiveReportRun(report) {
   if (!report) return null;
   const scope = report.scope || {};
+  const runId = String(report.run_id || report?.sales_audit_sources?.sales_run_id || "").trim();
   const scopeLabel =
     scope.mode === "sales_audit"
       ? "AI + Postgres аудит продаж"
@@ -298,7 +299,8 @@ export function buildExecutiveReportRun(report) {
       ? "Bitrix CRM"
       : "Проанализированные сделки";
   return {
-    id: EXECUTIVE_RUN_ID,
+    id: runId || EXECUTIVE_RUN_ID,
+    run_id: runId || "",
     title: scope.mode === "sales_audit" ? "Sales audit report" : "Executive sales report",
     created_at: report.generated_at || new Date().toISOString(),
     source: "executive_report",
@@ -320,7 +322,13 @@ export function buildAppStateWithExecutiveReport(appState, report) {
   if (!run) return appState;
   const state = appState || {};
   const history = state.history || {};
-  const runs = [run, ...ensureArray(history.runs).filter((item) => item?.id !== run.id)];
+  const runs = [
+    run,
+    ...ensureArray(history.runs).filter((item) => {
+      const id = String(item?.id || item?.run_id || "");
+      return id !== run.id && !id.startsWith("run-mock-");
+    }),
+  ];
   return {
     ...state,
     history: {

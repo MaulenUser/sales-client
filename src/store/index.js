@@ -154,9 +154,14 @@ const useStore = create((set, get) => ({
 
     const run = getActiveRun();
 
-    if (run?.source === "executive_report" && run?.executive_report) {
-      const summary = buildSummaryFromExecutiveReport(run.executive_report, baseSummary);
+    if (run?.source === "executive_report" || run?.source === "sales_audit_report") {
+      const reportRunId =
+        run?.run_id || (run?.id && run.id !== "run-executive-latest" ? run.id : "");
+      const report = run?.executive_report || await fetchExecutiveReport(reportRunId).catch(() => null);
+      if (!report) return;
+      const summary = buildSummaryFromExecutiveReport(report, baseSummary);
       set({
+        executiveReport: report,
         summary,
         interactions: ensureArray(baseInteractions),
         reportMarkdown: "",
@@ -229,7 +234,9 @@ const useStore = create((set, get) => ({
       ? buildAppStateWithExecutiveReport(rawAppState, executiveReport)
       : rawAppState;
     const newRunId =
-      executiveReport ? "run-executive-latest" : activeRunId ||
+      executiveReport
+        ? appState?.history?.latest_run_id || appState?.latest_run?.id || "run-executive-latest"
+        : activeRunId ||
       appState?.history?.latest_run_id ||
       appState?.latest_run?.id ||
       null;
@@ -311,7 +318,7 @@ const useStore = create((set, get) => ({
         : appState;
       const runId =
         executiveReport
-          ? "run-executive-latest"
+          ? resolvedAppState?.history?.latest_run_id || resolvedAppState?.latest_run?.id || "run-executive-latest"
           : appState?.history?.latest_run_id || appState?.latest_run?.id || null;
 
       set({

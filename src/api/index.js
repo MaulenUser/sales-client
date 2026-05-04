@@ -115,6 +115,38 @@ export function setCurrentTenantId(value) {
   return tenantId;
 }
 
+function isMockRun(run) {
+  return String(run?.id || run?.run_id || "").startsWith("run-mock-");
+}
+
+function withoutMockRuns(history = {}) {
+  const runs = ensureArray(history?.runs).filter((run) => !isMockRun(run));
+  return {
+    ...(history || {}),
+    latest_run_id: runs[0]?.id || runs[0]?.run_id || null,
+    runs,
+    summary: {
+      ...(history?.summary || {}),
+      total_runs: runs.length,
+    },
+  };
+}
+
+function normalizeSalesAuditHistory(payload, fallbackHistory = {}) {
+  if (!payload) return withoutMockRuns(fallbackHistory);
+  const runs = ensureArray(payload?.runs).filter((run) => !isMockRun(run));
+  return {
+    ...withoutMockRuns(fallbackHistory),
+    latest_run_id: payload?.latest_run_id || runs[0]?.id || runs[0]?.run_id || null,
+    runs,
+    summary: {
+      ...(fallbackHistory?.summary || {}),
+      ...(payload?.summary || {}),
+      total_runs: runs.length,
+    },
+  };
+}
+
 function withTenantHeader(headers = {}, { skipAuth = false } = {}) {
   const nextHeaders = {
     "X-Tenant-Id": getCurrentTenantId(),
@@ -365,10 +397,11 @@ function normalizeTenants(rows) {
 }
 
 async function fetchLiveAppState() {
-  const [backendState, funnelsPayload, managersPayload] = await Promise.all([
+  const [backendState, funnelsPayload, managersPayload, historyPayload] = await Promise.all([
     fetchLiveJson("/api/app-state").catch(() => null),
     fetchLiveJson("/catalog/funnels").catch(() => null),
     fetchLiveJson("/catalog/managers").catch(() => null),
+    fetchLiveJson("/sales-audit/history").catch(() => null),
   ]);
 
   const mockBase = await fetchJson("mock-app-state.json").catch(() => ({}));
@@ -381,10 +414,20 @@ async function fetchLiveAppState() {
   const availableManagers = normalizeLauncherManagers(managersPayload?.managers);
   const defaultCategoryId = availableCategories[0]?.id || "";
   const tenantId = backendState?.tenant_id || getCurrentTenantId();
+  const history = normalizeSalesAuditHistory(historyPayload, backendState?.history || mockBase?.history);
+  const latestRun = ensureArray(history?.runs)[0] || null;
 
   return {
     ...mockBase,
     tenant_id: tenantId,
+    history,
+    latest_run: latestRun
+      ? {
+          id: latestRun.id || latestRun.run_id,
+          title: latestRun.title,
+          scope_label: latestRun.scope_label,
+        }
+      : null,
     setup: {
       ...baseSetup,
       analysis_launcher: {
@@ -501,7 +544,7 @@ function getResponsibleIds(payload) {
 function upsertRunToAppState(appState, run) {
   const state = appState || {};
   const history = state.history || {};
-  const existingRuns = ensureArray(history.runs);
+  const existingRuns = ensureArray(history.runs).filter((row) => !isMockRun(row));
   const runs = [run, ...existingRuns.filter((row) => row?.id !== run.id)];
   return {
     ...state,
@@ -814,15 +857,32 @@ export async function fetchAuditScope({ categoryIds, periodFrom, periodTo }) {
   };
 }
 
-export async function fetchExecutiveReport() {
+export async function fetchExecutiveReport(runId = "") {
   if (!isLiveConfigured()) return null;
+  const resolvedRunId = String(runId || "").trim();
   try {
-    return await fetchLiveJson("/sales-audit/report");
+    return await fetchLiveJson("/sales-audit/report", {
+      query: resolvedRunId ? { run_id: resolvedRunId } : undefined,
+    });
   } catch {
+    if (resolvedRunId) return null;
     // Older backend versions only expose the executive report endpoint.
   }
   try {
     return await fetchLiveJson("/executive-report/latest");
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchSalesAuditHistory() {
+  if (!isLiveConfigured()) return null;
+  try {
+    const payload = await fetchLiveJson("/sales-audit/history");
+    return {
+      ...payload,
+      runs: ensureArray(payload?.runs).filter((run) => !isMockRun(run)),
+    };
   } catch {
     return null;
   }
