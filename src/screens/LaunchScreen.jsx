@@ -507,7 +507,7 @@ export default function LaunchScreen() {
             <div className="flex flex-wrap gap-6 items-start">
               <div>
                 <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Стоимость анализа</div>
-                <div className="text-3xl font-headline font-bold text-foreground">{formatNumber(quote.estimated_cost_kzt)} ₸</div>
+                <div className="text-3xl font-headline font-bold text-foreground">0 ₸</div>
               </div>
               <div>
                 <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Токены</div>
