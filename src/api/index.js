@@ -38,6 +38,7 @@ const DEFAULT_TENANT_ID = normalizeTenantId(import.meta.env.VITE_TENANT_ID || "d
 const TENANT_STORAGE_KEY = "ai-auditor:tenant-id";
 const AUTH_STORAGE_KEY = "ai-auditor:auth";
 const EXECUTIVE_REPORT_JOB_STORAGE_KEY = "ai-auditor:executive-report-job";
+const FAILED_EXECUTIVE_JOB_STATUSES = new Set(["error", "failed", "cancelled", "canceled"]);
 
 const MOCK_SCOPE_MANAGERS = [
   { id: "8", name: "Жасуан Менеджер", active: true },
@@ -254,14 +255,33 @@ function sleep(ms) {
   return new Promise((resolve) => window.setTimeout(resolve, ms));
 }
 
-function readStoredExecutiveReportJob() {
+function getExecutiveReportJobStartedAtMs(job) {
+  const raw = job?.started_at || job?.created_at || job?.updated_at;
+  const timestamp = Date.parse(String(raw || ""));
+  return Number.isFinite(timestamp) ? timestamp : 0;
+}
+
+function isStoredExecutiveReportJobExpired(job) {
+  const startedAtMs = getExecutiveReportJobStartedAtMs(job);
+  if (!startedAtMs || !Number.isFinite(LIVE_EXECUTIVE_JOB_TIMEOUT_MS) || LIVE_EXECUTIVE_JOB_TIMEOUT_MS <= 0) {
+    return false;
+  }
+  return Date.now() - startedAtMs > LIVE_EXECUTIVE_JOB_TIMEOUT_MS;
+}
+
+function readStoredExecutiveReportJob({ clearExpired = true } = {}) {
   if (typeof window === "undefined") return null;
   try {
     const raw = window.localStorage.getItem(EXECUTIVE_REPORT_JOB_STORAGE_KEY);
     const job = raw ? JSON.parse(raw) : null;
     if (job?.tenant_id && job.tenant_id !== getCurrentTenantId()) return null;
+    if (job?.job_id && isStoredExecutiveReportJobExpired(job)) {
+      if (clearExpired) window.localStorage.removeItem(EXECUTIVE_REPORT_JOB_STORAGE_KEY);
+      return null;
+    }
     return job;
   } catch {
+    window.localStorage.removeItem(EXECUTIVE_REPORT_JOB_STORAGE_KEY);
     return null;
   }
 }
@@ -276,7 +296,7 @@ function storeExecutiveReportJob(job) {
 
 function clearStoredExecutiveReportJob(jobId) {
   if (typeof window === "undefined") return;
-  const stored = readStoredExecutiveReportJob();
+  const stored = readStoredExecutiveReportJob({ clearExpired: false });
   if (!jobId || stored?.job_id === jobId) {
     window.localStorage.removeItem(EXECUTIVE_REPORT_JOB_STORAGE_KEY);
   }
@@ -286,20 +306,34 @@ export function getPendingExecutiveReportJob() {
   return readStoredExecutiveReportJob();
 }
 
-async function pollExecutiveReportJob(jobId, endpoint = "/sales-audit") {
-  const startedAt = Date.now();
+async function pollExecutiveReportJob(jobId, endpoint = "/sales-audit", options = {}) {
+  const startedAt = options.startedAtMs || Date.now();
   const pollMs = Math.max(1000, LIVE_EXECUTIVE_JOB_POLL_MS);
 
   while (true) {
-    const job = await fetchLiveJson(`${endpoint}/jobs/${encodeURIComponent(jobId)}`, {
-      timeoutMs: LIVE_TIMEOUT_MS,
-    });
+    let job;
+    try {
+      job = await fetchLiveJson(`${endpoint}/jobs/${encodeURIComponent(jobId)}`, {
+        timeoutMs: LIVE_TIMEOUT_MS,
+      });
+    } catch (err) {
+      if (err?.status === 404 || err?.status === 410) {
+        clearStoredExecutiveReportJob(jobId);
+        const missingErr = new Error("Сохраненный запуск анализа больше не найден. Можно запустить анализ заново.");
+        missingErr.status = err.status;
+        missingErr.cause = err;
+        throw missingErr;
+      }
+      throw err;
+    }
 
-    if (job?.status === "completed") {
+    const status = String(job?.status || "").toLowerCase();
+
+    if (status === "completed") {
       clearStoredExecutiveReportJob(jobId);
       return job;
     }
-    if (job?.status === "error") {
+    if (FAILED_EXECUTIVE_JOB_STATUSES.has(status)) {
       clearStoredExecutiveReportJob(jobId);
       const err = new Error(job?.error || "Запуск анализа завершился ошибкой");
       err.status = 0;
@@ -307,6 +341,7 @@ async function pollExecutiveReportJob(jobId, endpoint = "/sales-audit") {
       throw err;
     }
     if (Date.now() - startedAt > LIVE_EXECUTIVE_JOB_TIMEOUT_MS) {
+      clearStoredExecutiveReportJob(jobId);
       const timeoutSeconds = Math.round(LIVE_EXECUTIVE_JOB_TIMEOUT_MS / 1000);
       const err = new Error(`Анализ все еще выполняется после ${timeoutSeconds}s`);
       err.status = 0;
@@ -343,7 +378,9 @@ function buildExecutiveReportResponse(response, appState, jobId = null) {
 export async function resumePendingExecutiveReportBuild(appState) {
   const pending = getPendingExecutiveReportJob();
   if (!pending?.job_id) return null;
-  const response = await pollExecutiveReportJob(pending.job_id, pending.endpoint || "/sales-audit");
+  const response = await pollExecutiveReportJob(pending.job_id, pending.endpoint || "/sales-audit", {
+    startedAtMs: getExecutiveReportJobStartedAtMs(pending) || Date.now(),
+  });
   return buildExecutiveReportResponse(response, appState, pending.job_id);
 }
 
