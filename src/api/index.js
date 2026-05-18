@@ -992,6 +992,17 @@ export async function fetchIntegrations() {
   }
 }
 
+export async function postBitrixConnectStart(payload) {
+  return fetchLiveJson("/api/bitrix/connect/start", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      portal: String(payload?.portal || "").trim(),
+      return_url: String(payload?.return_url || "").trim(),
+    }),
+  });
+}
+
 async function postLiveSetupIntegrations(payload) {
   return fetchLiveJson("/api/setup-integrations", {
     method: "POST",

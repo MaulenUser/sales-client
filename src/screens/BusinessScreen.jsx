@@ -10,11 +10,17 @@ export default function BusinessScreen() {
   const setCurrentTenant = useStore((s) => s.setCurrentTenant);
   const saveTenant = useStore((s) => s.saveTenant);
   const saveBusinessProfile = useStore((s) => s.saveBusinessProfile);
+  const startBitrixConnect = useStore((s) => s.startBitrixConnect);
 
   // Tenant state
   const [tenantIdInput, setTenantIdInput] = useState("");
   const [tenantNameInput, setTenantNameInput] = useState("");
   const [tenantStatus, setTenantStatus] = useState("");
+
+  // Bitrix OAuth state
+  const [bitrixPortal, setBitrixPortal] = useState("");
+  const [bitrixConnectStatus, setBitrixConnectStatus] = useState("");
+  const [isBitrixConnecting, setIsBitrixConnecting] = useState(false);
 
   // Business profile state
   const [companyName, setCompanyName] = useState("");
@@ -48,8 +54,41 @@ export default function BusinessScreen() {
   }, [appState, currentTenantId]);
 
   const integrations = appState?.setup?.integrations || {};
+  const bitrixOauth = appState?.setup?.bitrix_oauth || {};
+  const missingBitrixScopes = Array.isArray(bitrixOauth.missing_scopes) ? bitrixOauth.missing_scopes : [];
+  const bitrixOAuthConfigured = Boolean(bitrixOauth.configured && bitrixOauth.status === "active");
   const activeTenantId = appState?.tenant_id || currentTenantId || "default";
   const isAdmin = currentUser?.role === "admin";
+
+  useEffect(() => {
+    if (bitrixOauth.bitrix_domain && !bitrixPortal) {
+      setBitrixPortal(bitrixOauth.bitrix_domain);
+    }
+  }, [bitrixOauth.bitrix_domain, bitrixPortal]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("bitrix_oauth") === "connected") {
+      setBitrixConnectStatus("Bitrix24 подключен.");
+      window.history.replaceState(null, "", `${window.location.pathname}${window.location.hash}`);
+    }
+  }, []);
+
+  const getErrorMessage = (err) => {
+    const raw = String(err?.bodyText || "").trim();
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        const detail = parsed?.detail;
+        if (typeof detail === "string") return detail;
+        if (detail?.message) return detail.message;
+      } catch {
+        return raw;
+      }
+    }
+    return err?.message || "Не удалось выполнить запрос.";
+  };
 
   const handleTenantChange = async (tenantId) => {
     setTenantStatus("Переключаю клиента...");
@@ -93,6 +132,24 @@ export default function BusinessScreen() {
       setProfileSaveStatus("Анкета бизнеса сохранена.");
     } catch (err) {
       setProfileSaveStatus(`Ошибка сохранения: ${err.message}`);
+    }
+  };
+
+  const handleBitrixConnectSubmit = async (e) => {
+    e.preventDefault();
+    setBitrixConnectStatus("Готовлю подключение Bitrix24...");
+    setIsBitrixConnecting(true);
+    try {
+      const result = await startBitrixConnect({
+        portal: bitrixPortal,
+        return_url: "/app/#/business",
+      });
+      if (!result?.authorize_url) throw new Error("Backend не вернул authorize_url.");
+      setBitrixConnectStatus("Открываю Bitrix24...");
+      window.location.assign(result.authorize_url);
+    } catch (err) {
+      setBitrixConnectStatus(`Ошибка подключения Bitrix24: ${getErrorMessage(err)}`);
+      setIsBitrixConnecting(false);
     }
   };
 
@@ -184,7 +241,7 @@ export default function BusinessScreen() {
       <section>
         <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-4">Интеграции</div>
         <div className="bg-card border border-border rounded p-6 space-y-4">
-          <div className="grid grid-cols-1 gap-3 @3xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-3 @3xl:grid-cols-4">
             <div className="rounded border border-border bg-muted/20 px-4 py-3">
               <div className="mb-2 text-[10px] uppercase tracking-widest text-muted-foreground">
                 Bitrix CRM
@@ -203,9 +260,51 @@ export default function BusinessScreen() {
               </div>
               <StatusBadge configured={integrations.openai_api_key_configured} />
             </div>
+            <div className="rounded border border-border bg-muted/20 px-4 py-3">
+              <div className="mb-2 text-[10px] uppercase tracking-widest text-muted-foreground">
+                Bitrix OAuth
+              </div>
+              <StatusBadge configured={bitrixOAuthConfigured} />
+              {bitrixOauth.bitrix_domain ? (
+                <div className="mt-2 text-[11px] text-muted-foreground">{bitrixOauth.bitrix_domain}</div>
+              ) : null}
+            </div>
           </div>
+          <form onSubmit={handleBitrixConnectSubmit} className="rounded border border-border bg-muted/20 p-4 space-y-3">
+            <div className="grid grid-cols-1 gap-3 @3xl:grid-cols-[minmax(0,1fr)_auto] @3xl:items-end">
+              <label className="flex flex-col gap-2 text-xs text-muted-foreground">
+                Домен Bitrix24
+                <input
+                  type="text"
+                  value={bitrixPortal}
+                  onChange={(e) => setBitrixPortal(e.target.value)}
+                  placeholder="client.bitrix24.kz"
+                  className="bg-input border border-border rounded px-3 py-2 text-foreground"
+                />
+              </label>
+              <button
+                type="submit"
+                disabled={isBitrixConnecting}
+                className="min-h-[38px] px-4 py-2 rounded bg-primary/15 border border-primary/30 text-primary text-xs font-bold uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Подключить Bitrix24
+              </button>
+            </div>
+            {missingBitrixScopes.length ? (
+              <div className="text-xs leading-6 text-destructive">
+                Недостаточно прав Bitrix: {missingBitrixScopes.join(", ")}
+              </div>
+            ) : bitrixOAuthConfigured ? (
+              <div className="text-xs leading-6 text-primary">
+                Bitrix24 подключен через OAuth.
+              </div>
+            ) : null}
+            {bitrixConnectStatus && (
+              <div className="text-xs leading-6 text-muted-foreground">{bitrixConnectStatus}</div>
+            )}
+          </form>
           <div className="rounded border border-border bg-muted/20 px-3 py-2 text-xs leading-6 text-muted-foreground">
-            Интеграции настраиваются администратором на сервере. Webhook-и и OpenAI ключ не вводятся в клиентском интерфейсе.
+            Webhook-и и OpenAI ключ не вводятся в клиентском интерфейсе.
           </div>
         </div>
       </section>

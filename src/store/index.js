@@ -11,6 +11,7 @@ import {
   getStoredAuth,
   getCurrentTenantId,
   postLiveLogin,
+  postBitrixConnectStart,
   postJson,
   resumePendingExecutiveReportBuild,
   setCurrentTenantId as persistCurrentTenantId,
@@ -363,6 +364,20 @@ const useStore = create((set, get) => ({
         appState: {
           ...appState,
           setup: { ...(appState?.setup || {}), integrations: res.integrations },
+        },
+      });
+    }
+    return res;
+  },
+
+  startBitrixConnect: async (payload) => {
+    const { appState } = get();
+    const res = await postBitrixConnectStart(payload);
+    if (res?.bitrix_oauth) {
+      set({
+        appState: {
+          ...appState,
+          setup: { ...(appState?.setup || {}), bitrix_oauth: res.bitrix_oauth },
         },
       });
     }
