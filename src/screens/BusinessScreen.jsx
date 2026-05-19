@@ -20,6 +20,7 @@ export default function BusinessScreen() {
   // Bitrix OAuth state
   const [bitrixPortal, setBitrixPortal] = useState("");
   const [bitrixConnectStatus, setBitrixConnectStatus] = useState("");
+  const [bitrixConnectInfo, setBitrixConnectInfo] = useState(null);
   const [isBitrixConnecting, setIsBitrixConnecting] = useState(false);
 
   // Business profile state
@@ -59,6 +60,20 @@ export default function BusinessScreen() {
   const bitrixOAuthConfigured = Boolean(bitrixOauth.configured && bitrixOauth.status === "active");
   const activeTenantId = appState?.tenant_id || currentTenantId || "default";
   const isAdmin = currentUser?.role === "admin";
+  const bitrixConnectionCode = bitrixConnectInfo?.connection_code || "";
+  const bitrixConnectionExpiry = bitrixConnectInfo?.connection_expires_at
+    ? new Date(Number(bitrixConnectInfo.connection_expires_at) * 1000)
+    : null;
+  const bitrixConnectionExpiryLabel =
+    bitrixConnectionExpiry && Number.isFinite(bitrixConnectionExpiry.getTime())
+      ? bitrixConnectionExpiry.toLocaleString("ru-RU", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : "";
 
   useEffect(() => {
     if (bitrixOauth.bitrix_domain && !bitrixPortal) {
@@ -71,6 +86,7 @@ export default function BusinessScreen() {
     const params = new URLSearchParams(window.location.search);
     if (params.get("bitrix_oauth") === "connected") {
       setBitrixConnectStatus("Bitrix24 подключен.");
+      setBitrixConnectInfo(null);
       window.history.replaceState(null, "", `${window.location.pathname}${window.location.hash}`);
     }
   }, []);
@@ -138,18 +154,40 @@ export default function BusinessScreen() {
   const handleBitrixConnectSubmit = async (e) => {
     e.preventDefault();
     setBitrixConnectStatus("Готовлю подключение Bitrix24...");
+    setBitrixConnectInfo(null);
     setIsBitrixConnecting(true);
     try {
       const result = await startBitrixConnect({
         portal: bitrixPortal,
         return_url: "/app/#/business",
       });
-      if (!result?.authorize_url) throw new Error("Backend не вернул authorize_url.");
-      setBitrixConnectStatus("Открываю Bitrix24...");
-      window.location.assign(result.authorize_url);
+      if (!result?.connection_code) {
+        if (!result?.authorize_url) throw new Error("Backend не вернул authorize_url.");
+        setBitrixConnectStatus("Открываю Bitrix24...");
+        window.location.assign(result.authorize_url);
+        return;
+      }
+      setBitrixConnectInfo(result);
+      setBitrixConnectStatus("Код подключения создан.");
+      setIsBitrixConnecting(false);
     } catch (err) {
       setBitrixConnectStatus(`Ошибка подключения Bitrix24: ${getErrorMessage(err)}`);
       setIsBitrixConnecting(false);
+    }
+  };
+
+  const handleOpenBitrixAuthorize = () => {
+    if (!bitrixConnectInfo?.authorize_url) return;
+    window.location.assign(bitrixConnectInfo.authorize_url);
+  };
+
+  const handleCopyBitrixCode = async () => {
+    if (!bitrixConnectionCode) return;
+    try {
+      await navigator.clipboard.writeText(bitrixConnectionCode);
+      setBitrixConnectStatus("Код подключения скопирован.");
+    } catch {
+      setBitrixConnectStatus("Скопируйте код вручную.");
     }
   };
 
@@ -277,7 +315,10 @@ export default function BusinessScreen() {
                 <input
                   type="text"
                   value={bitrixPortal}
-                  onChange={(e) => setBitrixPortal(e.target.value)}
+                  onChange={(e) => {
+                    setBitrixPortal(e.target.value);
+                    setBitrixConnectInfo(null);
+                  }}
                   placeholder="client.bitrix24.kz"
                   className="bg-input border border-border rounded px-3 py-2 text-foreground"
                 />
@@ -299,6 +340,42 @@ export default function BusinessScreen() {
                 Bitrix24 подключен через OAuth.
               </div>
             ) : null}
+            {bitrixConnectionCode && (
+              <div className="rounded border border-primary/20 bg-primary/5 p-4 space-y-3">
+                <div className="flex flex-col gap-3 @3xl:flex-row @3xl:items-center @3xl:justify-between">
+                  <div>
+                    <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
+                      Код подключения Bitrix24
+                    </div>
+                    <div className="font-mono text-2xl tracking-[0.16em] text-white">
+                      {bitrixConnectionCode}
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={handleCopyBitrixCode}
+                      className="min-h-[34px] px-3 py-2 rounded bg-primary/15 border border-primary/30 text-primary text-[10px] font-bold uppercase tracking-widest"
+                    >
+                      Копировать
+                    </button>
+                    {bitrixConnectInfo?.authorize_url && (
+                      <button
+                        type="button"
+                        onClick={handleOpenBitrixAuthorize}
+                        className="min-h-[34px] px-3 py-2 rounded bg-foreground/5 border border-border text-muted-foreground text-[10px] font-bold uppercase tracking-widest"
+                      >
+                        Открыть Bitrix24
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <div className="text-xs leading-6 text-muted-foreground">
+                  Установите приложение AISales Auditor в Bitrix24 и вставьте этот код в поле Connection code.
+                  {bitrixConnectionExpiryLabel ? ` Код действует до ${bitrixConnectionExpiryLabel}.` : ""}
+                </div>
+              </div>
+            )}
             {bitrixConnectStatus && (
               <div className="text-xs leading-6 text-muted-foreground">{bitrixConnectStatus}</div>
             )}
