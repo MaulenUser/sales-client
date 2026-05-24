@@ -37,16 +37,17 @@ export default function MetricCard({
   const fontSize = compact ? Math.round(baseFontSize * 0.82) : baseFontSize;
   const fontWeight = isNumericish ? 300 : 400;
 
-  const glowColor = GLOW[tone] ?? "rgba(255,255,255,0.02)";
-  const noteColor = NOTE_COLOR[tone] ?? "rgba(255,255,255,0.4)";
+  const glowColor = GLOW[tone] ?? "rgba(var(--foreground),0.04)";
+  const noteColor = NOTE_COLOR[tone] ?? "var(--text-muted)";
 
   return (
     <article
       className={spanClass}
       style={{
         flex: "1 1 0", minWidth: 160,
-        background: "linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)",
-        border: "1px solid rgba(255,255,255,0.06)",
+        background: "var(--surface-glass)",
+        border: "1px solid var(--surface-border)",
+        boxShadow: "var(--shadow-card)",
         borderRadius: compact ? 14 : 16,
         padding: compact ? "18px 20px" : "24px 28px",
         position: "relative",
@@ -69,7 +70,7 @@ export default function MetricCard({
 
       <div style={{
         fontSize: compact ? 11 : 12, fontWeight: 600, letterSpacing: "0.07em",
-        color: "rgba(255,255,255,0.55)", textTransform: "uppercase",
+        color: "var(--text-muted)", textTransform: "uppercase",
         fontFamily: "'JetBrains Mono', monospace",
         marginBottom: compact ? 10 : 16,
       }}>
@@ -77,7 +78,7 @@ export default function MetricCard({
       </div>
 
       <div style={{
-        fontSize, fontWeight: isNumericish ? 400 : 500, color: "#fff",
+        fontSize, fontWeight: isNumericish ? 400 : 500, color: "var(--text-strong)",
         lineHeight: 1.1, marginBottom: 8,
         letterSpacing: isNumericish ? "-0.025em" : "-0.01em",
         wordBreak: "break-word",

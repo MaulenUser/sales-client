@@ -42,7 +42,7 @@ export default function BusinessScreen() {
   }, [loadTenants]);
 
   useEffect(() => {
-    const profile = appState?.setup?.business_profile;
+    const profile = appState?.setup?.business_profile || {};
     const tenantId = appState?.tenant_id || currentTenantId || "default";
     if (initializedTenantRef.current === tenantId) return;
     initializedTenantRef.current = tenantId;
@@ -267,7 +267,7 @@ export default function BusinessScreen() {
               <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
                 Ваш клиент
               </div>
-              <div className="text-lg text-white">{activeTenantId}</div>
+              <div className="text-lg text-foreground">{activeTenantId}</div>
               <div className="mt-2 text-xs leading-6 text-muted-foreground">
                 Переключение клиентов доступно только администратору.
               </div>
@@ -358,7 +358,7 @@ export default function BusinessScreen() {
                     <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
                       Код подключения Bitrix24
                     </div>
-                    <div className="font-mono text-2xl tracking-[0.16em] text-white">
+                    <div className="font-mono text-2xl tracking-[0.16em] text-foreground">
                       {bitrixConnectionCode}
                     </div>
                   </div>

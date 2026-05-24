@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import useStore from "../../store/index.js";
 import { formatNumber, formatDate } from "../../utils/format.js";
+import ThemeToggle from "../shared/ThemeToggle.jsx";
 
 const SCREEN_META = {
   business: { eyebrow: "Настройка бизнеса",  title: "Настройка бизнеса",           subtitle: "Интеграция с Bitrix24 или amoCRM и анкета компании." },
@@ -19,7 +20,7 @@ const SCREEN_META = {
 export { SCREEN_META };
 
 
-export default function Header() {
+export default function Header({ theme = "dark", onThemeChange }) {
   const { pathname } = useLocation();
   const screen = pathname.replace("/", "") || "business";
   const meta = SCREEN_META[screen] || SCREEN_META.business;
@@ -42,12 +43,12 @@ export default function Header() {
       style={{
         display: "flex", justifyContent: "space-between", alignItems: "flex-start",
         padding: "28px 40px 24px",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
+        borderBottom: "1px solid var(--header-border)",
         opacity: mounted ? 1 : 0,
         transform: mounted ? "translateY(0)" : "translateY(-10px)",
         transition: "all 0.6s cubic-bezier(0.16,1,0.3,1) 0.1s",
         position: "sticky", top: 0, zIndex: 10,
-        background: "rgba(8,11,18,0.85)",
+        background: "var(--header-bg)",
         backdropFilter: "blur(16px)",
         WebkitBackdropFilter: "blur(16px)",
       }}
@@ -62,13 +63,13 @@ export default function Header() {
         </div>
         <h1 style={{
           fontSize: 32, fontWeight: 500, margin: "0 0 10px",
-          letterSpacing: "-0.025em", lineHeight: 1.15, color: "#fff",
+          letterSpacing: "-0.025em", lineHeight: 1.15, color: "var(--text-strong)",
           fontFamily: "'Inter', 'Outfit', sans-serif",
         }}>
           {meta.title}
         </h1>
         <p style={{
-          fontSize: 14, color: "rgba(255,255,255,0.58)",
+          fontSize: 14, color: "var(--text-soft)",
           maxWidth: 560, lineHeight: 1.65, margin: 0,
           fontFamily: "'Inter', 'Outfit', sans-serif",
         }}>
@@ -77,8 +78,9 @@ export default function Header() {
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 14, flexShrink: 0 }}>
+        <ThemeToggle theme={theme} onChange={onThemeChange} compact />
         <div style={{
-          fontSize: 12, color: "rgba(255,255,255,0.4)",
+          fontSize: 12, color: "var(--text-muted)",
           fontFamily: "'JetBrains Mono', monospace",
           textAlign: "right", lineHeight: 1.7,
         }}>
@@ -98,10 +100,10 @@ export default function Header() {
             title="Выйти"
             style={{
               minHeight: 34,
-              border: "1px solid rgba(255,255,255,0.1)",
+              border: "1px solid var(--surface-border)",
               borderRadius: 6,
-              background: "rgba(255,255,255,0.03)",
-              color: "rgba(255,255,255,0.65)",
+              background: "var(--surface-subtle)",
+              color: "var(--text-soft)",
               padding: "0 12px",
               fontSize: 11,
               fontWeight: 600,

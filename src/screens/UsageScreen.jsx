@@ -16,15 +16,15 @@ function UsageDistributionCard({ row, totalTokens }) {
   const pct = clampRate(share);
   return (
     <article style={{
-      background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)",
-      border: "1px solid rgba(255,255,255,0.06)", borderRadius: 14, padding: "18px 20px",
+      background: "var(--surface-glass)",
+      border: "1px solid var(--surface-border)", borderRadius: 14, padding: "18px 20px",
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, marginBottom: 14 }}>
         <div>
-          <strong style={{ fontSize: 12, color: "rgba(255,255,255,0.85)", display: "block", marginBottom: 3, fontWeight: 500 }}>
+          <strong style={{ fontSize: 12, color: "var(--text-strong)", display: "block", marginBottom: 3, fontWeight: 500 }}>
             {humanizeToken(row.name || "не указано")}
           </strong>
-          <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+          <span style={{ fontSize: 9, color: "var(--text-faint)", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.12em", textTransform: "uppercase" }}>
             {formatNumber(row.requests)} запросов
           </span>
         </div>
@@ -32,17 +32,17 @@ function UsageDistributionCard({ row, totalTokens }) {
           {formatPercent(share)}
         </span>
       </div>
-      <div style={{ height: 3, borderRadius: 2, background: "rgba(255,255,255,0.06)", overflow: "hidden", marginBottom: 14 }}>
+      <div style={{ height: 3, borderRadius: 2, background: "var(--surface-border)", overflow: "hidden", marginBottom: 14 }}>
         <div style={{ height: "100%", borderRadius: 2, background: "linear-gradient(90deg, rgba(52,168,90,0.7), rgba(52,168,90,0.3))", width: `${pct}%`, transition: "width 0.8s cubic-bezier(0.16,1,0.3,1)" }} />
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
         <div>
-          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.25)", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 3 }}>Total</div>
-          <div style={{ fontSize: 13, fontWeight: 300, color: "#fff", fontVariantNumeric: "tabular-nums" }}>{formatNumber(row.total_tokens)}</div>
+          <div style={{ fontSize: 9, color: "var(--text-faint)", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 3 }}>Total</div>
+          <div style={{ fontSize: 13, fontWeight: 300, color: "var(--text-strong)", fontVariantNumeric: "tabular-nums" }}>{formatNumber(row.total_tokens)}</div>
         </div>
         <div>
-          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.25)", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 3 }}>In / Out</div>
-          <div style={{ fontSize: 11, fontWeight: 400, color: "rgba(255,255,255,0.65)", fontVariantNumeric: "tabular-nums" }}>
+          <div style={{ fontSize: 9, color: "var(--text-faint)", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 3 }}>In / Out</div>
+          <div style={{ fontSize: 11, fontWeight: 400, color: "var(--text-soft)", fontVariantNumeric: "tabular-nums" }}>
             {formatNumber(row.input_tokens)} / {formatNumber(row.output_tokens)}
           </div>
         </div>
@@ -72,8 +72,8 @@ function UsageTimeline({ events }) {
 
   return (
     <div style={{
-      background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)",
-      border: "1px solid rgba(255,255,255,0.06)", borderRadius: 16, padding: "24px 28px",
+      background: "var(--surface-glass)",
+      border: "1px solid var(--surface-border)", borderRadius: 16, padding: "24px 28px",
     }}>
       <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 180 }}>
         {rows.map((row, i) => {
@@ -94,10 +94,10 @@ function UsageTimeline({ events }) {
                   }}
                 />
               </div>
-              <div style={{ fontSize: 8, color: "rgba(255,255,255,0.25)", fontFamily: "'JetBrains Mono', monospace", textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "100%" }}>
+              <div style={{ fontSize: 8, color: "var(--text-faint)", fontFamily: "'JetBrains Mono', monospace", textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "100%" }}>
                 {formatTime(row.event_at || row.generated_at)}
               </div>
-              <div style={{ fontSize: 8, color: "rgba(255,255,255,0.45)", fontFamily: "'JetBrains Mono', monospace", textAlign: "center", fontVariantNumeric: "tabular-nums" }}>
+              <div style={{ fontSize: 8, color: "var(--text-soft)", fontFamily: "'JetBrains Mono', monospace", textAlign: "center", fontVariantNumeric: "tabular-nums" }}>
                 {formatNumber(row.total_tokens)}
               </div>
             </div>
@@ -223,18 +223,18 @@ export default function UsageScreen() {
               <tbody>
                 {sortedEvents.map((row, i) => (
                   <tr key={i}>
-                    <td style={{ color: "rgba(255,255,255,0.35)" }}>
+                    <td style={{ color: "var(--text-faint)" }}>
                       {formatDate(row.event_at || row.generated_at)}
                     </td>
                     <td>{row.stage || "не указано"}</td>
-                    <td style={{ color: "rgba(255,255,255,0.45)", fontFamily: "'JetBrains Mono', monospace", fontSize: 11 }}>{row.model || "не указано"}</td>
+                    <td style={{ color: "var(--text-soft)", fontFamily: "'JetBrains Mono', monospace", fontSize: 11 }}>{row.model || "не указано"}</td>
                     <td style={{ textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
                       {formatNumber(row.input_tokens)}
                     </td>
                     <td style={{ textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
                       {formatNumber(row.output_tokens)}
                     </td>
-                    <td style={{ textAlign: "right", color: "rgba(255,255,255,0.9)", fontWeight: 500, fontVariantNumeric: "tabular-nums" }}>
+                    <td style={{ textAlign: "right", color: "var(--text-strong)", fontWeight: 500, fontVariantNumeric: "tabular-nums" }}>
                       {formatNumber(row.total_tokens)}
                     </td>
                   </tr>

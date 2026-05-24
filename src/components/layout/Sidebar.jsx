@@ -43,10 +43,10 @@ export default function Sidebar() {
     <aside
       style={{
         width: 240, flexShrink: 0, padding: "24px 16px",
-        borderRight: "1px solid rgba(255,255,255,0.05)",
+        borderRight: "1px solid var(--sidebar-border)",
         display: "flex", flexDirection: "column", gap: 4,
         position: "relative", zIndex: 1,
-        background: "rgba(255,255,255,0.01)",
+        background: "var(--sidebar-bg)",
         opacity: mounted ? 1 : 0,
         transform: mounted ? "translateX(0)" : "translateX(-20px)",
         transition: "all 0.8s cubic-bezier(0.16,1,0.3,1)",
@@ -58,7 +58,7 @@ export default function Sidebar() {
       <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "8px 12px", marginBottom: 24 }}>
         <Logo />
         <div>
-          <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em", color: "#fff" }}>
+          <div style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em", color: "var(--text-strong)" }}>
             AISales Auditor
           </div>
         </div>
@@ -69,7 +69,7 @@ export default function Sidebar() {
           <div key={section} style={{ marginBottom: 8 }}>
             <div style={{
               fontSize: 11, fontWeight: 600, letterSpacing: "0.1em",
-              color: "rgba(255,255,255,0.32)", padding: "12px 12px 6px",
+              color: "var(--text-faint)", padding: "12px 12px 6px",
               fontFamily: "'JetBrains Mono', monospace",
               textTransform: "uppercase",
             }}>

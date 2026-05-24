@@ -78,7 +78,7 @@ function Donut({ channels, total }) {
   const segments = [
     { label: "Звонки", pct: callRate, color: "rgba(0,210,255,0.85)" },
     { label: "WhatsApp", pct: waRate, color: "rgba(52,168,90,0.85)" },
-    { label: "Прочее", pct: restRate, color: "rgba(255,255,255,0.15)" },
+    { label: "Прочее", pct: restRate, color: "var(--text-faint)" },
   ];
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
@@ -91,14 +91,14 @@ function Donut({ channels, total }) {
         <div style={{
           position: "absolute", inset: "24px",
           borderRadius: "50%",
-          background: "rgba(8,11,18,0.95)",
+          background: "rgb(var(--card))",
           display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
           backdropFilter: "blur(4px)",
         }}>
-          <span style={{ fontSize: 16, fontWeight: 300, color: "#fff", letterSpacing: "-0.02em", lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>
+          <span style={{ fontSize: 16, fontWeight: 300, color: "var(--text-strong)", letterSpacing: "-0.02em", lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>
             {formatNumber(total)}
           </span>
-          <span style={{ fontSize: 8, color: "rgba(255,255,255,0.3)", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 3 }}>
+          <span style={{ fontSize: 8, color: "var(--text-faint)", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 3 }}>
             всего
           </span>
         </div>
@@ -107,10 +107,10 @@ function Donut({ channels, total }) {
         {segments.map((seg, i) => (
           <div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span style={{ width: 8, height: 8, borderRadius: 2, background: seg.color, flexShrink: 0 }} />
-            <span style={{ fontSize: 10, color: "rgba(255,255,255,0.45)", fontFamily: "'JetBrains Mono', monospace" }}>
+            <span style={{ fontSize: 10, color: "var(--text-soft)", fontFamily: "'JetBrains Mono', monospace" }}>
               {seg.label}
             </span>
-            <span style={{ fontSize: 10, color: "rgba(255,255,255,0.75)", fontFamily: "'JetBrains Mono', monospace", fontWeight: 600, marginLeft: "auto", paddingLeft: 16, fontVariantNumeric: "tabular-nums" }}>
+            <span style={{ fontSize: 10, color: "var(--text-strong)", fontFamily: "'JetBrains Mono', monospace", fontWeight: 600, marginLeft: "auto", paddingLeft: 16, fontVariantNumeric: "tabular-nums" }}>
               {formatPercent(seg.pct)}
             </span>
           </div>
@@ -135,15 +135,15 @@ function LeaderCard({ manager, summary }) {
     <div
       onClick={() => navigate("/managers")}
       style={{
-        background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)",
-        border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: "16px 20px",
+        background: "var(--surface-glass)",
+        border: "1px solid var(--surface-border)", borderRadius: 12, padding: "16px 20px",
         cursor: "pointer", transition: "border-color 0.2s ease",
       }}
       onMouseEnter={e => e.currentTarget.style.borderColor = "rgba(52,168,90,0.25)"}
-      onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"}
+      onMouseLeave={e => e.currentTarget.style.borderColor = "var(--surface-border)"}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
-        <span style={{ fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.8)" }}>
+        <span style={{ fontSize: 11, fontWeight: 500, color: "var(--text-strong)" }}>
           {getManagerName(manager.manager_id)}
         </span>
         <Badge
@@ -151,11 +151,11 @@ function LeaderCard({ manager, summary }) {
           tone={Number(manager.actionable_rate || 0) >= 50 ? "ok" : "warning"}
         />
       </div>
-      <p style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", fontFamily: "'JetBrains Mono', monospace", marginBottom: 12, lineHeight: 1.5 }}>{topics}</p>
-      <div style={{ height: 3, borderRadius: 2, background: "rgba(255,255,255,0.06)", overflow: "hidden" }}>
+      <p style={{ fontSize: 9, color: "var(--text-faint)", fontFamily: "'JetBrains Mono', monospace", marginBottom: 12, lineHeight: 1.5 }}>{topics}</p>
+      <div style={{ height: 3, borderRadius: 2, background: "var(--surface-border)", overflow: "hidden" }}>
         <div style={{ height: "100%", borderRadius: 2, background: "linear-gradient(90deg, rgba(0,210,255,0.7), rgba(0,210,255,0.3))", width: `${clampRate(width)}%`, transition: "width 0.8s cubic-bezier(0.16,1,0.3,1)" }} />
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9, color: "rgba(255,255,255,0.25)", fontFamily: "'JetBrains Mono', monospace", marginTop: 6 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9, color: "var(--text-faint)", fontFamily: "'JetBrains Mono', monospace", marginTop: 6 }}>
         <span>{formatNumber(manager.interactions)} обращений</span>
         <span>{formatPercent(manager.qualified_rate || 0)} квал.</span>
       </div>
@@ -172,20 +172,20 @@ function EvidenceCard({ title, rows, tone }) {
 
   return (
     <article style={{
-      background: "linear-gradient(145deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0.01) 100%)",
+      background: "var(--surface-glass)",
       border: `1px solid ${borderColor}`, borderRadius: 12, padding: "16px 20px",
       display: "flex", flexDirection: "column", gap: 12,
     }}>
       <p style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.14em", fontFamily: "'JetBrains Mono', monospace", color: labelColor, margin: 0 }}>{title}</p>
       {ensureArray(rows).slice(0, 2).map((item, i) => (
-        <div key={i} style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 12 }}>
+        <div key={i} style={{ borderTop: "1px solid var(--surface-border)", paddingTop: 12 }}>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 6 }}>
             {item.channel && <Badge text={item.channel} tone="neutral" />}
             {item.outcome_status && <Badge text={item.outcome_status} tone="neutral" />}
           </div>
-          <p style={{ fontSize: 11, color: "rgba(255,255,255,0.65)", lineHeight: 1.6, marginBottom: 8 }}>{item.summary}</p>
+          <p style={{ fontSize: 11, color: "var(--text-soft)", lineHeight: 1.6, marginBottom: 8 }}>{item.summary}</p>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ fontSize: 9, color: "rgba(255,255,255,0.25)", fontFamily: "'JetBrains Mono', monospace" }}>{getManagerName(item.manager_id)}</span>
+            <span style={{ fontSize: 9, color: "var(--text-faint)", fontFamily: "'JetBrains Mono', monospace" }}>{getManagerName(item.manager_id)}</span>
             {item.interaction_id && (
               <button
                 style={{ fontSize: 9, color: "rgba(0,210,255,0.7)", fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase", letterSpacing: "0.1em", background: "none", border: "none", cursor: "pointer" }}
@@ -311,15 +311,15 @@ export default function OverviewScreen() {
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div style={{
           gridColumn: "span 2",
-          background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)",
-          border: "1px solid rgba(255,255,255,0.06)", borderRadius: 16, padding: "24px 28px",
+          background: "var(--surface-glass)",
+          border: "1px solid var(--surface-border)", borderRadius: 16, padding: "24px 28px",
         }}>
           <p className="kpi-section-label">Общий срез</p>
-          <p style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.8 }}>{insight}</p>
+          <p style={{ fontSize: 13, color: "var(--text-soft)", lineHeight: 1.8 }}>{insight}</p>
         </div>
         <div style={{
-          background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)",
-          border: "1px solid rgba(255,255,255,0.06)", borderRadius: 16, padding: "24px 28px",
+          background: "var(--surface-glass)",
+          border: "1px solid var(--surface-border)", borderRadius: 16, padding: "24px 28px",
           display: "flex", alignItems: "center", justifyContent: "center",
         }}>
           <Donut channels={channels} total={Number(overall.total_interactions || 0)} />
@@ -366,17 +366,17 @@ export default function OverviewScreen() {
             const totalVal = Number(overall.total_interactions || 1);
             const pct = Math.min(100, (val / totalVal) * 100);
             return (
-              <div key={i} style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: "20px 16px", background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, margin: "0 4px" }}>
-                <span style={{ fontSize: 8, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.14em", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", marginBottom: 10 }}>
+              <div key={i} style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: "20px 16px", background: "var(--surface-glass)", border: "1px solid var(--surface-border)", borderRadius: 12, margin: "0 4px" }}>
+                <span style={{ fontSize: 8, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.14em", color: "var(--text-faint)", textTransform: "uppercase", marginBottom: 10 }}>
                   {step.label}
                 </span>
-                <span style={{ fontSize: 26, fontWeight: 300, color: "#fff", letterSpacing: "-0.02em", lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{formatNumber(val)}</span>
+                <span style={{ fontSize: 26, fontWeight: 300, color: "var(--text-strong)", letterSpacing: "-0.02em", lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{formatNumber(val)}</span>
                 <span style={{ fontSize: 9, color: "rgba(0,210,255,0.7)", fontFamily: "'JetBrains Mono', monospace", marginTop: 6 }}>{step.note}</span>
-                <div style={{ height: 2, borderRadius: 1, background: "rgba(255,255,255,0.04)", width: "100%", marginTop: 12, overflow: "hidden" }}>
+                <div style={{ height: 2, borderRadius: 1, background: "var(--surface-subtle)", width: "100%", marginTop: 12, overflow: "hidden" }}>
                   <div style={{ height: "100%", background: "linear-gradient(90deg, rgba(52,168,90,0.6), rgba(52,168,90,0.2))", width: `${pct}%`, transition: "width 1s cubic-bezier(0.16,1,0.3,1)" }} />
                 </div>
                 {i < PIPELINE_STEPS.length - 1 && (
-                  <span style={{ position: "absolute", right: -8, top: "50%", transform: "translateY(-50%)", fontSize: 16, color: "rgba(255,255,255,0.1)", zIndex: 10 }}>
+                  <span style={{ position: "absolute", right: -8, top: "50%", transform: "translateY(-50%)", fontSize: 16, color: "var(--text-faint)", zIndex: 10 }}>
                     ›
                   </span>
                 )}
@@ -450,9 +450,9 @@ export default function OverviewScreen() {
             >
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                 <Badge text={r.severity === "danger" ? "критично" : "внимание"} tone={r.severity === "danger" ? "danger" : "warning"} />
-                <span style={{ fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.8)", textTransform: "uppercase", letterSpacing: "0.08em" }}>{r.title}</span>
+                <span style={{ fontSize: 10, fontWeight: 600, color: "var(--text-strong)", textTransform: "uppercase", letterSpacing: "0.08em" }}>{r.title}</span>
               </div>
-              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", lineHeight: 1.7, margin: 0 }}>{r.body}</p>
+              <p style={{ fontSize: 12, color: "var(--text-faint)", lineHeight: 1.7, margin: 0 }}>{r.body}</p>
             </article>
           ))}
         </div>

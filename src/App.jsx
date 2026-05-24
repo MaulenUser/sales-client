@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import useStore from "./store/index.js";
 import Sidebar from "./components/layout/Sidebar.jsx";
@@ -16,16 +16,35 @@ import ReportScreen from "./screens/ReportScreen.jsx";
 import HistoryScreen from "./screens/HistoryScreen.jsx";
 import UsageScreen from "./screens/UsageScreen.jsx";
 
+const THEME_STORAGE_KEY = "ai-auditor-theme";
+const DEFAULT_THEME = "dark";
+
+function getInitialTheme() {
+  if (typeof window === "undefined") return DEFAULT_THEME;
+  return window.localStorage.getItem(THEME_STORAGE_KEY) === "light" ? "light" : DEFAULT_THEME;
+}
+
+function useThemeMode() {
+  const [theme, setTheme] = useState(getInitialTheme);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.theme = theme;
+    root.classList.toggle("dark", theme === "dark");
+    window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+  }, [theme]);
+
+  return [theme, setTheme];
+}
+
 const ambientStyle = {
   position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
-  background: [
-    "radial-gradient(ellipse 70% 50% at 10% 5%, rgba(52,168,90,0.055) 0%, transparent 70%)",
-    "radial-gradient(ellipse 50% 50% at 85% 85%, rgba(52,168,90,0.035) 0%, transparent 65%)",
-  ].join(", "),
+  background: "var(--app-ambient)",
 };
 
 function AppShell() {
   const { init, isLoading, error, authRequired, currentUser } = useStore();
+  const [theme, setTheme] = useThemeMode();
 
   useEffect(() => { init(); }, []);
 
@@ -34,19 +53,19 @@ function AppShell() {
       <main className="min-h-screen bg-background text-foreground flex items-center justify-center p-8">
         <div style={{
           maxWidth: 520, width: "100%",
-          background: "linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))",
+          background: "var(--surface-glass)",
           border: "1px solid rgba(240,86,86,0.18)",
           borderRadius: 20, padding: "32px 36px",
-          boxShadow: "0 24px 64px rgba(0,0,0,0.4)",
+          boxShadow: "var(--shadow-soft)",
         }}>
           <div style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.2em", color: "rgb(240,86,86)", textTransform: "uppercase", marginBottom: 16, fontFamily: "'JetBrains Mono', monospace" }}>
             Ошибка дэшборда
           </div>
-          <h1 style={{ fontSize: 22, fontWeight: 300, letterSpacing: "-0.02em", marginBottom: 12, color: "#fff" }}>
+          <h1 style={{ fontSize: 22, fontWeight: 300, letterSpacing: "-0.02em", marginBottom: 12, color: "var(--text-strong)" }}>
             Не удалось инициализировать дэшборд
           </h1>
-          <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", lineHeight: 1.6 }}>{error}</p>
-          <p style={{ fontSize: 11, color: "rgba(255,255,255,0.2)", marginTop: 20, paddingTop: 16, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+          <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6 }}>{error}</p>
+          <p style={{ fontSize: 11, color: "var(--text-faint)", marginTop: 20, paddingTop: 16, borderTop: "1px solid var(--surface-border)" }}>
             Проверьте локальный сервер и наличие файлов в export/.
           </p>
         </div>
@@ -55,7 +74,7 @@ function AppShell() {
   }
 
   if (authRequired && !currentUser) {
-    return <LoginScreen />;
+    return <LoginScreen theme={theme} onThemeChange={setTheme} />;
   }
 
   return (
@@ -63,14 +82,14 @@ function AppShell() {
       <div style={ambientStyle} />
       <Sidebar />
       <main className="flex-1 flex flex-col min-w-0" style={{ position: "relative", zIndex: 1 }}>
-        <Header />
+        <Header theme={theme} onThemeChange={setTheme} />
         <div
           className="flex-1 overflow-y-auto custom-scrollbar"
           style={{ padding: "32px 40px", containerType: "inline-size", containerName: "canvas" }}
         >
           {isLoading ? (
             <div className="flex items-center justify-center h-full">
-              <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.2em", color: "rgba(255,255,255,0.2)", textTransform: "uppercase", fontFamily: "'JetBrains Mono', monospace" }}>
+              <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.2em", color: "var(--text-faint)", textTransform: "uppercase", fontFamily: "'JetBrains Mono', monospace" }}>
                 Загрузка данных...
               </div>
             </div>

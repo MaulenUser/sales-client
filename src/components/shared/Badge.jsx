@@ -2,7 +2,7 @@ import React from "react";
 
 const TONES = {
   ok:      { bg: "rgba(52,168,90,0.12)",  border: "rgba(52,168,90,0.25)",  text: "rgb(74,222,128)" },
-  neutral: { bg: "rgba(255,255,255,0.05)", border: "rgba(255,255,255,0.1)", text: "rgba(255,255,255,0.5)" },
+  neutral: { bg: "var(--surface-subtle)", border: "var(--surface-border)", text: "var(--text-muted)" },
   warning: { bg: "rgba(246,192,60,0.1)",  border: "rgba(246,192,60,0.22)", text: "rgb(246,192,60)" },
   danger:  { bg: "rgba(240,86,86,0.1)",   border: "rgba(240,86,86,0.22)",  text: "rgb(240,86,86)" },
 };

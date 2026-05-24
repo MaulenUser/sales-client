@@ -8,6 +8,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <script>
+    try {
+      const theme = localStorage.getItem("ai-auditor-theme") === "light" ? "light" : "dark";
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.classList.toggle("dark", theme === "dark");
+    } catch (error) {}
+  </script>
 </head>
 <body>
   <div id="root"></div>

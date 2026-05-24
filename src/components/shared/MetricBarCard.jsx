@@ -6,14 +6,14 @@ export default function MetricBarCard({ title, rate: rateValue, note, tone = "su
   const pct = clampRate(rateValue);
   const isDanger = tone === "danger";
   const barColor = isDanger ? "rgba(240,86,86,0.8)" : "rgba(52,168,90,0.8)";
-  const pctColor = isDanger ? "rgba(240,86,86,0.9)" : "#fff";
+  const pctColor = isDanger ? "rgba(240,86,86,0.9)" : "var(--text-strong)";
 
   return (
     <article style={{ display: "flex", flexDirection: "column", gap: 0 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
         <span style={{
           fontSize: 10, fontWeight: 600, letterSpacing: "0.1em",
-          color: "rgba(255,255,255,0.35)", textTransform: "uppercase",
+          color: "var(--text-faint)", textTransform: "uppercase",
           fontFamily: "'JetBrains Mono', monospace",
           whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "65%",
         }}>
@@ -29,7 +29,7 @@ export default function MetricBarCard({ title, rate: rateValue, note, tone = "su
       </div>
       <div style={{
         height: 4, borderRadius: 2,
-        background: "rgba(255,255,255,0.06)",
+        background: "var(--surface-border)",
         overflow: "hidden", marginBottom: 6,
       }}>
         <div style={{
@@ -40,7 +40,7 @@ export default function MetricBarCard({ title, rate: rateValue, note, tone = "su
       </div>
       <div style={{
         display: "flex", justifyContent: "space-between",
-        fontSize: 9, color: "rgba(255,255,255,0.25)",
+        fontSize: 9, color: "var(--text-faint)",
         fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase",
         letterSpacing: "0.08em",
       }}>

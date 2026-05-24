@@ -56,11 +56,11 @@ function ManagerHeatmap({ managers, interactions }) {
     <table style={{ width: "100%", borderCollapse: "collapse" }}>
       <thead>
         <tr>
-          <th style={{ textAlign: "left", fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)", fontWeight: 600, paddingBottom: 14, paddingRight: 16, minWidth: 130 }}>
+          <th style={{ textAlign: "left", fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-faint)", fontWeight: 600, paddingBottom: 14, paddingRight: 16, minWidth: 130 }}>
             Менеджер
           </th>
           {HEATMAP_COLUMNS.map(([, label]) => (
-            <th key={label} style={{ textAlign: "center", fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)", fontWeight: 600, paddingBottom: 14, paddingLeft: 8, paddingRight: 8, minWidth: 90 }}>
+            <th key={label} style={{ textAlign: "center", fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-faint)", fontWeight: 600, paddingBottom: 14, paddingLeft: 8, paddingRight: 8, minWidth: 90 }}>
               {label}
             </th>
           ))}
@@ -72,8 +72,8 @@ function ManagerHeatmap({ managers, interactions }) {
             (r) => String(r.manager_id) === String(m.manager_id)
           );
           return (
-            <tr key={i} style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-              <td style={{ paddingTop: 10, paddingBottom: 10, paddingRight: 16, fontSize: 12, color: "rgba(255,255,255,0.75)", fontWeight: 400, whiteSpace: "nowrap" }}>
+            <tr key={i} style={{ borderTop: "1px solid var(--surface-border)" }}>
+              <td style={{ paddingTop: 10, paddingBottom: 10, paddingRight: 16, fontSize: 12, color: "var(--text-strong)", fontWeight: 400, whiteSpace: "nowrap" }}>
                 {getManagerName(m.manager_id)}
               </td>
               {HEATMAP_COLUMNS.map(([key]) => {
@@ -84,7 +84,7 @@ function ManagerHeatmap({ managers, interactions }) {
                       ...heatmapCellStyle(r),
                       display: "inline-flex", alignItems: "center", justifyContent: "center",
                       padding: "4px 8px", borderRadius: 6,
-                      fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.9)",
+                      fontSize: 9, fontWeight: 700, color: "var(--text-strong)",
                       fontFamily: "'JetBrains Mono', monospace", minWidth: 44,
                       fontVariantNumeric: "tabular-nums",
                     }}>
@@ -128,24 +128,24 @@ function ManagerComparison({ managers }) {
 
   return (
     <div style={{
-      background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)",
-      border: "1px solid rgba(255,255,255,0.06)", borderRadius: 16, padding: "24px 28px",
+      background: "var(--surface-glass)",
+      border: "1px solid var(--surface-border)", borderRadius: 16, padding: "24px 28px",
     }}>
       <p className="kpi-section-label" style={{ marginBottom: 6 }}>Лидер vs среднее по команде</p>
       <p style={{ fontSize: 12, color: "rgba(0,210,255,0.8)", marginBottom: 20, fontFamily: "'JetBrains Mono', monospace" }}>{getManagerName(leader.manager_id)}</p>
       <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
         {compareRows.map((row, i) => (
           <div key={i}>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9, color: "rgba(255,255,255,0.3)", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9, color: "var(--text-faint)", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 6 }}>
               <span>{row.label}</span>
               <span>
                 <span style={{ color: "rgba(52,168,90,0.9)", fontWeight: 600, fontVariantNumeric: "tabular-nums" }}>{formatPercent(row.leaderVal)}</span>
-                <span style={{ margin: "0 6px", color: "rgba(255,255,255,0.15)" }}>vs</span>
+                <span style={{ margin: "0 6px", color: "var(--text-faint)" }}>vs</span>
                 <span style={{ fontVariantNumeric: "tabular-nums" }}>{formatPercent(row.avgVal)} ср.</span>
               </span>
             </div>
-            <div style={{ position: "relative", height: 4, background: "rgba(255,255,255,0.05)", borderRadius: 2, overflow: "hidden" }}>
-              <div style={{ position: "absolute", top: 0, left: 0, height: "100%", borderRadius: 2, background: "rgba(255,255,255,0.12)", width: `${clampRate(row.avgVal)}%` }} />
+            <div style={{ position: "relative", height: 4, background: "var(--surface-border)", borderRadius: 2, overflow: "hidden" }}>
+              <div style={{ position: "absolute", top: 0, left: 0, height: "100%", borderRadius: 2, background: "color-mix(in srgb, rgb(var(--foreground)) 14%, transparent)", width: `${clampRate(row.avgVal)}%` }} />
               <div style={{ position: "absolute", top: 0, left: 0, height: "100%", borderRadius: 2, background: "linear-gradient(90deg, rgba(52,168,90,0.8), rgba(52,168,90,0.4))", width: `${clampRate(row.leaderVal)}%`, transition: `width 0.8s ${i * 0.1}s cubic-bezier(0.16,1,0.3,1)` }} />
             </div>
           </div>
@@ -168,11 +168,11 @@ function ManagerSpotlight({ manager, interactions }) {
 
   return (
     <div style={{
-      background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)",
-      border: "1px solid rgba(255,255,255,0.06)", borderRadius: 16, padding: "24px 28px",
+      background: "var(--surface-glass)",
+      border: "1px solid var(--surface-border)", borderRadius: 16, padding: "24px 28px",
     }}>
       <p className="kpi-section-label" style={{ marginBottom: 4 }}>Лидер команды</p>
-      <h3 style={{ fontSize: 18, fontWeight: 300, color: "#fff", marginBottom: 16, letterSpacing: "-0.01em" }}>
+      <h3 style={{ fontSize: 18, fontWeight: 300, color: "var(--text-strong)", marginBottom: 16, letterSpacing: "-0.01em" }}>
         {getManagerName(manager.manager_id)}
       </h3>
       <div className="flex flex-wrap gap-1 mb-4">
@@ -280,9 +280,9 @@ export default function ManagersScreen() {
                   <tr key={i}>
                     <td>
                       <button
-                        style={{ textAlign: "left", background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.8)", fontWeight: 500, fontSize: 12, display: "flex", alignItems: "center", gap: 6, transition: "color 0.15s" }}
+                        style={{ textAlign: "left", background: "none", border: "none", cursor: "pointer", color: "var(--text-strong)", fontWeight: 500, fontSize: 12, display: "flex", alignItems: "center", gap: 6, transition: "color 0.15s" }}
                         onMouseEnter={e => e.currentTarget.style.color = "rgba(0,210,255,0.9)"}
-                        onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.8)"}
+                        onMouseLeave={e => e.currentTarget.style.color = "var(--text-strong)"}
                         onClick={() => focusManager(m.manager_id)}
                       >
                         {getManagerName(m.manager_id)}
@@ -296,7 +296,7 @@ export default function ManagersScreen() {
                           ))}
                       </div>
                     </td>
-                    <td style={{ textAlign: "right", fontVariantNumeric: "tabular-nums", fontWeight: 500, color: "rgba(255,255,255,0.85)" }}>
+                    <td style={{ textAlign: "right", fontVariantNumeric: "tabular-nums", fontWeight: 500, color: "var(--text-strong)" }}>
                       {formatNumber(m.interactions)}
                     </td>
                     <td style={{ textAlign: "right" }}>
@@ -309,13 +309,13 @@ export default function ManagersScreen() {
                         {formatPercent(m.actionable_rate)}
                       </span>
                     </td>
-                    <td style={{ textAlign: "right", color: "rgba(255,255,255,0.35)", fontVariantNumeric: "tabular-nums" }}>
+                    <td style={{ textAlign: "right", color: "var(--text-faint)", fontVariantNumeric: "tabular-nums" }}>
                       {formatNumber(m.qualified_count)}
                     </td>
                     <td style={{ textAlign: "right" }}>
                       <button
                         style={{ fontSize: 9, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(0,210,255,0.7)", background: "none", border: "none", cursor: "pointer", transition: "color 0.15s" }}
-                        onMouseEnter={e => e.currentTarget.style.color = "#fff"}
+                        onMouseEnter={e => e.currentTarget.style.color = "var(--text-strong)"}
                         onMouseLeave={e => e.currentTarget.style.color = "rgba(0,210,255,0.7)"}
                         onClick={() => focusManager(m.manager_id)}
                       >
@@ -340,8 +340,8 @@ export default function ManagersScreen() {
           Тепловая карта навыков
         </h2>
         <div style={{
-          background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)",
-          border: "1px solid rgba(255,255,255,0.06)", borderRadius: 16, padding: "24px 28px", overflowX: "auto",
+          background: "var(--surface-glass)",
+          border: "1px solid var(--surface-border)", borderRadius: 16, padding: "24px 28px", overflowX: "auto",
         }}>
           <ManagerHeatmap managers={managers} interactions={interactions} />
         </div>

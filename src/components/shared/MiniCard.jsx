@@ -12,21 +12,21 @@ export default function MiniCard({ label, value, note, tone = "cyan" }) {
   return (
     <article style={{
       padding: "16px 20px",
-      background: "rgba(255,255,255,0.025)",
-      border: "1px solid rgba(255,255,255,0.06)",
+      background: "var(--surface-subtle)",
+      border: "1px solid var(--surface-border)",
       borderRadius: 12,
       display: "flex", flexDirection: "column", gap: 6,
     }}>
       <p style={{
         fontSize: 11, fontWeight: 600, letterSpacing: "0.1em",
-        color: "rgba(255,255,255,0.5)", textTransform: "uppercase",
+        color: "var(--text-muted)", textTransform: "uppercase",
         fontFamily: "'JetBrains Mono', monospace", margin: 0,
       }}>
         {label}
       </p>
       <p style={{
         fontSize: 24, fontWeight: 400, letterSpacing: "-0.025em",
-        color: "#fff", lineHeight: 1.05, margin: 0,
+        color: "var(--text-strong)", lineHeight: 1.05, margin: 0,
         fontVariantNumeric: "tabular-nums",
         fontFamily: "'Inter', 'Outfit', sans-serif",
       }}>
@@ -34,7 +34,7 @@ export default function MiniCard({ label, value, note, tone = "cyan" }) {
       </p>
       {note && (
         <p style={{
-          fontSize: 12, color: NOTE_COLOR[tone] ?? "rgba(255,255,255,0.5)",
+          fontSize: 12, color: NOTE_COLOR[tone] ?? "var(--text-muted)",
           fontFamily: "'JetBrains Mono', monospace", margin: 0, lineHeight: 1.5,
         }}>
           {note}

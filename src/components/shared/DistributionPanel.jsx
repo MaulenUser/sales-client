@@ -6,20 +6,21 @@ export default function DistributionPanel({ title, rows }) {
   const items = ensureArray(rows).slice(0, 6);
   return (
     <article style={{
-      background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)",
-      border: "1px solid rgba(255,255,255,0.06)",
+      background: "var(--surface-glass)",
+      border: "1px solid var(--surface-border)",
+      boxShadow: "var(--shadow-card)",
       borderRadius: 16, padding: "20px 24px",
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
         <span style={{
           fontSize: 10, fontWeight: 600, letterSpacing: "0.12em",
-          color: "rgba(255,255,255,0.3)", textTransform: "uppercase",
+          color: "var(--text-faint)", textTransform: "uppercase",
           fontFamily: "'JetBrains Mono', monospace",
         }}>
           {title}
         </span>
         <span style={{
-          fontSize: 10, color: "rgba(255,255,255,0.2)",
+          fontSize: 10, color: "var(--text-faint)",
           fontFamily: "'JetBrains Mono', monospace",
           fontVariantNumeric: "tabular-nums",
         }}>
@@ -32,22 +33,22 @@ export default function DistributionPanel({ title, rows }) {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
                 <span style={{
-                  fontSize: 9, fontWeight: 600, color: "rgba(255,255,255,0.2)",
+                  fontSize: 9, fontWeight: 600, color: "var(--text-faint)",
                   fontFamily: "'JetBrains Mono', monospace", width: 12, flexShrink: 0,
                   fontVariantNumeric: "tabular-nums",
                 }}>
                   {i + 1}
                 </span>
-                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <span style={{ fontSize: 12, color: "var(--text-soft)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {item.name || "не указано"}
                 </span>
               </div>
               <span style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", flexShrink: 0, paddingLeft: 8, fontVariantNumeric: "tabular-nums" }}>
-                <span style={{ color: "rgba(255,255,255,0.35)" }}>{formatNumber(item.count)} </span>
+                <span style={{ color: "var(--text-faint)" }}>{formatNumber(item.count)} </span>
                 <span style={{ color: "rgba(52,168,90,0.9)", fontWeight: 600 }}>{formatPercent(item.rate)}</span>
               </span>
             </div>
-            <div style={{ height: 3, borderRadius: 2, background: "rgba(255,255,255,0.05)", marginLeft: 20 }}>
+            <div style={{ height: 3, borderRadius: 2, background: "var(--surface-border)", marginLeft: 20 }}>
               <div style={{
                 height: "100%", borderRadius: 2,
                 background: "linear-gradient(90deg, rgba(52,168,90,0.6), rgba(52,168,90,0.3))",
