@@ -11,6 +11,7 @@ import {
   getStoredAuth,
   getCurrentTenantId,
   postLiveLogin,
+  postLiveRegister,
   postBitrixConnectStart,
   postJson,
   resumePendingExecutiveReportBuild,
@@ -70,6 +71,24 @@ const useStore = create((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const auth = await postLiveLogin(credentials);
+      set({
+        authToken: auth?.access_token || "",
+        currentUser: auth?.user || null,
+        authRequired: false,
+        currentTenantId: auth?.user?.tenant_id || getCurrentTenantId(),
+      });
+      await get().init();
+      return auth;
+    } catch (err) {
+      set({ isLoading: false });
+      throw err;
+    }
+  },
+
+  register: async (payload) => {
+    set({ isLoading: true, error: null });
+    try {
+      const auth = await postLiveRegister(payload);
       set({
         authToken: auth?.access_token || "",
         currentUser: auth?.user || null,

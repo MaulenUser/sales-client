@@ -865,6 +865,24 @@ export async function postLiveLogin(payload) {
   return storeAuth(response);
 }
 
+export async function postLiveRegister(payload) {
+  if (!isLiveConfigured()) {
+    throw new Error("Live backend is not configured");
+  }
+  const response = await fetchLiveJson("/api/auth/register", {
+    method: "POST",
+    skipAuth: true,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: String(payload?.name || "").trim(),
+      phone: String(payload?.phone || "").trim(),
+      email: String(payload?.email || "").trim(),
+      password: String(payload?.password || ""),
+    }),
+  });
+  return storeAuth(response);
+}
+
 export async function fetchLiveCurrentUser() {
   if (!isLiveConfigured() || !getAuthToken()) return null;
   const response = await fetchLiveJson("/api/auth/me");
