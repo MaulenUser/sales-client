@@ -163,10 +163,7 @@ export default function BusinessScreen() {
         return_url: "/app/#/business",
       });
       if (!result?.connection_code) {
-        if (!result?.authorize_url) throw new Error("Backend не вернул authorize_url.");
-        setBitrixConnectStatus("Открываю Bitrix24...");
-        window.location.assign(result.authorize_url);
-        return;
+        throw new Error("Backend не вернул код подключения.");
       }
       setBitrixConnectInfo(result);
       setBitrixConnectStatus("Код подключения создан.");
@@ -175,11 +172,6 @@ export default function BusinessScreen() {
       setBitrixConnectStatus(`Ошибка подключения Bitrix24: ${getErrorMessage(err)}`);
       setIsBitrixConnecting(false);
     }
-  };
-
-  const handleOpenBitrixAuthorize = () => {
-    if (!bitrixConnectInfo?.authorize_url) return;
-    window.location.assign(bitrixConnectInfo.authorize_url);
   };
 
   const handleCopyBitrixCode = async () => {
@@ -370,19 +362,10 @@ export default function BusinessScreen() {
                     >
                       Копировать
                     </button>
-                    {bitrixConnectInfo?.authorize_url && (
-                      <button
-                        type="button"
-                        onClick={handleOpenBitrixAuthorize}
-                        className="min-h-[34px] px-3 py-2 rounded bg-foreground/5 border border-border text-muted-foreground text-[10px] font-bold uppercase tracking-widest"
-                      >
-                        Открыть Bitrix24
-                      </button>
-                    )}
                   </div>
                 </div>
                 <div className="text-xs leading-6 text-muted-foreground">
-                  Установите приложение AISales Auditor в Bitrix24 и вставьте этот код в поле Connection code.
+                  Установите приложение AISales Auditor в Bitrix24 Market или через тестовую установку в кабинете Bitrix vendor, затем вставьте этот код в поле Connection code.
                   {bitrixConnectionExpiryLabel ? ` Код действует до ${bitrixConnectionExpiryLabel}.` : ""}
                 </div>
               </div>
