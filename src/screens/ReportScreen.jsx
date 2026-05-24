@@ -1410,7 +1410,7 @@ function ReportContent({ summary, markdown }) {
         </div>
       </section>
 
-      <section className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+      <section className="grid grid-cols-1 gap-5">
         <article className="bg-card border border-border rounded p-4">
           <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
             Самые частые причины слива лидов
