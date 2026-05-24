@@ -54,7 +54,6 @@ export default function BusinessScreen() {
     setProfileSaveStatus("");
   }, [appState, currentTenantId]);
 
-  const integrations = appState?.setup?.integrations || {};
   const bitrixOauth = appState?.setup?.bitrix_oauth || {};
   const missingBitrixScopes = Array.isArray(bitrixOauth.missing_scopes) ? bitrixOauth.missing_scopes : [];
   const bitrixOAuthConfigured = Boolean(bitrixOauth.configured && bitrixOauth.status === "active");
@@ -279,33 +278,21 @@ export default function BusinessScreen() {
       <section>
         <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-4">Интеграции</div>
         <div className="bg-card border border-border rounded p-6 space-y-4">
-          <div className="grid grid-cols-1 gap-3 @3xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-3 @3xl:grid-cols-2">
             <div className="rounded border border-border bg-muted/20 px-4 py-3">
               <div className="mb-2 text-[10px] uppercase tracking-widest text-muted-foreground">
-                Bitrix CRM
-              </div>
-              <StatusBadge configured={integrations.bitrix_webhook_url_configured} />
-            </div>
-            <div className="rounded border border-border bg-muted/20 px-4 py-3">
-              <div className="mb-2 text-[10px] uppercase tracking-widest text-muted-foreground">
-                WhatsApp
-              </div>
-              <StatusBadge configured={integrations.whatsapp_webhook_url_configured} />
-            </div>
-            <div className="rounded border border-border bg-muted/20 px-4 py-3">
-              <div className="mb-2 text-[10px] uppercase tracking-widest text-muted-foreground">
-                OpenAI
-              </div>
-              <StatusBadge configured={integrations.openai_api_key_configured} />
-            </div>
-            <div className="rounded border border-border bg-muted/20 px-4 py-3">
-              <div className="mb-2 text-[10px] uppercase tracking-widest text-muted-foreground">
-                Bitrix OAuth
+                Bitrix
               </div>
               <StatusBadge configured={bitrixOAuthConfigured} />
               {bitrixOauth.bitrix_domain ? (
                 <div className="mt-2 text-[11px] text-muted-foreground">{bitrixOauth.bitrix_domain}</div>
               ) : null}
+            </div>
+            <div className="rounded border border-border bg-muted/20 px-4 py-3">
+              <div className="mb-2 text-[10px] uppercase tracking-widest text-muted-foreground">
+                amoCrm
+              </div>
+              <StatusBadge configured={false} />
             </div>
           </div>
           <form onSubmit={handleBitrixConnectSubmit} className="rounded border border-border bg-muted/20 p-4 space-y-3">
@@ -380,9 +367,6 @@ export default function BusinessScreen() {
               <div className="text-xs leading-6 text-muted-foreground">{bitrixConnectStatus}</div>
             )}
           </form>
-          <div className="rounded border border-border bg-muted/20 px-3 py-2 text-xs leading-6 text-muted-foreground">
-            Webhook-и и OpenAI ключ не вводятся в клиентском интерфейсе.
-          </div>
         </div>
       </section>
 
