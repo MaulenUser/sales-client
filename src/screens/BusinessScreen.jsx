@@ -22,6 +22,8 @@ export default function BusinessScreen() {
   const [bitrixConnectStatus, setBitrixConnectStatus] = useState("");
   const [bitrixConnectInfo, setBitrixConnectInfo] = useState(null);
   const [isBitrixConnecting, setIsBitrixConnecting] = useState(false);
+  const [activeIntegration, setActiveIntegration] = useState("bitrix");
+  const [amoCrmDomain, setAmoCrmDomain] = useState("");
 
   // Business profile state
   const [companyName, setCompanyName] = useState("");
@@ -279,7 +281,16 @@ export default function BusinessScreen() {
         <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-4">Интеграции</div>
         <div className="bg-card border border-border rounded p-6 space-y-4">
           <div className="grid grid-cols-1 gap-3 @3xl:grid-cols-2">
-            <div className="rounded border border-border bg-muted/20 px-4 py-3">
+            <button
+              type="button"
+              aria-pressed={activeIntegration === "bitrix"}
+              onClick={() => setActiveIntegration("bitrix")}
+              className={`min-h-[124px] w-full rounded border px-4 py-3 text-left transition duration-150 active:scale-[0.985] ${
+                activeIntegration === "bitrix"
+                  ? "border-primary/40 bg-primary/5 shadow-[inset_0_0_0_1px_rgba(52,168,90,0.18)]"
+                  : "border-border bg-muted/20 hover:border-primary/25 hover:bg-muted/30"
+              }`}
+            >
               <div className="mb-2 text-[10px] uppercase tracking-widest text-muted-foreground">
                 Bitrix
               </div>
@@ -287,14 +298,27 @@ export default function BusinessScreen() {
               {bitrixOauth.bitrix_domain ? (
                 <div className="mt-2 text-[11px] text-muted-foreground">{bitrixOauth.bitrix_domain}</div>
               ) : null}
-            </div>
-            <div className="rounded border border-border bg-muted/20 px-4 py-3">
+            </button>
+            <button
+              type="button"
+              aria-pressed={activeIntegration === "amoCrm"}
+              onClick={() => setActiveIntegration("amoCrm")}
+              className={`min-h-[124px] w-full rounded border px-4 py-3 text-left transition duration-150 active:scale-[0.985] ${
+                activeIntegration === "amoCrm"
+                  ? "border-primary/40 bg-primary/5 shadow-[inset_0_0_0_1px_rgba(52,168,90,0.18)]"
+                  : "border-border bg-muted/20 hover:border-primary/25 hover:bg-muted/30"
+              }`}
+            >
               <div className="mb-2 text-[10px] uppercase tracking-widest text-muted-foreground">
                 amoCrm
               </div>
               <StatusBadge configured={false} />
-            </div>
+              {amoCrmDomain ? (
+                <div className="mt-2 text-[11px] text-muted-foreground">{amoCrmDomain}</div>
+              ) : null}
+            </button>
           </div>
+          {activeIntegration === "bitrix" ? (
           <form onSubmit={handleBitrixConnectSubmit} className="rounded border border-border bg-muted/20 p-4 space-y-3">
             <div className="grid grid-cols-1 gap-3 @3xl:grid-cols-[minmax(0,1fr)_auto] @3xl:items-end">
               <label className="flex flex-col gap-2 text-xs text-muted-foreground">
@@ -367,6 +391,23 @@ export default function BusinessScreen() {
               <div className="text-xs leading-6 text-muted-foreground">{bitrixConnectStatus}</div>
             )}
           </form>
+          ) : (
+            <form
+              onSubmit={(e) => e.preventDefault()}
+              className="rounded border border-border bg-muted/20 p-4 space-y-3"
+            >
+              <label className="flex flex-col gap-2 text-xs text-muted-foreground">
+                Домен amoCrm
+                <input
+                  type="text"
+                  value={amoCrmDomain}
+                  onChange={(e) => setAmoCrmDomain(e.target.value)}
+                  placeholder="client.amocrm.ru"
+                  className="bg-input border border-border rounded px-3 py-2 text-foreground"
+                />
+              </label>
+            </form>
+          )}
         </div>
       </section>
 
