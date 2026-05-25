@@ -33,6 +33,20 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function toLocalIsoDate(date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function getDefaultAnalysisPeriod() {
+  const to = new Date();
+  const from = new Date(to.getFullYear(), to.getMonth(), to.getDate());
+  from.setDate(from.getDate() - 30);
+  return {
+    from: toLocalIsoDate(from),
+    to: toLocalIsoDate(to),
+  };
+}
+
 function AuditRunStatusPanel({ runStatus, statusMessage, onOpenReport }) {
   if (runStatus === "idle") return null;
 
@@ -128,12 +142,14 @@ export default function LaunchScreen() {
 
   // Инициализация из дефолтов лаунчера
   useEffect(() => {
-    if (!launcher || Object.keys(launcher).length === 0) return;
-    const allowed = new Set(availableCategories.map((c) => String(c.id)));
-    const resolvedCategory = allowed.has(String(defaultCategoryId)) ? String(defaultCategoryId) : "";
-    setCategoryId((prev) => prev || resolvedCategory);
-    setPeriodFrom((prev) => prev || defaultFilters.period_from || launcher.date_range?.from || "");
-    setPeriodTo((prev) => prev || defaultFilters.period_to || launcher.date_range?.to || "");
+    const defaultPeriod = getDefaultAnalysisPeriod();
+    if (launcher && Object.keys(launcher).length > 0) {
+      const allowed = new Set(availableCategories.map((c) => String(c.id)));
+      const resolvedCategory = allowed.has(String(defaultCategoryId)) ? String(defaultCategoryId) : "";
+      setCategoryId((prev) => prev || resolvedCategory);
+    }
+    setPeriodFrom((prev) => prev || defaultPeriod.from);
+    setPeriodTo((prev) => prev || defaultPeriod.to);
   }, [launcher]);
 
   useEffect(() => {
