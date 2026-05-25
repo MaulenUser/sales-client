@@ -84,7 +84,7 @@ function AuditRunStatusPanel({ runStatus, statusMessage, onOpenReport }) {
                 ? "Финальный аудит можно открыть"
                 : isError
                 ? "Проверьте запуск аудита"
-                : "Обычно занимает 20-30 минут"}
+                : "Обычно занимает 5-15 минут"}
             </h3>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
               {isReady

@@ -8,6 +8,7 @@ import {
   fetchTextAny,
   fetchJson,
   fetchLiveCurrentUser,
+  isLiveConfigured,
   getStoredAuth,
   getCurrentTenantId,
   postLiveLogin,
@@ -246,6 +247,7 @@ const useStore = create((set, get) => ({
 
   refreshAppState: async () => {
     const { activeRunId, activateRunData } = get();
+    const liveMode = isLiveConfigured();
     const [rawAppState, executiveReport] = await Promise.all([
       fetchJsonAny(DATA_PATHS.appState).catch(() => get().appState),
       fetchExecutiveReport().catch(() => null),
@@ -262,6 +264,8 @@ const useStore = create((set, get) => ({
       null;
     const summary = executiveReport
       ? buildSummaryFromExecutiveReport(executiveReport, get().baseSummary)
+      : liveMode
+      ? null
       : get().summary;
     set({
       appState,
@@ -269,6 +273,9 @@ const useStore = create((set, get) => ({
       activeRunId: newRunId,
       executiveReport,
       ...(summary ? { summary } : {}),
+      ...(liveMode && !executiveReport
+        ? { summary: null, interactions: [], reportMarkdown: "", selectedId: null }
+        : {}),
     });
     if (!executiveReport) await activateRunData(newRunId);
   },
@@ -317,12 +324,13 @@ const useStore = create((set, get) => ({
 
       if (currentUser?.tenant_id) persistCurrentTenantId(currentUser.tenant_id);
 
+      const liveMode = isLiveConfigured();
       const [appState, summary, interactions, reportMarkdown, usageSummary, usageEvents, tenants] =
         await Promise.all([
           fetchJsonAny(DATA_PATHS.appState).catch(() => null),
-          fetchJsonAny(DATA_PATHS.summary).catch(() => null),
-          fetchJsonAny(DATA_PATHS.interactions).catch(() => []),
-          fetchTextAny(DATA_PATHS.report).catch(() => ""),
+          liveMode ? Promise.resolve(null) : fetchJsonAny(DATA_PATHS.summary).catch(() => null),
+          liveMode ? Promise.resolve([]) : fetchJsonAny(DATA_PATHS.interactions).catch(() => []),
+          liveMode ? Promise.resolve("") : fetchTextAny(DATA_PATHS.report).catch(() => ""),
           fetchJsonAny(DATA_PATHS.usageSummary).catch(() => null),
           fetchJsonAny(DATA_PATHS.usageEvents).catch(() => []),
           fetchTenants().catch(() => []),

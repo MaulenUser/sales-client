@@ -1650,11 +1650,56 @@ function EvidenceCard({ title, rows, tone }) {
   );
 }
 
+function isRealReportRun(run) {
+  const id = String(run?.id || run?.run_id || "").trim();
+  return Boolean(run && id && !id.startsWith("run-mock-"));
+}
+
+function EmptyReportState() {
+  const navigate = useNavigate();
+
+  return (
+    <section className="max-w-[1380px] w-full mx-auto">
+      <div className="rounded border border-border bg-card p-8">
+        <div className="max-w-2xl">
+          <div className="text-[10px] uppercase font-bold tracking-[0.15em] text-muted-foreground mb-4">
+            Итоговый отчет
+          </div>
+          <h2 className="text-2xl font-headline font-bold text-foreground">
+            Отчет пока не создан
+          </h2>
+          <p className="mt-3 text-sm leading-6 text-muted-foreground">
+            Здесь появится первый реальный отчет клиента после запуска AI-аудита. Моковые данные в рабочем кабинете не показываются.
+          </p>
+          <button
+            type="button"
+            onClick={() => navigate("/launch")}
+            className="mt-5 inline-flex min-h-[40px] items-center justify-center rounded border border-primary/30 bg-primary/15 px-5 py-2 text-[11px] font-bold uppercase tracking-widest text-primary transition-colors hover:bg-primary/20"
+          >
+            Запустить аудит
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function ReportScreen() {
-  const { summary, reportMarkdown, getActiveRun } = useStore();
+  const { summary, reportMarkdown, getActiveRun, executiveReport } = useStore();
+
+  const activeRun = getActiveRun();
+  const hasReportData = Boolean(
+    executiveReport ||
+      reportMarkdown ||
+      summary?.report_snapshot ||
+      summary?.analysis_scope ||
+      summary?.crm_context,
+  );
+  if (!hasReportData || (!executiveReport && !isRealReportRun(activeRun) && !reportMarkdown)) {
+    return <EmptyReportState />;
+  }
 
   const s = summary || {};
-  const activeRun = getActiveRun();
   const reportSnapshot = s.report_snapshot || {};
   const departmentDashboard = reportSnapshot.dashboard?.department || {};
   const departmentRating = reportSnapshot.department_rating || {};

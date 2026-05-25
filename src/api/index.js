@@ -48,7 +48,7 @@ const MOCK_SCOPE_MANAGERS = [
   { id: "131", name: "Кладовщик выдача", active: true },
 ];
 
-function isLiveConfigured() {
+export function isLiveConfigured() {
   return Boolean(LIVE_BASE_URL);
 }
 
