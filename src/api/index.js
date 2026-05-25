@@ -55,8 +55,7 @@ function isLiveConfigured() {
 function normalizeTenantId(value) {
   const normalized = String(value || "")
     .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9_-]+/g, "-")
+    .replace(/[^A-Za-z0-9_-]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 64);
   return normalized || "default";
