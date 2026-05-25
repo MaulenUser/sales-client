@@ -56,9 +56,16 @@ export default function BusinessScreen() {
     setProfileSaveStatus("");
   }, [appState, currentTenantId]);
 
+  const integrations = appState?.setup?.integrations || {};
   const bitrixOauth = appState?.setup?.bitrix_oauth || {};
   const missingBitrixScopes = Array.isArray(bitrixOauth.missing_scopes) ? bitrixOauth.missing_scopes : [];
   const bitrixOAuthConfigured = Boolean(bitrixOauth.configured && bitrixOauth.status === "active");
+  const bitrixOAuthReady = bitrixOAuthConfigured && missingBitrixScopes.length === 0;
+  const bitrixOAuthHasScopeIssue = bitrixOAuthConfigured && missingBitrixScopes.length > 0;
+  const bitrixWebhookConfigured = Boolean(integrations.bitrix_webhook_url_configured);
+  const bitrixWebhookReady = bitrixWebhookConfigured && !bitrixOAuthHasScopeIssue;
+  const bitrixConfigured = bitrixOAuthReady || bitrixWebhookReady;
+  const bitrixDisplayLabel = bitrixOauth.bitrix_domain || (bitrixWebhookReady ? "Webhook настроен администратором" : "");
   const activeTenantId = appState?.tenant_id || currentTenantId || "default";
   const isAdmin = currentUser?.role === "admin";
   const bitrixConnectionCode = bitrixConnectInfo?.connection_code || "";
@@ -286,9 +293,9 @@ export default function BusinessScreen() {
               <div className="mb-2 text-[10px] uppercase tracking-widest text-muted-foreground">
                 Bitrix
               </div>
-              <StatusBadge configured={bitrixOAuthConfigured} />
-              {bitrixOauth.bitrix_domain ? (
-                <div className="mt-2 text-[11px] text-muted-foreground">{bitrixOauth.bitrix_domain}</div>
+              <StatusBadge configured={bitrixConfigured} />
+              {bitrixDisplayLabel ? (
+                <div className="mt-2 text-[11px] text-muted-foreground">{bitrixDisplayLabel}</div>
               ) : null}
             </button>
             <button
@@ -311,6 +318,18 @@ export default function BusinessScreen() {
             </button>
           </div>
           {activeIntegration === "bitrix" ? (
+          bitrixConfigured ? (
+          <div className="rounded border border-border bg-muted/20 p-4 space-y-2">
+            <div className="text-xs leading-6 text-primary">
+              {bitrixOAuthReady ? "Bitrix24 подключен через OAuth." : "Bitrix24 подключен через webhook."}
+            </div>
+            {bitrixWebhookReady && !bitrixOAuthReady ? (
+              <div className="text-xs leading-6 text-muted-foreground">
+                Webhook сохранен администратором на сервере, поэтому клиенту не нужно подключать Bitrix24 через домен.
+              </div>
+            ) : null}
+          </div>
+          ) : (
           <form onSubmit={handleBitrixConnectSubmit} className="rounded border border-border bg-muted/20 p-4 space-y-3">
             <div className="grid grid-cols-1 gap-3 @3xl:grid-cols-[minmax(0,1fr)_auto] @3xl:items-end">
               <label className="flex flex-col gap-2 text-xs text-muted-foreground">
@@ -374,6 +393,7 @@ export default function BusinessScreen() {
               <div className="text-xs leading-6 text-muted-foreground">{bitrixConnectStatus}</div>
             )}
           </form>
+          )
           ) : (
             <form
               onSubmit={(e) => e.preventDefault()}
