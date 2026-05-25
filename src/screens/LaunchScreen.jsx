@@ -494,14 +494,6 @@ export default function LaunchScreen() {
                   "Оценить объем"
                 )}
               </button>
-              <button
-                type="button"
-                onClick={handleRun}
-                disabled={isAuditRunning}
-                className="inline-flex min-h-[40px] w-full items-center justify-center rounded border border-primary/30 bg-primary/15 px-5 py-2 text-[11px] font-bold uppercase tracking-widest text-primary transition-colors hover:bg-primary/20 disabled:cursor-not-allowed disabled:opacity-60 @3xl:w-auto"
-              >
-                {isAuditRunning ? "Анализ выполняется" : "Запустить анализ"}
-              </button>
             </div>
             {statusMessage && (
               <div className="max-w-md text-right text-xs text-muted-foreground">
