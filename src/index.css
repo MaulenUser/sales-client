@@ -444,6 +444,24 @@
   box-shadow: 0 0 0 3px rgba(21,128,61,0.12) !important;
 }
 
+:root[data-theme="light"] input[type="checkbox"],
+:root[data-theme="light"] input[type="radio"] {
+  background-color: rgba(255,255,255,0.98) !important;
+  border-color: rgba(31,41,55,0.22) !important;
+  color: rgb(var(--primary)) !important;
+}
+
+:root[data-theme="light"] input[type="checkbox"]:checked,
+:root[data-theme="light"] input[type="radio"]:checked {
+  background-color: rgb(var(--primary)) !important;
+  border-color: rgb(var(--primary)) !important;
+}
+
+:root[data-theme="light"] input[type="checkbox"]:focus,
+:root[data-theme="light"] input[type="radio"]:focus {
+  box-shadow: 0 0 0 3px rgba(21,128,61,0.16) !important;
+}
+
 :root[data-theme="light"] .nav-link {
   color: rgba(55,65,81,0.86);
 }
