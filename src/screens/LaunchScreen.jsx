@@ -58,16 +58,6 @@ function normalizeRunProgress(jobOrProgress) {
   };
 }
 
-function formatEta(seconds) {
-  if (seconds === null || seconds === undefined) return "";
-  if (seconds < 60) return "меньше минуты";
-  const minutes = Math.round(seconds / 60);
-  if (minutes < 60) return `${minutes} мин`;
-  const hours = Math.floor(minutes / 60);
-  const rest = minutes % 60;
-  return rest ? `${hours} ч ${rest} мин` : `${hours} ч`;
-}
-
 function toLocalIsoDate(date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
@@ -90,9 +80,6 @@ function AuditRunStatusPanel({ runStatus, statusMessage, runProgress, onOpenRepo
   const isError = runStatus === "error";
   const progress = normalizeRunProgress(runProgress);
   const progressPercent = clampProgressPercent(progress?.percent || 0);
-  const progressLabel = progress?.label || "Аудит выполняется";
-  const progressMessage = progress?.message || statusMessage || "Готовим данные для отчёта";
-  const etaText = formatEta(progress?.etaSeconds);
 
   return (
     <article className="rounded border border-primary/20 bg-primary/[0.035] p-4">
@@ -124,15 +111,15 @@ function AuditRunStatusPanel({ runStatus, statusMessage, runProgress, onOpenRepo
                 ? "Финальный аудит можно открыть"
                 : isError
                 ? "Проверьте запуск аудита"
-                : progressLabel}
+                : "Аудит выполняется"}
             </h3>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              {isReady
-                ? "Если пользователь закрывал вкладку, эта же ссылка должна прийти ему на почту."
-                : isError
-                ? statusMessage || "Не удалось завершить запуск аудита."
-                : progressMessage}
-            </p>
+            {!isRunning && (
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                {isReady
+                  ? "Если пользователь закрывал вкладку, эта же ссылка должна прийти ему на почту."
+                  : statusMessage || "Не удалось завершить запуск аудита."}
+              </p>
+            )}
             {isRunning && (
               <div className="mt-3 space-y-2">
                 <div className="h-2 overflow-hidden rounded bg-border">
@@ -141,14 +128,8 @@ function AuditRunStatusPanel({ runStatus, statusMessage, runProgress, onOpenRepo
                     style={{ width: `${progressPercent}%` }}
                   />
                 </div>
-                <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] uppercase tracking-widest text-muted-foreground">
+                <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
                   <span>{Math.round(progressPercent)}%</span>
-                  {progress?.total > 0 && (
-                    <span>
-                      {formatNumber(progress.current)} / {formatNumber(progress.total)}
-                    </span>
-                  )}
-                  {etaText && <span>Осталось примерно {etaText}</span>}
                 </div>
               </div>
             )}
