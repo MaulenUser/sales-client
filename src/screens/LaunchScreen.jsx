@@ -33,6 +33,41 @@ function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function clampProgressPercent(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return 0;
+  return Math.max(0, Math.min(100, number));
+}
+
+function normalizeRunProgress(jobOrProgress) {
+  const progress = jobOrProgress?.progress || jobOrProgress || null;
+  if (!progress || typeof progress !== "object") return null;
+  const percent = clampProgressPercent(progress.percent ?? progress.progress_percent);
+  return {
+    stage: progress.stage || progress.progress_stage || "",
+    label: progress.label || progress.progress_label || "",
+    current: Number(progress.current ?? progress.progress_current ?? 0) || 0,
+    total: Number(progress.total ?? progress.progress_total ?? 0) || 0,
+    percent,
+    message: progress.message || progress.progress_message || "",
+    etaSeconds:
+      progress.eta_seconds === null || progress.eta_seconds === undefined
+        ? null
+        : Math.max(0, Number(progress.eta_seconds) || 0),
+    updatedAt: progress.updated_at || progress.progress_updated_at || "",
+  };
+}
+
+function formatEta(seconds) {
+  if (seconds === null || seconds === undefined) return "";
+  if (seconds < 60) return "меньше минуты";
+  const minutes = Math.round(seconds / 60);
+  if (minutes < 60) return `${minutes} мин`;
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  return rest ? `${hours} ч ${rest} мин` : `${hours} ч`;
+}
+
 function toLocalIsoDate(date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
@@ -47,12 +82,17 @@ function getDefaultAnalysisPeriod() {
   };
 }
 
-function AuditRunStatusPanel({ runStatus, statusMessage, onOpenReport }) {
+function AuditRunStatusPanel({ runStatus, statusMessage, runProgress, onOpenReport }) {
   if (runStatus === "idle") return null;
 
   const isRunning = runStatus === "running";
   const isReady = runStatus === "ready";
   const isError = runStatus === "error";
+  const progress = normalizeRunProgress(runProgress);
+  const progressPercent = clampProgressPercent(progress?.percent || 0);
+  const progressLabel = progress?.label || "Аудит выполняется";
+  const progressMessage = progress?.message || statusMessage || "Готовим данные для отчёта";
+  const etaText = formatEta(progress?.etaSeconds);
 
   return (
     <article className="rounded border border-primary/20 bg-primary/[0.035] p-4">
@@ -84,15 +124,34 @@ function AuditRunStatusPanel({ runStatus, statusMessage, onOpenReport }) {
                 ? "Финальный аудит можно открыть"
                 : isError
                 ? "Проверьте запуск аудита"
-                : "Обычно занимает 5-15 минут"}
+                : progressLabel}
             </h3>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
               {isReady
                 ? "Если пользователь закрывал вкладку, эта же ссылка должна прийти ему на почту."
                 : isError
                 ? statusMessage || "Не удалось завершить запуск аудита."
-                : "Можно закрыть вкладку. Когда анализ будет готов, отправим уведомление на почту."}
+                : progressMessage}
             </p>
+            {isRunning && (
+              <div className="mt-3 space-y-2">
+                <div className="h-2 overflow-hidden rounded bg-border">
+                  <div
+                    className="h-full rounded bg-primary transition-[width] duration-500"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+                <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] uppercase tracking-widest text-muted-foreground">
+                  <span>{Math.round(progressPercent)}%</span>
+                  {progress?.total > 0 && (
+                    <span>
+                      {formatNumber(progress.current)} / {formatNumber(progress.total)}
+                    </span>
+                  )}
+                  {etaText && <span>Осталось примерно {etaText}</span>}
+                </div>
+              </div>
+            )}
           </div>
         </div>
         {isReady && (
@@ -137,6 +196,7 @@ export default function LaunchScreen() {
   const [quoteStatus, setQuoteStatus] = useState("idle");
   const [statusMessage, setStatusMessage] = useState("");
   const [runStatus, setRunStatus] = useState("idle");
+  const [runProgress, setRunProgress] = useState(null);
   const [completedRunId, setCompletedRunId] = useState("");
   const resumeStartedRef = useRef(false);
 
@@ -160,18 +220,26 @@ export default function LaunchScreen() {
     resumeStartedRef.current = true;
     setRunStatus("running");
     setCompletedRunId("");
+    setRunProgress(normalizeRunProgress(pending));
     setStatusMessage("Продолжаем отслеживать уже запущенный анализ...");
 
-    resumeExecutiveReportRun()
+    resumeExecutiveReportRun({
+      onProgress: (job) => {
+        const nextProgress = normalizeRunProgress(job);
+        if (nextProgress) setRunProgress(nextProgress);
+      },
+    })
       .then((run) => {
         if (!run) {
           setRunStatus("idle");
           setStatusMessage("");
+          setRunProgress(null);
           return;
         }
         setCompletedRunId(run?.id || "");
         setRunStatus("ready");
         setStatusMessage("");
+        setRunProgress(null);
       })
       .catch((err) => {
         setRunStatus("error");
@@ -220,6 +288,7 @@ export default function LaunchScreen() {
     setQuoteStatus("idle");
     if (runStatus !== "running") {
       setRunStatus("idle");
+      setRunProgress(null);
       setCompletedRunId("");
     }
   };
@@ -307,6 +376,15 @@ export default function LaunchScreen() {
     if (validationError) { setStatusMessage(validationError); return; }
     setRunStatus("running");
     setCompletedRunId("");
+    setRunProgress({
+      stage: "queued",
+      label: "Подготовка запуска",
+      current: 0,
+      total: 1,
+      percent: 0,
+      message: "Отправляем задачу на сервер",
+      etaSeconds: null,
+    });
     setStatusMessage("Обновляем WhatsApp, звонки, AI-разборы и финальный отчет в одном scope...");
     try {
       const averageTicket = Number(businessProfile?.average_ticket_kzt || 0);
@@ -314,10 +392,15 @@ export default function LaunchScreen() {
         ...collectRequest(),
         scope: "bitrix",
         average_ticket_kzt: averageTicket > 0 ? averageTicket : undefined,
+        onProgress: (job) => {
+          const nextProgress = normalizeRunProgress(job);
+          if (nextProgress) setRunProgress(nextProgress);
+        },
       });
       setCompletedRunId(run?.id || "");
       setRunStatus("ready");
       setStatusMessage("");
+      setRunProgress(null);
     } catch (err) {
       setRunStatus("error");
       setStatusMessage(`Ошибка запуска: ${err.message}`);
@@ -507,6 +590,7 @@ export default function LaunchScreen() {
       <AuditRunStatusPanel
         runStatus={runStatus}
         statusMessage={statusMessage}
+        runProgress={runProgress}
         onOpenReport={() => openRunReport(completedRunId || latestRun?.id)}
       />
 

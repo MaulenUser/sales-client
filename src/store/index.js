@@ -452,9 +452,9 @@ const useStore = create((set, get) => ({
     return res.run || nextAppState?.latest_run || null;
   },
 
-  resumeExecutiveReportRun: async () => {
+  resumeExecutiveReportRun: async (options = {}) => {
     const { appState, baseSummary } = get();
-    const res = await resumePendingExecutiveReportBuild(appState);
+    const res = await resumePendingExecutiveReportBuild(appState, options);
     if (!res) return null;
     const report = res.executive_report || null;
     const nextAppState = res.app_state || (report

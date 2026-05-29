@@ -301,6 +301,21 @@ function clearStoredExecutiveReportJob(jobId) {
   }
 }
 
+function publishExecutiveReportJobProgress(jobId, endpoint, job, onProgress) {
+  if (!job) return;
+  const stored = readStoredExecutiveReportJob({ clearExpired: false }) || {};
+  storeExecutiveReportJob({
+    ...stored,
+    job_id: job?.job_id || jobId,
+    endpoint,
+    status: job?.status || stored.status || "running",
+    started_at: stored.started_at || job?.started_at || job?.created_at || new Date().toISOString(),
+    progress: job?.progress || stored.progress || null,
+    updated_at: job?.updated_at || new Date().toISOString(),
+  });
+  if (typeof onProgress === "function") onProgress(job);
+}
+
 export function getPendingExecutiveReportJob() {
   return readStoredExecutiveReportJob();
 }
@@ -308,6 +323,7 @@ export function getPendingExecutiveReportJob() {
 async function pollExecutiveReportJob(jobId, endpoint = "/sales-audit", options = {}) {
   const startedAt = options.startedAtMs || Date.now();
   const pollMs = Math.max(1000, LIVE_EXECUTIVE_JOB_POLL_MS);
+  const onProgress = options.onProgress;
 
   while (true) {
     let job;
@@ -327,6 +343,7 @@ async function pollExecutiveReportJob(jobId, endpoint = "/sales-audit", options 
     }
 
     const status = String(job?.status || "").toLowerCase();
+    publishExecutiveReportJobProgress(jobId, endpoint, job, onProgress);
 
     if (status === "completed") {
       clearStoredExecutiveReportJob(jobId);
@@ -374,11 +391,15 @@ function buildExecutiveReportResponse(response, appState, jobId = null) {
   });
 }
 
-export async function resumePendingExecutiveReportBuild(appState) {
+export async function resumePendingExecutiveReportBuild(appState, options = {}) {
   const pending = getPendingExecutiveReportJob();
   if (!pending?.job_id) return null;
+  if (typeof options.onProgress === "function" && pending.progress) {
+    options.onProgress(pending);
+  }
   const response = await pollExecutiveReportJob(pending.job_id, pending.endpoint || "/sales-audit", {
     startedAtMs: getExecutiveReportJobStartedAtMs(pending) || Date.now(),
+    onProgress: options.onProgress,
   });
   return buildExecutiveReportResponse(response, appState, pending.job_id);
 }
@@ -706,6 +727,7 @@ async function postLiveRun(payload, appState) {
 async function postLiveExecutiveReportBuild(payload, appState) {
   const categoryIds = ensureArray(payload?.category_ids).map(String).filter(Boolean);
   const responsibleIds = getResponsibleIds(payload);
+  const onProgress = typeof payload?.onProgress === "function" ? payload.onProgress : null;
   const form = new URLSearchParams();
 
   if (payload?.sales_quality_dir) form.set("sales_quality_dir", payload.sales_quality_dir);
@@ -747,10 +769,11 @@ async function postLiveExecutiveReportBuild(payload, appState) {
         responsible_ids: responsibleIds,
       },
     });
+    publishExecutiveReportJobProgress(startResponse.job_id, "/sales-audit", startResponse, onProgress);
   }
 
   const response = startResponse?.job_id
-    ? await pollExecutiveReportJob(startResponse.job_id, "/sales-audit")
+    ? await pollExecutiveReportJob(startResponse.job_id, "/sales-audit", { onProgress })
     : startResponse;
   return buildExecutiveReportResponse(response, appState, startResponse?.job_id || null);
 }
