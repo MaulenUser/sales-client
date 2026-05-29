@@ -11,6 +11,7 @@ import {
   isLiveConfigured,
   getStoredAuth,
   getCurrentTenantId,
+  hideSalesAuditReport,
   postLiveLogin,
   postLiveRegister,
   postBitrixConnectStart,
@@ -476,6 +477,42 @@ const useStore = create((set, get) => ({
       reportMarkdown: "",
     });
     return res.run || nextAppState?.latest_run || null;
+  },
+
+  hideSalesAuditRun: async (runId) => {
+    const resolvedRunId = String(runId || "").trim();
+    if (!resolvedRunId) throw new Error("Не выбран отчет для скрытия");
+
+    const { appState, activeRunId } = get();
+    const res = await hideSalesAuditReport(resolvedRunId);
+    const history = appState?.history || {};
+    const runs = ensureArray(history.runs).filter((run) => {
+      const id = String(run?.id || run?.run_id || "");
+      return id !== resolvedRunId;
+    });
+    const latestRunId = runs[0]?.id || runs[0]?.run_id || null;
+    const nextAppState = {
+      ...(appState || {}),
+      latest_run: appState?.latest_run?.id === resolvedRunId ? runs[0] || null : appState?.latest_run || null,
+      history: {
+        ...history,
+        latest_run_id: latestRunId,
+        runs,
+        summary: {
+          ...(history.summary || {}),
+          total_runs: runs.length,
+          latest_run_id: latestRunId,
+        },
+      },
+    };
+    set({
+      appState: nextAppState,
+      activeRunId: activeRunId === resolvedRunId ? latestRunId : activeRunId,
+      ...(activeRunId === resolvedRunId
+        ? { executiveReport: null, summary: null, interactions: [], reportMarkdown: "", selectedId: null }
+        : {}),
+    });
+    return res;
   },
 }));
 

@@ -965,6 +965,17 @@ export async function fetchSalesAuditHistory() {
   }
 }
 
+export async function hideSalesAuditReport(runId) {
+  const resolvedRunId = String(runId || "").trim();
+  if (!resolvedRunId) throw new Error("Не выбран отчет для скрытия");
+  if (!isLiveConfigured()) {
+    return { status: "ok", run_id: resolvedRunId, hidden: true };
+  }
+  return await fetchLiveJson(`/sales-audit/history/${encodeURIComponent(resolvedRunId)}/hide`, {
+    method: "POST",
+  });
+}
+
 export async function fetchTenants() {
   if (!isLiveConfigured()) {
     return [{ id: getCurrentTenantId(), name: getCurrentTenantId(), created_at: "" }];

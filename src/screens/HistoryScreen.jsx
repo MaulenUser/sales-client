@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useStore from "../store/index.js";
 import { formatDate } from "../utils/format.js";
@@ -41,6 +41,9 @@ export default function HistoryScreen() {
   const navigate = useNavigate();
   const appState = useStore((s) => s.appState);
   const activateRunData = useStore((s) => s.activateRunData);
+  const hideSalesAuditRun = useStore((s) => s.hideSalesAuditRun);
+  const [pendingHideId, setPendingHideId] = useState("");
+  const [hideError, setHideError] = useState("");
 
   const history = appState?.history || {};
   const runs = ensureArray(history.runs).filter(
@@ -53,8 +56,29 @@ export default function HistoryScreen() {
     navigate("/report");
   };
 
+  const hideRun = async (runId) => {
+    const resolvedRunId = String(runId || "").trim();
+    if (!resolvedRunId || pendingHideId) return;
+    const confirmed = window.confirm("Скрыть отчет из истории анализов?");
+    if (!confirmed) return;
+    setPendingHideId(resolvedRunId);
+    setHideError("");
+    try {
+      await hideSalesAuditRun(resolvedRunId);
+    } catch (err) {
+      setHideError(err?.message || "Не удалось скрыть отчет.");
+    } finally {
+      setPendingHideId("");
+    }
+  };
+
   return (
     <div className="space-y-4 max-w-[1380px] w-full mx-auto">
+      {hideError && (
+        <div className="rounded border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          {hideError}
+        </div>
+      )}
       {runs.length ? (
         runs.map((run) => (
           <article key={run.id} className="bg-card border border-border rounded p-5">
@@ -70,13 +94,23 @@ export default function HistoryScreen() {
                   {formatFilterText(run, launcher)}
                 </p>
               </div>
-              <button
-                type="button"
-                className="px-4 py-2 rounded bg-primary/15 border border-primary/30 text-primary text-xs font-bold uppercase tracking-widest self-start @3xl:self-auto"
-                onClick={() => openRunReport(run.id)}
-              >
-                Посмотреть
-              </button>
+              <div className="flex flex-wrap gap-2 self-start @3xl:self-auto">
+                <button
+                  type="button"
+                  className="px-4 py-2 rounded bg-primary/15 border border-primary/30 text-primary text-xs font-bold uppercase tracking-widest"
+                  onClick={() => openRunReport(run.id)}
+                >
+                  Посмотреть
+                </button>
+                <button
+                  type="button"
+                  className="px-4 py-2 rounded border border-destructive/30 bg-destructive/10 text-destructive text-xs font-bold uppercase tracking-widest disabled:cursor-not-allowed disabled:opacity-60"
+                  disabled={pendingHideId === String(run.id || run.run_id || "")}
+                  onClick={() => hideRun(run.id || run.run_id)}
+                >
+                  {pendingHideId === String(run.id || run.run_id || "") ? "Скрываем" : "Скрыть"}
+                </button>
+              </div>
             </div>
           </article>
         ))
