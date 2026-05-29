@@ -228,19 +228,30 @@ function buildRatingComponents(rating) {
     ]),
   );
   const fallbackScore = Number(rating?.score_100 || rating?.value * 10 || 0);
-  const pickScore = (...labels) => {
+  const findScore = (...labels) => {
     for (const label of labels) {
       const item = byLabel.get(String(label).toLowerCase());
       if (item) return Number(item.score_100 || 0);
     }
+    return null;
+  };
+  const pickScore = (...labels) => {
+    const score = findScore(...labels);
+    if (score !== null) return score;
     return fallbackScore;
   };
+  const communicationScores = [
+    findScore("Переписки", "WhatsApp"),
+    findScore("Звонки", "Calls"),
+  ].filter((score) => score !== null);
+  const communicationScore = communicationScores.length
+    ? communicationScores.reduce((sum, score) => sum + score, 0) / communicationScores.length
+    : fallbackScore;
 
   return [
     { label: "Этапы продаж", score_100: pickScore("Этапы продаж") },
     { label: "Скорость реакции", score_100: pickScore("Скорость реакции", "Реакция") },
-    { label: "Переписки", score_100: pickScore("Переписки", "WhatsApp") },
-    { label: "Звонки", score_100: pickScore("Звонки", "Calls") },
+    { label: "Переписки и звонки", score_100: communicationScore },
   ];
 }
 
