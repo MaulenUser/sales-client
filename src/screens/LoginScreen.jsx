@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import useStore from "../store/index.js";
-import ThemeToggle from "../components/shared/ThemeToggle.jsx";
 
-export default function LoginScreen({ theme = "dark", onThemeChange }) {
+export default function LoginScreen() {
   const login = useStore((s) => s.login);
   const register = useStore((s) => s.register);
   const authStatus = useStore((s) => s.authStatus);
@@ -47,9 +46,6 @@ export default function LoginScreen({ theme = "dark", onThemeChange }) {
         onSubmit={handleSubmit}
         className="w-full max-w-[420px] bg-card border border-border rounded p-7 space-y-5"
       >
-        <div className="flex justify-end">
-          <ThemeToggle theme={theme} onChange={onThemeChange} compact />
-        </div>
         <div>
           <div className="text-[10px] uppercase tracking-widest text-primary mb-3">
             AI Sales Auditor

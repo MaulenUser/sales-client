@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import useStore from "../../store/index.js";
 import { formatNumber, formatDate } from "../../utils/format.js";
-import ThemeToggle from "../shared/ThemeToggle.jsx";
 
 const SCREEN_META = {
   business: { eyebrow: "Настройка бизнеса",  title: "Настройка бизнеса",           subtitle: "Интеграция с Bitrix24 или amoCRM и анкета компании." },
@@ -20,7 +19,7 @@ const SCREEN_META = {
 export { SCREEN_META };
 
 
-export default function Header({ theme = "dark", onThemeChange }) {
+export default function Header() {
   const { pathname } = useLocation();
   const screen = pathname.replace("/", "") || "business";
   const meta = SCREEN_META[screen] || SCREEN_META.business;
@@ -78,7 +77,6 @@ export default function Header({ theme = "dark", onThemeChange }) {
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 14, flexShrink: 0 }}>
-        <ThemeToggle theme={theme} onChange={onThemeChange} compact />
         <div style={{
           fontSize: 12, color: "var(--text-muted)",
           fontFamily: "'JetBrains Mono', monospace",
