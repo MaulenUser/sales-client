@@ -1262,6 +1262,357 @@
     font-style: normal;
   }
 
+  .dialog-page {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .dialog-toolbar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 18px 20px;
+    border: 1px solid var(--surface-border);
+    border-radius: 8px;
+    background: var(--surface-glass);
+  }
+
+  .dialog-toolbar__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 220px;
+  }
+
+  .dialog-toolbar__copy span,
+  .dialog-table-card__head span {
+    color: var(--text-faint);
+    font-size: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .dialog-toolbar__copy strong,
+  .dialog-table-card__head strong {
+    color: var(--text-strong);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .dialog-filters {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .dialog-filters label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .dialog-filters label span {
+    color: var(--text-muted);
+    font-size: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .dialog-filters select {
+    min-width: 220px;
+    height: 40px;
+    padding: 0 34px 0 12px;
+    border-radius: 7px;
+    border: 1px solid var(--surface-border);
+    background: var(--surface-subtle);
+    color: var(--text-strong);
+    font-size: 13px;
+    outline: none;
+  }
+
+  .dialog-filters select:focus {
+    border-color: rgba(52,168,90,0.55);
+    box-shadow: 0 0 0 3px rgba(52,168,90,0.12);
+  }
+
+  .dialog-status-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .dialog-status-strip button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 34px;
+    padding: 4px 8px 4px 4px;
+    border-radius: 7px;
+    border: 1px solid var(--surface-border);
+    background: var(--surface-subtle);
+    color: var(--text-muted);
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+  }
+
+  .dialog-status-strip button:hover,
+  .dialog-status-strip button.active {
+    border-color: rgba(52,168,90,0.28);
+    background: var(--surface-hover);
+  }
+
+  .dialog-status-strip button:active {
+    transform: scale(0.98);
+  }
+
+  .dialog-status-strip button > span:last-child {
+    min-width: 20px;
+    color: var(--text-strong);
+    font-size: 12px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  .dialog-status {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    max-width: 210px;
+    min-height: 26px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font-size: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 800;
+    line-height: 1.25;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .dialog-status--danger {
+    color: rgb(240,86,86);
+    background: rgba(240,86,86,0.1);
+    border-color: rgba(240,86,86,0.22);
+  }
+
+  .dialog-status--warning {
+    color: rgb(246,192,60);
+    background: rgba(246,192,60,0.12);
+    border-color: rgba(246,192,60,0.26);
+  }
+
+  .dialog-status--ok {
+    color: rgb(52,168,90);
+    background: rgba(52,168,90,0.12);
+    border-color: rgba(52,168,90,0.26);
+  }
+
+  .dialog-status--neutral {
+    color: var(--text-muted);
+    background: var(--surface-subtle);
+    border-color: var(--surface-border);
+  }
+
+  .dialog-table-card {
+    border: 1px solid var(--surface-border);
+    border-radius: 8px;
+    background: var(--surface-glass);
+    overflow: hidden;
+  }
+
+  .dialog-table-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--surface-border);
+  }
+
+  .dialog-table-card__head > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .dialog-table-card__head button {
+    min-height: 34px;
+    padding: 0 12px;
+    border: 1px solid var(--surface-border);
+    border-radius: 7px;
+    background: var(--surface-subtle);
+    color: var(--text-muted);
+    font-size: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .dialog-table-card__head button:hover {
+    color: var(--text-strong);
+    background: var(--surface-hover);
+  }
+
+  .dialog-table-wrap {
+    overflow-x: auto;
+  }
+
+  .dialog-table {
+    width: 100%;
+    min-width: 1040px;
+    border-collapse: collapse;
+  }
+
+  .dialog-table th {
+    padding: 14px 16px;
+    color: var(--text-muted);
+    font-size: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-align: left;
+    border-bottom: 1px solid var(--surface-border);
+    white-space: nowrap;
+  }
+
+  .dialog-table td {
+    padding: 15px 16px;
+    color: var(--text-soft);
+    font-size: 13px;
+    line-height: 1.5;
+    border-bottom: 1px solid var(--surface-border);
+    vertical-align: top;
+  }
+
+  .dialog-table tbody tr {
+    transition: background 0.15s ease;
+  }
+
+  .dialog-table tbody tr:hover td {
+    background: var(--surface-hover);
+  }
+
+  .dialog-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .dialog-table__date {
+    width: 150px;
+    white-space: nowrap;
+  }
+
+  .dialog-table__date time {
+    display: block;
+    color: var(--text-strong);
+    font-size: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 800;
+  }
+
+  .dialog-table__date small {
+    display: block;
+    margin-top: 3px;
+    color: var(--text-faint);
+    font-size: 10px;
+  }
+
+  .dialog-table__manager {
+    width: 150px;
+    color: var(--text-strong) !important;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .dialog-analysis-cell {
+    max-width: 560px;
+  }
+
+  .dialog-analysis-cell__text {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0;
+    color: var(--text-soft);
+    line-height: 1.55;
+  }
+
+  .dialog-analysis-cell__text.expanded {
+    display: block;
+    overflow: visible;
+  }
+
+  .dialog-analysis-cell button {
+    margin-top: 7px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: rgb(52,168,90);
+    font-size: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .dialog-links {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .dialog-links a,
+  .dialog-links button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-height: 32px;
+    padding: 0 10px;
+    border-radius: 7px;
+    border: 1px solid rgba(52,168,90,0.22);
+    background: rgba(52,168,90,0.1);
+    color: rgb(52,168,90);
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .dialog-links a:hover,
+  .dialog-links button:hover:not(:disabled) {
+    background: rgba(52,168,90,0.16);
+    border-color: rgba(52,168,90,0.34);
+  }
+
+  .dialog-links button:disabled {
+    color: var(--text-faint);
+    background: var(--surface-subtle);
+    border-color: var(--surface-border);
+    cursor: not-allowed;
+  }
+
+  .dialog-links .material-symbols-outlined {
+    font-size: 15px;
+  }
+
+  .dialog-empty {
+    padding: 36px;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
   /* ── Buttons ──────────────────────── */
   .cta-button {
     @apply inline-flex items-center justify-center px-5 py-2.5 rounded-xl font-semibold font-mono text-[11px] uppercase text-white;

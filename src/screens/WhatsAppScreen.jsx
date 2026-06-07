@@ -1,267 +1,328 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useStore from "../store/index.js";
-import { formatNumber, formatPercent } from "../utils/format.js";
-import {
-  ensureArray,
-  rate,
-  average,
-  isTrueLike,
-  isActionableOutcome,
-  topCounts,
-} from "../utils/index.js";
-import DistributionPanel from "../components/shared/DistributionPanel.jsx";
-import PlaceholderCards from "../components/shared/PlaceholderCards.jsx";
+import { formatDate } from "../utils/format.js";
+import { ensureArray, isTrueLike, sortRowsByDateDesc } from "../utils/index.js";
+
+const STATUS_FILTERS = [
+  { value: "all", label: "Все статусы" },
+  { value: "no_manager_answer", label: "Клиент не получил ответа" },
+  { value: "attention", label: "Обратите внимание" },
+  { value: "normal", label: "Нормальный диалог" },
+  { value: "client_silent", label: "Клиент не отвечает" },
+];
+
+const STATUS_META = {
+  no_manager_answer: {
+    label: "Клиент не получил ответа",
+    className: "dialog-status dialog-status--danger",
+  },
+  attention: {
+    label: "Обратите внимание",
+    className: "dialog-status dialog-status--warning",
+  },
+  normal: {
+    label: "Нормальный диалог",
+    className: "dialog-status dialog-status--ok",
+  },
+  client_silent: {
+    label: "Клиент не отвечает",
+    className: "dialog-status dialog-status--neutral",
+  },
+};
 
 function getManagerName(id) {
   if (id === undefined || id === null || id === "") return "Менеджер не указан";
   return `Менеджер #${id}`;
 }
 
-function getSortedManagers(summary) {
-  return [...ensureArray(summary?.managers)]
-    .map((m) => ({ ...m, top_topics: ensureArray(m?.top_topics) }))
-    .sort(
-      (a, b) =>
-        Number(b.interactions || 0) - Number(a.interactions || 0) ||
-        Number(b.actionable_rate || 0) - Number(a.actionable_rate || 0)
-    );
+function formatTableDate(value) {
+  const ts = Date.parse(value || "");
+  if (!Number.isFinite(ts)) return "—";
+  const d = new Date(ts);
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-function buildWhatsAppInsight(rows, targetRows, awaitingRows) {
-  if (!rows.length) return "WhatsApp-слой пока пустой.";
-  const withFiles = rows.filter(
-    (r) => Number(r.messages_with_files || 0) > 0
-  ).length;
-  return `WhatsApp уже является главным рабочим каналом: ${formatNumber(rows.length)} чатов, из них ${formatNumber(targetRows.length)} целевые, ${formatNumber(awaitingRows.length)} зависли в ожидании ответа, а ${formatNumber(withFiles)} содержат вложения и потребуют отдельного разбора файлов в следующих релизах.`;
+function getDialogueStatus(row) {
+  const outcome = String(row?.outcome_status || "").toLowerCase();
+  const summary = String(row?.summary || "").toLowerCase();
+  const noNextStep = !isTrueLike(row?.manager_agreed_next_step);
+
+  if (
+    outcome === "awaiting_response" &&
+    (summary.includes("клиент не ответил") || summary.includes("нет ответа") || summary.includes("диалог прервался"))
+  ) {
+    return "client_silent";
+  }
+
+  if (
+    outcome === "awaiting_response" ||
+    (noNextStep && summary.includes("ждёт ответа")) ||
+    (noNextStep && summary.includes("обещал"))
+  ) {
+    return "no_manager_answer";
+  }
+
+  if (
+    outcome === "not_interested" ||
+    row?.fragmented_or_unclear ||
+    row?.short_or_low_content ||
+    !isTrueLike(row?.need_identified) ||
+    !isTrueLike(row?.manager_asked_questions)
+  ) {
+    return "attention";
+  }
+
+  return "normal";
 }
 
-function FlowStage({ label, count, note }) {
+function buildAiAnalysis(row) {
+  const parts = [];
+  const summary = String(row?.summary || "").trim();
+  const request = String(row?.client_request || "").trim();
+  const topic = String(row?.primary_topic || "").trim();
+
+  if (summary) parts.push(summary);
+  if (request) parts.push(`Запрос клиента: ${request}.`);
+  if (topic) parts.push(`Тема: ${topic}.`);
+
+  const needs = isTrueLike(row?.need_identified)
+    ? "Потребность выявлена."
+    : "Потребность не раскрыта или зафиксирована слабо.";
+  const objections = row?.outcome_status === "not_interested"
+    ? "Есть признак возражения или отказа, нужен повторный контакт с конкретным аргументом."
+    : "Критичных возражений в данных не выделено.";
+  const nextStep = isTrueLike(row?.manager_agreed_next_step)
+    ? "Следующий шаг зафиксирован."
+    : "Следующий шаг не закреплен, диалог может потеряться.";
+  const conflict = row?.fragmented_or_unclear || row?.short_or_low_content
+    ? "Диалог выглядит неполным: возможна потеря контекста или слабая коммуникация."
+    : "Признаков конфликта в переписке не видно.";
+
+  parts.push(`${needs} ${objections} ${nextStep} ${conflict}`);
+  return parts.join(" ");
+}
+
+function getDealHref(row) {
   return (
-    <article className="flex flex-col items-center text-center p-4 bg-card border border-border rounded">
-      <div className="text-[9px] uppercase tracking-widest font-bold text-muted-foreground mb-2">
-        {label}
-      </div>
-      <strong className="text-2xl font-headline font-bold text-foreground mb-1">
-        {formatNumber(count)}
-      </strong>
-      <div className="text-[9px] text-muted-foreground leading-tight flex-1">{note}</div>
-    </article>
+    row?.deal_url ||
+    row?.crm_url ||
+    row?.source?.deal_url ||
+    row?.feature?.source?.deal_url ||
+    ""
   );
 }
 
-const WA_FUTURE = [
-  [
-    "First response / median response",
-    "Нужен message-level SLA parser по timestamps.",
-  ],
-  [
-    "Real-time stalled chat alerts",
-    "Появится после event-driven sync и background jobs.",
-  ],
-  [
-    "Разбор вложений",
-    "Нужна обработка файлов и мультимодальный разбор вложений.",
-  ],
-];
+function buildRows(interactions) {
+  return sortRowsByDateDesc(
+    ensureArray(interactions)
+      .filter((row) => String(row?.channel || "").toLowerCase() === "whatsapp")
+      .map((row) => ({
+        ...row,
+        dialogue_status: getDialogueStatus(row),
+        ai_analysis: buildAiAnalysis(row),
+        deal_href: getDealHref(row),
+      }))
+  );
+}
+
+function buildManagers(rows) {
+  return [
+    ...new Map(
+      rows.map((row) => [
+        String(row.manager_id || ""),
+        {
+          id: String(row.manager_id || ""),
+          name: getManagerName(row.manager_id),
+        },
+      ])
+    ).values(),
+  ].sort((a, b) => a.name.localeCompare(b.name, "ru"));
+}
+
+function StatusBadge({ status }) {
+  const meta = STATUS_META[status] || STATUS_META.attention;
+  return <span className={meta.className}>{meta.label}</span>;
+}
+
+function AnalysisCell({ text, rowId, expanded, onToggle }) {
+  return (
+    <div className="dialog-analysis-cell">
+      <p className={expanded ? "dialog-analysis-cell__text expanded" : "dialog-analysis-cell__text"}>
+        {text}
+      </p>
+      <button type="button" onClick={() => onToggle(rowId)}>
+        {expanded ? "Свернуть" : "Развернуть"}
+      </button>
+    </div>
+  );
+}
 
 export default function WhatsAppScreen() {
   const navigate = useNavigate();
-  const { summary, interactions, setSelectedId } = useStore();
+  const { interactions, setSelectedId } = useStore();
+  const [managerFilter, setManagerFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [expandedRows, setExpandedRows] = useState(() => new Set());
 
-  const rows = ensureArray(interactions).filter(
-    (r) => r.channel === "whatsapp"
-  );
-  const targetRows = rows.filter((r) => r.relevance === "target_client");
-  const awaitingRows = rows.filter((r) => r.outcome_status === "awaiting_response");
-  const followRows = rows.filter((r) =>
-    ["follow_up", "qualified_interest", "callback_requested"].includes(
-      r.outcome_status
-    )
-  );
-  const actionableRows = rows.filter((r) => isActionableOutcome(r.outcome_status));
-  const withFiles = rows.filter((r) => Number(r.messages_with_files || 0) > 0);
+  const rows = useMemo(() => buildRows(interactions), [interactions]);
+  const managers = useMemo(() => buildManagers(rows), [rows]);
+  const filteredRows = useMemo(() => {
+    return rows.filter((row) => {
+      if (managerFilter !== "all" && String(row.manager_id || "") !== managerFilter) return false;
+      if (statusFilter !== "all" && row.dialogue_status !== statusFilter) return false;
+      return true;
+    });
+  }, [rows, managerFilter, statusFilter]);
 
-  const allManagers = getSortedManagers(summary);
-  const managers = allManagers.filter(
-    (m) => Number(m.whatsapp_count || 0) > 0
-  );
+  const statusCounts = useMemo(() => {
+    return rows.reduce((acc, row) => {
+      acc[row.dialogue_status] = (acc[row.dialogue_status] || 0) + 1;
+      return acc;
+    }, {});
+  }, [rows]);
 
-  const insight = buildWhatsAppInsight(rows, targetRows, awaitingRows);
+  const toggleRow = (rowId) => {
+    setExpandedRows((prev) => {
+      const next = new Set(prev);
+      if (next.has(rowId)) next.delete(rowId);
+      else next.add(rowId);
+      return next;
+    });
+  };
 
-  const topicsRows = topCounts(rows.map((r) => r.primary_topic), 6);
-  const clientRequestRows = topCounts(rows.map((r) => r.client_request), 6);
-  const filesDistribution = [
-    {
-      name: "С файлами",
-      count: withFiles.length,
-      rate: rate(withFiles.length, rows.length),
-    },
-    {
-      name: "Без файлов",
-      count: rows.length - withFiles.length,
-      rate: rate(rows.length - withFiles.length, rows.length),
-    },
-  ];
-
-  function openInteraction(id) {
-    setSelectedId(id);
+  const openChat = (row) => {
+    setSelectedId(row.interaction_id);
     navigate("/explorer");
-  }
+  };
 
   return (
-    <div className="flex flex-col gap-8">
-      <section>
-        <h2 className="text-[10px] uppercase font-bold tracking-[0.15em] text-muted-foreground mb-4">
-          Воронка WhatsApp
-        </h2>
-        <div className="flow-grid grid grid-cols-2 md:grid-cols-4 gap-3">
-          <FlowStage
-            label="Все чаты"
-            count={rows.length}
-            note="Общий объем переписки"
-          />
-          <FlowStage
-            label="Целевые"
-            count={targetRows.length}
-            note={`${formatPercent(rate(targetRows.length, rows.length))} от всех`}
-          />
-          <FlowStage
-            label="Есть движение"
-            count={actionableRows.length}
-            note="Есть следующее действие"
-          />
-          <FlowStage
-            label="Нужно дожать"
-            count={followRows.length}
-            note="Продвижение к следующему шагу"
-          />
+    <div className="dialog-page">
+      <section className="dialog-toolbar">
+        <div className="dialog-toolbar__copy">
+          <span>AI-анализ переписок</span>
+          <strong>{filteredRows.length} из {rows.length} диалогов</strong>
+        </div>
+        <div className="dialog-filters">
+          <label>
+            <span>Ответственный менеджер</span>
+            <select value={managerFilter} onChange={(e) => setManagerFilter(e.target.value)}>
+              <option value="all">Все менеджеры</option>
+              {managers.map((manager) => (
+                <option key={manager.id || "unknown"} value={manager.id}>
+                  {manager.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            <span>Статус диалога</span>
+            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+              {STATUS_FILTERS.map((item) => (
+                <option key={item.value} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
       </section>
 
-      {managers.length > 0 && (
-        <section>
-          <h2 className="text-[10px] uppercase font-bold tracking-[0.15em] text-muted-foreground mb-4">
-            Менеджеры
-          </h2>
-          <div className="flex flex-col gap-4">
-            {managers.map((manager, i) => {
-              const managerRows = rows.filter(
-                (r) => String(r.manager_id) === String(manager.manager_id)
-              );
-              const avgMsgs = average(managerRows.map((r) => r.message_count));
-              return (
-                <article
-                  key={manager.manager_id || i}
-                  className="leader-card bg-card border border-border rounded p-4"
-                >
-                  <div className="leader-card__head flex justify-between items-start mb-3">
-                    <div className="flex flex-col gap-1">
-                      <strong className="text-foreground text-[12px] font-bold">
-                        {getManagerName(manager.manager_id)}
-                      </strong>
-                      <span className="leader-card__hint text-[9px] text-muted-foreground">
-                        Позже добавим скорость ответа; пока показываем нагрузку
-                        и качество результата.
-                      </span>
-                    </div>
-                    <div className="text-right ml-4 shrink-0">
-                      <div className="leader-card__value text-2xl font-bold text-foreground">
-                        {formatNumber(manager.whatsapp_count)}
+      <section className="dialog-status-strip">
+        {STATUS_FILTERS.filter((item) => item.value !== "all").map((item) => (
+          <button
+            type="button"
+            key={item.value}
+            className={statusFilter === item.value ? "active" : ""}
+            onClick={() => setStatusFilter(statusFilter === item.value ? "all" : item.value)}
+          >
+            <StatusBadge status={item.value} />
+            <span>{statusCounts[item.value] || 0}</span>
+          </button>
+        ))}
+      </section>
+
+      <section className="dialog-table-card">
+        <div className="dialog-table-card__head">
+          <div>
+            <span>Свежие сверху</span>
+            <strong>Хронология AI-вердиктов</strong>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setManagerFilter("all");
+              setStatusFilter("all");
+            }}
+          >
+            Сбросить фильтры
+          </button>
+        </div>
+
+        <div className="dialog-table-wrap">
+          <table className="dialog-table">
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Менеджер</th>
+                <th>Статус</th>
+                <th>AI-Анализ</th>
+                <th>Ссылки</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredRows.map((row) => {
+                const rowId = row.interaction_id || `${row.created_at}-${row.manager_id}`;
+                return (
+                  <tr key={rowId}>
+                    <td className="dialog-table__date">
+                      <time dateTime={row.created_at || ""}>{formatTableDate(row.created_at)}</time>
+                      <small>{formatDate(row.created_at)}</small>
+                    </td>
+                    <td className="dialog-table__manager">{getManagerName(row.manager_id)}</td>
+                    <td><StatusBadge status={row.dialogue_status} /></td>
+                    <td>
+                      <AnalysisCell
+                        text={row.ai_analysis}
+                        rowId={rowId}
+                        expanded={expandedRows.has(rowId)}
+                        onToggle={toggleRow}
+                      />
+                    </td>
+                    <td>
+                      <div className="dialog-links">
+                        {row.deal_href ? (
+                          <a href={row.deal_href} target="_blank" rel="noreferrer">
+                            <span className="material-symbols-outlined">open_in_new</span>
+                            Сделка
+                          </a>
+                        ) : (
+                          <button type="button" disabled>
+                            <span className="material-symbols-outlined">open_in_new</span>
+                            Сделка
+                          </button>
+                        )}
+                        <button type="button" onClick={() => openChat(row)}>
+                          <span className="material-symbols-outlined">forum</span>
+                          Чат
+                        </button>
                       </div>
-                      <span className="leader-card__rate text-[9px] text-muted-foreground">
-                        {formatPercent(manager.actionable_rate)} есть движение
-                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+              {!filteredRows.length && (
+                <tr>
+                  <td colSpan={5}>
+                    <div className="dialog-empty">
+                      Нет переписок под выбранные фильтры.
                     </div>
-                  </div>
-                  <div className="leader-card__stats flex gap-4 text-[10px] text-muted-foreground">
-                    <span>
-                      Целевые{" "}
-                      <strong className="text-foreground">
-                        {formatPercent(manager.target_rate)}
-                      </strong>
-                    </span>
-                    <span>
-                      Avg msgs{" "}
-                      <strong className="text-foreground">
-                        {formatNumber(avgMsgs.toFixed(1))}
-                      </strong>
-                    </span>
-                    <span>
-                      Short{" "}
-                      <strong className="text-foreground">
-                        {formatNumber(manager.short_count)}
-                      </strong>
-                    </span>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {awaitingRows.length > 0 && (
-        <section>
-          <h2 className="text-[10px] uppercase font-bold tracking-[0.15em] text-muted-foreground mb-4">
-            Зависшие чаты
-          </h2>
-          <div className="flex flex-col gap-4">
-            {awaitingRows.slice(0, 5).map((row, i) => (
-              <article
-                key={row.interaction_id || i}
-                className="risk-card risk-card--danger bg-destructive/5 border border-destructive/30 rounded p-4 flex flex-col gap-2"
-              >
-                <div className="risk-card__head flex justify-between items-center">
-                  <strong className="text-foreground text-[12px]">
-                    {row.primary_topic || "Без темы"}
-                  </strong>
-                  <span className="severity severity--danger text-[9px] font-bold uppercase tracking-widest text-destructive bg-destructive/10 border border-destructive/25 px-2 py-0.5 rounded">
-                    awaiting
-                  </span>
-                </div>
-                <p className="text-[11px] text-muted-foreground leading-relaxed">
-                  {row.summary || "Нет summary"}
-                </p>
-                <div className="detail-meta text-[9px] text-muted-foreground">
-                  {getManagerName(row.manager_id)} |{" "}
-                  {formatNumber(row.message_count)} messages
-                </div>
-                <button
-                  className="cta-button self-start mt-1 px-3 py-1.5 bg-primary text-primary-foreground text-[9px] font-bold uppercase tracking-widest rounded hover:bg-primary/80 transition-colors"
-                  onClick={() => openInteraction(row.interaction_id)}
-                >
-                  Открыть чат
-                </button>
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
-
-      <section>
-        <div className="insight-banner bg-card border border-border rounded p-6">
-          <div className="insight-banner__copy flex flex-col gap-2">
-            <div className="text-[9px] uppercase tracking-widest font-bold text-primary mb-1">
-              Подсказка
-            </div>
-            <p className="text-[11px] text-muted-foreground leading-relaxed">{insight}</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <DistributionPanel title="Частые темы" rows={topicsRows} />
-        <DistributionPanel title="Запросы клиентов" rows={clientRequestRows} />
-        <DistributionPanel title="Файлы в чатах" rows={filesDistribution} />
-      </section>
-
-      <section>
-        <h2 className="text-[10px] uppercase font-bold tracking-[0.15em] text-muted-foreground mb-4">
-          В разработке
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <PlaceholderCards items={WA_FUTURE} />
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </section>
     </div>
