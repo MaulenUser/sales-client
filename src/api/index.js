@@ -34,6 +34,7 @@ const LIVE_EXECUTIVE_JOB_TIMEOUT_MS = parseTimeout(
 );
 const LIVE_FEEDBACK_WEBHOOK_URL = String(import.meta.env.VITE_FEEDBACK_WEBHOOK_URL || "").trim();
 const LIVE_AUTH_REQUIRED = parseBoolean(import.meta.env.VITE_AUTH_REQUIRED, false);
+const MOCK_FALLBACK_ENABLED = parseBoolean(import.meta.env.VITE_MOCK_FALLBACK, true);
 const DEFAULT_TENANT_ID = normalizeTenantId(import.meta.env.VITE_TENANT_ID || "default");
 const TENANT_STORAGE_KEY = "ai-auditor:tenant-id";
 const AUTH_STORAGE_KEY = "ai-auditor:auth";
@@ -50,6 +51,10 @@ const MOCK_SCOPE_MANAGERS = [
 
 export function isLiveConfigured() {
   return Boolean(LIVE_BASE_URL);
+}
+
+export function isMockFallbackEnabled() {
+  return MOCK_FALLBACK_ENABLED;
 }
 
 function normalizeTenantId(value) {
@@ -471,7 +476,14 @@ async function fetchLiveAppState() {
   const availableManagers = normalizeLauncherManagers(managersPayload?.managers);
   const defaultCategoryId = availableCategories[0]?.id || "";
   const tenantId = backendState?.tenant_id || getCurrentTenantId();
-  const history = normalizeSalesAuditHistory(historyPayload, backendState?.history || mockBase?.history);
+  const hasLiveRuns =
+    Boolean(historyPayload?.latest_run_id || backendState?.history?.latest_run_id) ||
+    ensureArray(historyPayload?.runs).length > 0 ||
+    ensureArray(backendState?.history?.runs).length > 0;
+  const useMockFallback = MOCK_FALLBACK_ENABLED && !hasLiveRuns;
+  const history = useMockFallback
+    ? (mockBase?.history || { latest_run_id: null, runs: [], summary: { total_runs: 0 } })
+    : normalizeSalesAuditHistory(historyPayload, backendState?.history || mockBase?.history);
   const latestRun = ensureArray(history?.runs)[0] || null;
 
   return {
@@ -498,7 +510,8 @@ async function fetchLiveAppState() {
       },
     },
     runtime: {
-      source: "live",
+      source: useMockFallback ? "mock-fallback" : "live",
+      mock_fallback: useMockFallback,
       backend_url: LIVE_BASE_URL,
       refreshed_at: new Date().toISOString(),
     },

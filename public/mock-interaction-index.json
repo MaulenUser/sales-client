@@ -22,7 +22,21 @@
       "отопление",
       "трубы-пп"
     ],
-    "deal_category_id": "0"
+    "deal_category_id": "0",
+    "deal_id": 1841,
+    "deal_stage_name": "? ??????",
+    "response_wait_minutes": 12,
+    "active_task_count": 1,
+    "overdue_task_count": 0,
+    "deal_title": "Цена на трубы ПП 32мм",
+    "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1841/",
+    "crm_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1841/",
+    "has_active_task": true,
+    "has_overdue_task": false,
+    "last_client_message_at": "2026-04-08T09:14:00Z",
+    "source": {
+      "transcript_file_path": "export/transcripts/text/call-001.txt"
+    }
   },
   {
     "interaction_id": "call-002",
@@ -48,7 +62,21 @@
       "фитинги",
       "строительство"
     ],
-    "deal_category_id": "0"
+    "deal_category_id": "0",
+    "deal_id": 1848,
+    "deal_stage_name": "? ??????",
+    "response_wait_minutes": 47,
+    "active_task_count": 0,
+    "overdue_task_count": 0,
+    "deal_title": "Оптовая партия фитингов",
+    "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1848/",
+    "crm_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1848/",
+    "has_active_task": false,
+    "has_overdue_task": false,
+    "last_client_message_at": "2026-04-08T10:32:00Z",
+    "source": {
+      "transcript_file_path": "export/transcripts/text/call-002.txt"
+    }
   },
   {
     "interaction_id": "call-003",
@@ -70,7 +98,21 @@
     "non_sales_interaction": false,
     "fragmented_or_unclear": false,
     "labels": [],
-    "deal_category_id": "0"
+    "deal_category_id": "0",
+    "deal_id": 1855,
+    "deal_stage_name": "? ??????",
+    "response_wait_minutes": 0,
+    "active_task_count": 0,
+    "overdue_task_count": 1,
+    "deal_title": "Нет ответа",
+    "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1855/",
+    "crm_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1855/",
+    "has_active_task": false,
+    "has_overdue_task": true,
+    "last_client_message_at": "2026-04-08T11:05:00Z",
+    "source": {
+      "transcript_file_path": "export/transcripts/text/call-003.txt"
+    }
   },
   {
     "interaction_id": "call-004",
@@ -96,7 +138,21 @@
       "водоснабжение",
       "выезд"
     ],
-    "deal_category_id": "0"
+    "deal_category_id": "0",
+    "deal_id": 1862,
+    "deal_stage_name": "? ??????",
+    "response_wait_minutes": 18,
+    "active_task_count": 1,
+    "overdue_task_count": 0,
+    "deal_title": "Водоснабжение — трубы и монтаж",
+    "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1862/",
+    "crm_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1862/",
+    "has_active_task": true,
+    "has_overdue_task": false,
+    "last_client_message_at": "2026-04-08T13:20:00Z",
+    "source": {
+      "transcript_file_path": "export/transcripts/text/call-004.txt"
+    }
   },
   {
     "interaction_id": "call-005",
@@ -121,7 +177,21 @@
       "консультация",
       "отопление"
     ],
-    "deal_category_id": "0"
+    "deal_category_id": "0",
+    "deal_id": 1869,
+    "deal_stage_name": "? ??????",
+    "response_wait_minutes": 35,
+    "active_task_count": 1,
+    "overdue_task_count": 0,
+    "deal_title": "Сравнение труб — ПП vs металлопластик",
+    "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1869/",
+    "crm_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1869/",
+    "has_active_task": true,
+    "has_overdue_task": false,
+    "last_client_message_at": "2026-04-09T09:45:00Z",
+    "source": {
+      "transcript_file_path": "export/transcripts/text/call-005.txt"
+    }
   },
   {
     "interaction_id": "call-006",
@@ -145,7 +215,21 @@
     "labels": [
       "нецелевой"
     ],
-    "deal_category_id": "0"
+    "deal_category_id": "0",
+    "deal_id": 1876,
+    "deal_stage_name": "?? ???????",
+    "is_active": false,
+    "active_task_count": 0,
+    "overdue_task_count": 0,
+    "deal_title": "Ошибочный звонок",
+    "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1876/",
+    "crm_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1876/",
+    "has_active_task": false,
+    "has_overdue_task": false,
+    "last_client_message_at": "2026-04-09T11:00:00Z",
+    "source": {
+      "transcript_file_path": "export/transcripts/text/call-006.txt"
+    }
   },
   {
     "interaction_id": "call-007",
@@ -171,7 +255,21 @@
       "срочно",
       "объект"
     ],
-    "deal_category_id": "0"
+    "deal_category_id": "0",
+    "deal_id": 1883,
+    "deal_stage_name": "??????? ???????",
+    "is_active": false,
+    "active_task_count": 0,
+    "overdue_task_count": 0,
+    "deal_title": "Закупка для объекта — трубы ПП 20мм",
+    "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1883/",
+    "crm_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1883/",
+    "has_active_task": false,
+    "has_overdue_task": false,
+    "last_client_message_at": "2026-04-09T14:15:00Z",
+    "source": {
+      "transcript_file_path": "export/transcripts/text/call-007.txt"
+    }
   },
   {
     "interaction_id": "call-008",
@@ -196,7 +294,21 @@
       "тёплый пол",
       "спецификация"
     ],
-    "deal_category_id": "0"
+    "deal_category_id": "0",
+    "deal_id": 1890,
+    "deal_stage_name": "? ??????",
+    "response_wait_minutes": 66,
+    "active_task_count": 0,
+    "overdue_task_count": 0,
+    "deal_title": "Фитинги для тёплого пола",
+    "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1890/",
+    "crm_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1890/",
+    "has_active_task": false,
+    "has_overdue_task": false,
+    "last_client_message_at": "2026-04-09T15:30:00Z",
+    "source": {
+      "transcript_file_path": "export/transcripts/text/call-008.txt"
+    }
   },
   {
     "interaction_id": "call-009",
@@ -218,7 +330,21 @@
     "non_sales_interaction": false,
     "fragmented_or_unclear": false,
     "labels": [],
-    "deal_category_id": "0"
+    "deal_category_id": "0",
+    "deal_id": 1897,
+    "deal_stage_name": "? ??????",
+    "response_wait_minutes": 0,
+    "active_task_count": 0,
+    "overdue_task_count": 1,
+    "deal_title": "Нет ответа",
+    "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1897/",
+    "crm_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1897/",
+    "has_active_task": false,
+    "has_overdue_task": true,
+    "last_client_message_at": "2026-04-10T09:00:00Z",
+    "source": {
+      "transcript_file_path": "export/transcripts/text/call-009.txt"
+    }
   },
   {
     "interaction_id": "call-010",
@@ -244,7 +370,21 @@
       "встреча",
       "b2b"
     ],
-    "deal_category_id": "1"
+    "deal_category_id": "1",
+    "deal_id": 1904,
+    "deal_stage_name": "? ??????",
+    "response_wait_minutes": 9,
+    "active_task_count": 1,
+    "overdue_task_count": 0,
+    "deal_title": "Дилерское соглашение",
+    "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1904/",
+    "crm_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1904/",
+    "has_active_task": true,
+    "has_overdue_task": false,
+    "last_client_message_at": "2026-04-10T10:45:00Z",
+    "source": {
+      "transcript_file_path": "export/transcripts/text/call-010.txt"
+    }
   },
   {
     "interaction_id": "wa-001",
@@ -271,7 +411,19 @@
       "прайс",
       "без ответа"
     ],
-    "deal_category_id": "0"
+    "deal_category_id": "0",
+    "deal_id": 1911,
+    "deal_stage_name": "? ??????",
+    "response_wait_minutes": 55,
+    "active_task_count": 0,
+    "overdue_task_count": 0,
+    "deal_title": "Прайс-лист на трубы",
+    "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1911/",
+    "crm_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1911/",
+    "has_active_task": false,
+    "has_overdue_task": false,
+    "last_client_message_at": "2026-04-08T08:30:00Z",
+    "source": {}
   },
   {
     "interaction_id": "wa-002",
@@ -298,7 +450,19 @@
       "доставка",
       "объект"
     ],
-    "deal_category_id": "0"
+    "deal_category_id": "0",
+    "deal_id": 1918,
+    "deal_stage_name": "? ??????",
+    "response_wait_minutes": 24,
+    "active_task_count": 1,
+    "overdue_task_count": 0,
+    "deal_title": "Доставка труб на объект",
+    "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1918/",
+    "crm_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1918/",
+    "has_active_task": true,
+    "has_overdue_task": false,
+    "last_client_message_at": "2026-04-08T10:15:00Z",
+    "source": {}
   },
   {
     "interaction_id": "wa-003",
@@ -324,7 +488,19 @@
     "labels": [
       "зависший"
     ],
-    "deal_category_id": "0"
+    "deal_category_id": "0",
+    "deal_id": 1925,
+    "deal_stage_name": "? ??????",
+    "response_wait_minutes": 92,
+    "active_task_count": 1,
+    "overdue_task_count": 1,
+    "deal_title": "Наличие труб 50мм",
+    "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1925/",
+    "crm_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1925/",
+    "has_active_task": true,
+    "has_overdue_task": true,
+    "last_client_message_at": "2026-04-09T11:30:00Z",
+    "source": {}
   },
   {
     "interaction_id": "wa-004",
@@ -351,7 +527,19 @@
       "закрытая сделка",
       "розница"
     ],
-    "deal_category_id": "0"
+    "deal_category_id": "0",
+    "deal_id": 1932,
+    "deal_stage_name": "??????? ???????",
+    "is_active": false,
+    "active_task_count": 0,
+    "overdue_task_count": 0,
+    "deal_title": "Розничная покупка — труба + фитинги",
+    "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1932/",
+    "crm_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1932/",
+    "has_active_task": false,
+    "has_overdue_task": false,
+    "last_client_message_at": "2026-04-09T14:00:00Z",
+    "source": {}
   },
   {
     "interaction_id": "wa-005",
@@ -378,6 +566,18 @@
       "рекламация",
       "нецелевой"
     ],
-    "deal_category_id": "0"
+    "deal_category_id": "0",
+    "deal_id": 1939,
+    "deal_stage_name": "? ??????",
+    "response_wait_minutes": 38,
+    "active_task_count": 0,
+    "overdue_task_count": 0,
+    "deal_title": "Жалоба на качество",
+    "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1939/",
+    "crm_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1939/",
+    "has_active_task": false,
+    "has_overdue_task": false,
+    "last_client_message_at": "2026-04-10T08:00:00Z",
+    "source": {}
   }
 ]

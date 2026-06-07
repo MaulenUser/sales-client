@@ -146,7 +146,7 @@
       {
         "name": "WhatsApp title",
         "count": 19,
-        "rate": 100.0
+        "rate": 100
       }
     ]
   },
@@ -156,12 +156,12 @@
       {
         "name": "whatsapp",
         "count": 20,
-        "rate": 69.0
+        "rate": 69
       },
       {
         "name": "call",
         "count": 9,
-        "rate": 31.0
+        "rate": 31
       }
     ],
     "target_interactions": 15,
@@ -397,37 +397,37 @@
       {
         "name": "ТОО",
         "count": 2,
-        "rate": 3.0
+        "rate": 3
       },
       {
         "name": "банк",
         "count": 2,
-        "rate": 3.0
+        "rate": 3
       },
       {
         "name": "доверенность",
         "count": 2,
-        "rate": 3.0
+        "rate": 3
       },
       {
         "name": "информация",
         "count": 2,
-        "rate": 3.0
+        "rate": 3
       },
       {
         "name": "клиент",
         "count": 2,
-        "rate": 3.0
+        "rate": 3
       },
       {
         "name": "консультация",
         "count": 2,
-        "rate": 3.0
+        "rate": 3
       },
       {
         "name": "налоги",
         "count": 2,
-        "rate": 3.0
+        "rate": 3
       },
       {
         "name": "Годовой отчет",
@@ -484,7 +484,7 @@
       "yes_count": 0,
       "no_count": 4,
       "unknown_count": 25,
-      "yes_rate": 0.0,
+      "yes_rate": 0,
       "no_rate": 13.8
     },
     "decision_maker_identified": {
@@ -503,7 +503,7 @@
       "no_count": 20,
       "unknown_count": 1,
       "yes_rate": 27.6,
-      "no_rate": 69.0
+      "no_rate": 69
     },
     "manager_asked_questions": {
       "total": 29,
@@ -528,7 +528,7 @@
       "yes_count": 0,
       "no_count": 15,
       "unknown_count": 14,
-      "yes_rate": 0.0,
+      "yes_rate": 0,
       "no_rate": 51.7
     },
     "manager_rushed_to_pitch": {
@@ -536,7 +536,7 @@
       "yes_count": 0,
       "no_count": 27,
       "unknown_count": 2,
-      "yes_rate": 0.0,
+      "yes_rate": 0,
       "no_rate": 93.1
     },
     "manager_agreed_next_step": {
@@ -745,7 +745,7 @@
         {
           "name": "unknown",
           "count": 9,
-          "rate": 100.0
+          "rate": 100
         }
       ],
       "owner_type_distribution": [
@@ -801,103 +801,103 @@
         {
           "name": "target_client",
           "count": 12,
-          "rate": 60.0
+          "rate": 60
         },
         {
           "name": "not_target_client",
           "count": 8,
-          "rate": 40.0
+          "rate": 40
         }
       ],
       "outcome_distribution": [
         {
           "name": "awaiting_response",
           "count": 5,
-          "rate": 25.0
+          "rate": 25
         },
         {
           "name": "follow_up",
           "count": 5,
-          "rate": 25.0
+          "rate": 25
         },
         {
           "name": "not_target_client",
           "count": 5,
-          "rate": 25.0
+          "rate": 25
         },
         {
           "name": "qualified_interest",
           "count": 2,
-          "rate": 10.0
+          "rate": 10
         },
         {
           "name": "technical_or_short",
           "count": 2,
-          "rate": 10.0
+          "rate": 10
         },
         {
           "name": "callback_requested",
           "count": 1,
-          "rate": 5.0
+          "rate": 5
         }
       ],
       "topic_distribution_top": [
         {
           "name": "Бухгалтерское сопровождение",
           "count": 2,
-          "rate": 10.0
+          "rate": 10
         },
         {
           "name": "Бухгалтерское сопровождение для ИП и ТОО",
           "count": 1,
-          "rate": 5.0
+          "rate": 5
         },
         {
           "name": "Доступ к онлайн-банкингу",
           "count": 1,
-          "rate": 5.0
+          "rate": 5
         },
         {
           "name": "Запрос бухгалтерских услуг",
           "count": 1,
-          "rate": 5.0
+          "rate": 5
         },
         {
           "name": "Запрос информации о доверенности для онлайн-банкинга",
           "count": 1,
-          "rate": 5.0
+          "rate": 5
         },
         {
           "name": "Запрос на получение коммерческого предложения",
           "count": 1,
-          "rate": 5.0
+          "rate": 5
         },
         {
           "name": "Запрос на услугу \"Бухгалтерия под ключ\".",
           "count": 1,
-          "rate": 5.0
+          "rate": 5
         },
         {
           "name": "Коды ГСВС и окэд",
           "count": 1,
-          "rate": 5.0
+          "rate": 5
         },
         {
           "name": "Консультация по бухгалтерии для маркетплейса",
           "count": 1,
-          "rate": 5.0
+          "rate": 5
         },
         {
           "name": "Консультация по налогам и бухгалтерии",
           "count": 1,
-          "rate": 5.0
+          "rate": 5
         }
       ],
       "tag_distribution_top": [
         {
           "name": "бухгалтерия",
           "count": 8,
-          "rate": 17.0
+          "rate": 17
         },
         {
           "name": "ИП",
@@ -959,63 +959,63 @@
         {
           "name": "medium",
           "count": 12,
-          "rate": 60.0
+          "rate": 60
         },
         {
           "name": "low",
           "count": 4,
-          "rate": 20.0
+          "rate": 20
         },
         {
           "name": "high",
           "count": 2,
-          "rate": 10.0
+          "rate": 10
         },
         {
           "name": "unknown",
           "count": 2,
-          "rate": 10.0
+          "rate": 10
         }
       ],
       "stage_distribution": [
         {
           "name": "LOSE",
           "count": 10,
-          "rate": 50.0
+          "rate": 50
         },
         {
           "name": "EXECUTING",
           "count": 6,
-          "rate": 30.0
+          "rate": 30
         },
         {
           "name": "NEW",
           "count": 2,
-          "rate": 10.0
+          "rate": 10
         },
         {
           "name": "FINAL_INVOICE",
           "count": 1,
-          "rate": 5.0
+          "rate": 5
         },
         {
           "name": "UC_RO3B30",
           "count": 1,
-          "rate": 5.0
+          "rate": 5
         }
       ],
       "chats_with_files": {
         "total": 20,
         "true_count": 8,
         "false_count": 12,
-        "true_rate": 40.0
+        "true_rate": 40
       },
       "avg_messages_per_chat": 7.7,
       "fragmented_chat": {
         "total": 20,
         "true_count": 8,
         "false_count": 12,
-        "true_rate": 40.0
+        "true_rate": 40
       }
     }
   },
@@ -1027,27 +1027,27 @@
       "call_count": 0,
       "whatsapp_count": 20,
       "target_count": 12,
-      "target_rate": 60.0,
+      "target_rate": 60,
       "qualified_count": 2,
       "actionable_count": 13,
-      "actionable_rate": 65.0,
+      "actionable_rate": 65,
       "non_target_count": 8,
       "short_count": 5,
       "top_topics": [
         {
           "name": "Бухгалтерское сопровождение",
           "count": 2,
-          "rate": 10.0
+          "rate": 10
         },
         {
           "name": "Бухгалтерское сопровождение для ИП и ТОО",
           "count": 1,
-          "rate": 5.0
+          "rate": 5
         },
         {
           "name": "Доступ к онлайн-банкингу",
           "count": 1,
-          "rate": 5.0
+          "rate": 5
         }
       ],
       "total_deals": 19,
@@ -1075,7 +1075,7 @@
         "deals_with_overdue_tasks": 0,
         "active_task_count": 1,
         "without_tasks_rate": 94.1,
-        "overdue_tasks_rate": 0.0
+        "overdue_tasks_rate": 0
       },
       "sales_stage_compliance": {
         "manager_id": "18",
@@ -1088,8 +1088,8 @@
             "yes_count": 6,
             "no_count": 14,
             "unknown_count": 0,
-            "yes_rate": 30.0,
-            "no_rate": 70.0
+            "yes_rate": 30,
+            "no_rate": 70
           },
           {
             "code": "need_identified",
@@ -1098,8 +1098,8 @@
             "yes_count": 15,
             "no_count": 3,
             "unknown_count": 2,
-            "yes_rate": 75.0,
-            "no_rate": 15.0
+            "yes_rate": 75,
+            "no_rate": 15
           },
           {
             "code": "manager_presented_service",
@@ -1108,8 +1108,8 @@
             "yes_count": 9,
             "no_count": 11,
             "unknown_count": 0,
-            "yes_rate": 45.0,
-            "no_rate": 55.0
+            "yes_rate": 45,
+            "no_rate": 55
           },
           {
             "code": "manager_mentioned_promotion_or_usp",
@@ -1118,8 +1118,8 @@
             "yes_count": 0,
             "no_count": 11,
             "unknown_count": 9,
-            "yes_rate": 0.0,
-            "no_rate": 55.0
+            "yes_rate": 0,
+            "no_rate": 55
           },
           {
             "code": "manager_agreed_next_step",
@@ -1128,37 +1128,37 @@
             "yes_count": 3,
             "no_count": 3,
             "unknown_count": 14,
-            "yes_rate": 15.0,
-            "no_rate": 15.0
+            "yes_rate": 15,
+            "no_rate": 15
           }
         ],
-        "average_rate": 33.0
+        "average_rate": 33
       },
       "lost_reasons_top": [
         {
           "name": "Нецелевой лид / не тот запрос",
           "count": 2,
-          "rate": 100.0
+          "rate": 100
         }
       ],
       "rating": {
-        "value": 2.0,
+        "value": 2,
         "max": 10,
         "score_100": 19.7,
         "components": [
           {
             "label": "CRM-результат",
-            "score_100": 0.0,
+            "score_100": 0,
             "weight": 0.3
           },
           {
             "label": "Этапы продаж",
-            "score_100": 33.0,
+            "score_100": 33,
             "weight": 0.4
           },
           {
             "label": "Скорость реакции",
-            "score_100": 0.0,
+            "score_100": 0,
             "weight": 0.15
           },
           {
@@ -1212,8 +1212,8 @@
         "unmeasured_deals": 3,
         "average_minutes": 1.6,
         "median_minutes": 1.6,
-        "sla_15m_rate": 100.0,
-        "sla_60m_rate": 100.0
+        "sla_15m_rate": 100,
+        "sla_60m_rate": 100
       },
       "task_discipline": {
         "manager_id": "8",
@@ -1223,8 +1223,8 @@
         "deals_without_tasks": 4,
         "deals_with_overdue_tasks": 0,
         "active_task_count": 0,
-        "without_tasks_rate": 100.0,
-        "overdue_tasks_rate": 0.0
+        "without_tasks_rate": 100,
+        "overdue_tasks_rate": 0
       },
       "sales_stage_compliance": {
         "manager_id": "8",
@@ -1237,7 +1237,7 @@
             "yes_count": 2,
             "no_count": 5,
             "unknown_count": 1,
-            "yes_rate": 25.0,
+            "yes_rate": 25,
             "no_rate": 62.5
           },
           {
@@ -1248,7 +1248,7 @@
             "no_count": 4,
             "unknown_count": 1,
             "yes_rate": 37.5,
-            "no_rate": 50.0
+            "no_rate": 50
           },
           {
             "code": "manager_presented_service",
@@ -1257,7 +1257,7 @@
             "yes_count": 4,
             "no_count": 3,
             "unknown_count": 1,
-            "yes_rate": 50.0,
+            "yes_rate": 50,
             "no_rate": 37.5
           },
           {
@@ -1267,7 +1267,7 @@
             "yes_count": 0,
             "no_count": 3,
             "unknown_count": 5,
-            "yes_rate": 0.0,
+            "yes_rate": 0,
             "no_rate": 37.5
           },
           {
@@ -1278,10 +1278,10 @@
             "no_count": 2,
             "unknown_count": 3,
             "yes_rate": 37.5,
-            "no_rate": 25.0
+            "no_rate": 25
           }
         ],
-        "average_rate": 30.0
+        "average_rate": 30
       },
       "lost_reasons_top": [],
       "rating": {
@@ -1296,17 +1296,17 @@
           },
           {
             "label": "Этапы продаж",
-            "score_100": 30.0,
+            "score_100": 30,
             "weight": 0.4
           },
           {
             "label": "Скорость реакции",
-            "score_100": 100.0,
+            "score_100": 100,
             "weight": 0.15
           },
           {
             "label": "CRM-дисциплина",
-            "score_100": 40.0,
+            "score_100": 40,
             "weight": 0.15
           }
         ]
@@ -1319,17 +1319,17 @@
       "call_count": 1,
       "whatsapp_count": 0,
       "target_count": 0,
-      "target_rate": 0.0,
+      "target_rate": 0,
       "qualified_count": 0,
       "actionable_count": 0,
-      "actionable_rate": 0.0,
+      "actionable_rate": 0,
       "non_target_count": 1,
       "short_count": 1,
       "top_topics": [
         {
           "name": "Составление договора для ИП.",
           "count": 1,
-          "rate": 100.0
+          "rate": 100
         }
       ],
       "total_deals": 0,
@@ -1343,10 +1343,10 @@
         "deal_count": 0,
         "measured_deals": 0,
         "unmeasured_deals": 0,
-        "average_minutes": 0.0,
-        "median_minutes": 0.0,
-        "sla_15m_rate": 0.0,
-        "sla_60m_rate": 0.0
+        "average_minutes": 0,
+        "median_minutes": 0,
+        "sla_15m_rate": 0,
+        "sla_60m_rate": 0
       },
       "task_discipline": {
         "manager_id": "98",
@@ -1356,8 +1356,8 @@
         "deals_without_tasks": 0,
         "deals_with_overdue_tasks": 0,
         "active_task_count": 0,
-        "without_tasks_rate": 0.0,
-        "overdue_tasks_rate": 0.0
+        "without_tasks_rate": 0,
+        "overdue_tasks_rate": 0
       },
       "sales_stage_compliance": {
         "manager_id": "98",
@@ -1370,8 +1370,8 @@
             "yes_count": 0,
             "no_count": 1,
             "unknown_count": 0,
-            "yes_rate": 0.0,
-            "no_rate": 100.0
+            "yes_rate": 0,
+            "no_rate": 100
           },
           {
             "code": "need_identified",
@@ -1380,8 +1380,8 @@
             "yes_count": 0,
             "no_count": 1,
             "unknown_count": 0,
-            "yes_rate": 0.0,
-            "no_rate": 100.0
+            "yes_rate": 0,
+            "no_rate": 100
           },
           {
             "code": "manager_presented_service",
@@ -1390,8 +1390,8 @@
             "yes_count": 0,
             "no_count": 1,
             "unknown_count": 0,
-            "yes_rate": 0.0,
-            "no_rate": 100.0
+            "yes_rate": 0,
+            "no_rate": 100
           },
           {
             "code": "manager_mentioned_promotion_or_usp",
@@ -1400,8 +1400,8 @@
             "yes_count": 0,
             "no_count": 1,
             "unknown_count": 0,
-            "yes_rate": 0.0,
-            "no_rate": 100.0
+            "yes_rate": 0,
+            "no_rate": 100
           },
           {
             "code": "manager_agreed_next_step",
@@ -1410,26 +1410,26 @@
             "yes_count": 0,
             "no_count": 1,
             "unknown_count": 0,
-            "yes_rate": 0.0,
-            "no_rate": 100.0
+            "yes_rate": 0,
+            "no_rate": 100
           }
         ],
-        "average_rate": 0.0
+        "average_rate": 0
       },
       "lost_reasons_top": [],
       "rating": {
-        "value": 0.0,
+        "value": 0,
         "max": 10,
-        "score_100": 0.0,
+        "score_100": 0,
         "components": [
           {
             "label": "CRM-результат",
-            "score_100": 0.0,
+            "score_100": 0,
             "weight": 0.3
           },
           {
             "label": "Этапы продаж",
-            "score_100": 0.0,
+            "score_100": 0,
             "weight": 0.4
           }
         ]
@@ -1566,17 +1566,17 @@
       "components": [
         {
           "label": "CRM",
-          "score_100": 0.0,
+          "score_100": 0,
           "weight": 0.2
         },
         {
           "label": "Этапы продаж",
-          "score_100": 31.0,
+          "score_100": 31,
           "weight": 0.2
         },
         {
           "label": "Скорость реакции",
-          "score_100": 0.0,
+          "score_100": 0,
           "weight": 0.15
         },
         {
@@ -1604,7 +1604,7 @@
         "won_amount_kzt": 0,
         "lost_deals": 2,
         "closed_deals": 2,
-        "closed_win_rate": 0.0
+        "closed_win_rate": 0
       },
       "by_manager": [
         {
@@ -1616,23 +1616,23 @@
           "won_amount_kzt": 0,
           "lost_deals": 2,
           "rating": {
-            "value": 2.0,
+            "value": 2,
             "max": 10,
             "score_100": 19.7,
             "components": [
               {
                 "label": "CRM-результат",
-                "score_100": 0.0,
+                "score_100": 0,
                 "weight": 0.3
               },
               {
                 "label": "Этапы продаж",
-                "score_100": 33.0,
+                "score_100": 33,
                 "weight": 0.4
               },
               {
                 "label": "Скорость реакции",
-                "score_100": 0.0,
+                "score_100": 0,
                 "weight": 0.15
               },
               {
@@ -1663,17 +1663,17 @@
               },
               {
                 "label": "Этапы продаж",
-                "score_100": 30.0,
+                "score_100": 30,
                 "weight": 0.4
               },
               {
                 "label": "Скорость реакции",
-                "score_100": 100.0,
+                "score_100": 100,
                 "weight": 0.15
               },
               {
                 "label": "CRM-дисциплина",
-                "score_100": 40.0,
+                "score_100": 40,
                 "weight": 0.15
               }
             ]
@@ -1688,18 +1688,18 @@
           "won_amount_kzt": 0,
           "lost_deals": 0,
           "rating": {
-            "value": 0.0,
+            "value": 0,
             "max": 10,
-            "score_100": 0.0,
+            "score_100": 0,
             "components": [
               {
                 "label": "CRM-результат",
-                "score_100": 0.0,
+                "score_100": 0,
                 "weight": 0.3
               },
               {
                 "label": "Этапы продаж",
-                "score_100": 0.0,
+                "score_100": 0,
                 "weight": 0.4
               }
             ]
@@ -1711,12 +1711,12 @@
       {
         "title": "Медленная обработка новых лидов",
         "detail": "Среднее время первого CRM-касания: 4207.5 мин.",
-        "score": 100.0
+        "score": 100
       },
       {
         "title": "Проседает соблюдение этапов продаж",
         "detail": "Самый слабый этап: Упоминание акций / УТП (0.0%).",
-        "score": 100.0
+        "score": 100
       },
       {
         "title": "Сделки в работе остаются без задач",
@@ -1728,7 +1728,7 @@
       {
         "title": "Устранение частых причин слива",
         "detail": "Главная причина сейчас: Нецелевой лид / не тот запрос.",
-        "score": 100.0
+        "score": 100
       },
       {
         "title": "CRM-дисциплина по открытым сделкам",
@@ -1738,7 +1738,7 @@
       {
         "title": "Выравнивание этапов продаж по скрипту",
         "detail": "Среднее соблюдение этапов сейчас 31.0%. Здесь быстрый резерв роста качества.",
-        "score": 69.0
+        "score": 69
       }
     ],
     "response_speed": {
@@ -1763,8 +1763,8 @@
           "unmeasured_deals": 3,
           "average_minutes": 1.6,
           "median_minutes": 1.6,
-          "sla_15m_rate": 100.0,
-          "sla_60m_rate": 100.0
+          "sla_15m_rate": 100,
+          "sla_60m_rate": 100
         },
         {
           "manager_id": "18",
@@ -1783,10 +1783,10 @@
           "deal_count": 0,
           "measured_deals": 0,
           "unmeasured_deals": 0,
-          "average_minutes": 0.0,
-          "median_minutes": 0.0,
-          "sla_15m_rate": 0.0,
-          "sla_60m_rate": 0.0
+          "average_minutes": 0,
+          "median_minutes": 0,
+          "sla_15m_rate": 0,
+          "sla_60m_rate": 0
         }
       ]
     },
@@ -1800,7 +1800,7 @@
         "deals_with_overdue_tasks": 0,
         "active_task_count": 1,
         "without_tasks_rate": 95.2,
-        "overdue_tasks_rate": 0.0
+        "overdue_tasks_rate": 0
       },
       "by_manager": [
         {
@@ -1811,8 +1811,8 @@
           "deals_without_tasks": 4,
           "deals_with_overdue_tasks": 0,
           "active_task_count": 0,
-          "without_tasks_rate": 100.0,
-          "overdue_tasks_rate": 0.0
+          "without_tasks_rate": 100,
+          "overdue_tasks_rate": 0
         },
         {
           "manager_id": "18",
@@ -1823,7 +1823,7 @@
           "deals_with_overdue_tasks": 0,
           "active_task_count": 1,
           "without_tasks_rate": 94.1,
-          "overdue_tasks_rate": 0.0
+          "overdue_tasks_rate": 0
         },
         {
           "manager_id": "98",
@@ -1833,8 +1833,8 @@
           "deals_without_tasks": 0,
           "deals_with_overdue_tasks": 0,
           "active_task_count": 0,
-          "without_tasks_rate": 0.0,
-          "overdue_tasks_rate": 0.0
+          "without_tasks_rate": 0,
+          "overdue_tasks_rate": 0
         }
       ]
     },
@@ -1849,7 +1849,7 @@
             "no_count": 20,
             "unknown_count": 1,
             "yes_rate": 27.6,
-            "no_rate": 69.0
+            "no_rate": 69
           },
           {
             "code": "need_identified",
@@ -1878,7 +1878,7 @@
             "yes_count": 0,
             "no_count": 15,
             "unknown_count": 14,
-            "yes_rate": 0.0,
+            "yes_rate": 0,
             "no_rate": 51.7
           },
           {
@@ -1892,7 +1892,7 @@
             "no_rate": 20.7
           }
         ],
-        "average_rate": 31.0
+        "average_rate": 31
       },
       "by_manager": [
         {
@@ -1906,7 +1906,7 @@
               "yes_count": 2,
               "no_count": 5,
               "unknown_count": 1,
-              "yes_rate": 25.0,
+              "yes_rate": 25,
               "no_rate": 62.5
             },
             {
@@ -1917,7 +1917,7 @@
               "no_count": 4,
               "unknown_count": 1,
               "yes_rate": 37.5,
-              "no_rate": 50.0
+              "no_rate": 50
             },
             {
               "code": "manager_presented_service",
@@ -1926,7 +1926,7 @@
               "yes_count": 4,
               "no_count": 3,
               "unknown_count": 1,
-              "yes_rate": 50.0,
+              "yes_rate": 50,
               "no_rate": 37.5
             },
             {
@@ -1936,7 +1936,7 @@
               "yes_count": 0,
               "no_count": 3,
               "unknown_count": 5,
-              "yes_rate": 0.0,
+              "yes_rate": 0,
               "no_rate": 37.5
             },
             {
@@ -1947,10 +1947,10 @@
               "no_count": 2,
               "unknown_count": 3,
               "yes_rate": 37.5,
-              "no_rate": 25.0
+              "no_rate": 25
             }
           ],
-          "average_rate": 30.0
+          "average_rate": 30
         },
         {
           "manager_id": "18",
@@ -1963,8 +1963,8 @@
               "yes_count": 6,
               "no_count": 14,
               "unknown_count": 0,
-              "yes_rate": 30.0,
-              "no_rate": 70.0
+              "yes_rate": 30,
+              "no_rate": 70
             },
             {
               "code": "need_identified",
@@ -1973,8 +1973,8 @@
               "yes_count": 15,
               "no_count": 3,
               "unknown_count": 2,
-              "yes_rate": 75.0,
-              "no_rate": 15.0
+              "yes_rate": 75,
+              "no_rate": 15
             },
             {
               "code": "manager_presented_service",
@@ -1983,8 +1983,8 @@
               "yes_count": 9,
               "no_count": 11,
               "unknown_count": 0,
-              "yes_rate": 45.0,
-              "no_rate": 55.0
+              "yes_rate": 45,
+              "no_rate": 55
             },
             {
               "code": "manager_mentioned_promotion_or_usp",
@@ -1993,8 +1993,8 @@
               "yes_count": 0,
               "no_count": 11,
               "unknown_count": 9,
-              "yes_rate": 0.0,
-              "no_rate": 55.0
+              "yes_rate": 0,
+              "no_rate": 55
             },
             {
               "code": "manager_agreed_next_step",
@@ -2003,11 +2003,11 @@
               "yes_count": 3,
               "no_count": 3,
               "unknown_count": 14,
-              "yes_rate": 15.0,
-              "no_rate": 15.0
+              "yes_rate": 15,
+              "no_rate": 15
             }
           ],
-          "average_rate": 33.0
+          "average_rate": 33
         },
         {
           "manager_id": "98",
@@ -2020,8 +2020,8 @@
               "yes_count": 0,
               "no_count": 1,
               "unknown_count": 0,
-              "yes_rate": 0.0,
-              "no_rate": 100.0
+              "yes_rate": 0,
+              "no_rate": 100
             },
             {
               "code": "need_identified",
@@ -2030,8 +2030,8 @@
               "yes_count": 0,
               "no_count": 1,
               "unknown_count": 0,
-              "yes_rate": 0.0,
-              "no_rate": 100.0
+              "yes_rate": 0,
+              "no_rate": 100
             },
             {
               "code": "manager_presented_service",
@@ -2040,8 +2040,8 @@
               "yes_count": 0,
               "no_count": 1,
               "unknown_count": 0,
-              "yes_rate": 0.0,
-              "no_rate": 100.0
+              "yes_rate": 0,
+              "no_rate": 100
             },
             {
               "code": "manager_mentioned_promotion_or_usp",
@@ -2050,8 +2050,8 @@
               "yes_count": 0,
               "no_count": 1,
               "unknown_count": 0,
-              "yes_rate": 0.0,
-              "no_rate": 100.0
+              "yes_rate": 0,
+              "no_rate": 100
             },
             {
               "code": "manager_agreed_next_step",
@@ -2060,11 +2060,11 @@
               "yes_count": 0,
               "no_count": 1,
               "unknown_count": 0,
-              "yes_rate": 0.0,
-              "no_rate": 100.0
+              "yes_rate": 0,
+              "no_rate": 100
             }
           ],
-          "average_rate": 0.0
+          "average_rate": 0
         }
       ]
     },
@@ -2075,7 +2075,7 @@
           {
             "name": "Нецелевой лид / не тот запрос",
             "count": 2,
-            "rate": 100.0
+            "rate": 100
           }
         ]
       },
@@ -2094,7 +2094,7 @@
             {
               "name": "Нецелевой лид / не тот запрос",
               "count": 2,
-              "rate": 100.0
+              "rate": 100
             }
           ]
         },
@@ -2148,7 +2148,7 @@
     },
     "missed_revenue": {
       "lost_deals": 2,
-      "average_conversion_rate": 0.0,
+      "average_conversion_rate": 0,
       "average_ticket_kzt": 0,
       "estimated_missed_revenue_kzt": 0,
       "formula": "Проигранные сделки × средняя конверсия × средний чек"
@@ -2165,7 +2165,47 @@
       "Работа над позитивом и энергией в коллективе.",
       "Трансляция заботы о клиенте и намерения помочь в голосе.",
       "Поднятие уровня энергии через спорт, зарядки и игры."
-    ]
+    ],
+    "alerts_dashboard": {
+      "rows": [
+        {
+          "deal_id": 1911,
+          "deal_title": "?????-???? ?? ?????",
+          "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1911/",
+          "manager_id": "8",
+          "manager_label": "?????? ????????",
+          "trigger_type": "response_sla",
+          "reason": "?????? ???????? ????? ? ???? ?????? ?????? 55 ????? ? ??????? ?????.",
+          "recommendation": "???????? ???????, ???????? ????? ??????? ? ????????? ?????? ?? ??????????? ?????? ???????.",
+          "score": 9,
+          "created_at": "2026-04-08T08:30:00Z"
+        },
+        {
+          "deal_id": 1897,
+          "deal_title": "??? ??????",
+          "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1897/",
+          "manager_id": "18",
+          "manager_label": "?????? ????????",
+          "trigger_type": "missed_call",
+          "reason": "?? ?????? ???? ??????????? ?????? ? ???????????? ??????.",
+          "recommendation": "??????????? ???????, ????? ????????????? ????? ??????? ?????? ? CRM.",
+          "score": 8,
+          "created_at": "2026-04-07T07:30:00Z"
+        },
+        {
+          "deal_id": 1925,
+          "deal_title": "??????? ???? 50??",
+          "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1925/",
+          "manager_id": "8",
+          "manager_label": "?????? ????????",
+          "trigger_type": "overdue_task",
+          "reason": "?????? ??????? ???????, ?????? ??????????, ????????? ??? ?? ?????????.",
+          "recommendation": "????????? ???????, ????????? ??????? ?????? ??????? ? ????????? ????????? ???????.",
+          "score": 8,
+          "created_at": "2026-04-06T13:50:00Z"
+        }
+      ]
+    }
   },
   "data_quality_notes": [
     "Менеджеры пока отображаются как CRM ID, потому что в текущем экспорте нет справочника пользователей с именами.",
@@ -2177,5 +2217,43 @@
     "Не добавлен прайс услуг или товаров, поэтому оценка презентации цены и офферов ограничена.",
     "Не указан средний чек, поэтому расчет упущенной выгоды строится только на фактических суммах сделок или остается нулевым.",
     "Не описаны преимущества компании, поэтому блок по УТП и акциям опирается только на содержание диалогов."
+  ],
+  "urgent_alerts": [
+    {
+      "deal_id": 1911,
+      "deal_title": "?????-???? ?? ?????",
+      "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1911/",
+      "manager_id": "8",
+      "manager_label": "?????? ????????",
+      "trigger_type": "response_sla",
+      "reason": "?????? ???????? ????? ? ???? ?????? ?????? 55 ????? ? ??????? ?????.",
+      "recommendation": "???????? ???????, ???????? ????? ??????? ? ????????? ?????? ?? ??????????? ?????? ???????.",
+      "score": 9,
+      "created_at": "2026-04-08T08:30:00Z"
+    },
+    {
+      "deal_id": 1897,
+      "deal_title": "??? ??????",
+      "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1897/",
+      "manager_id": "18",
+      "manager_label": "?????? ????????",
+      "trigger_type": "missed_call",
+      "reason": "?? ?????? ???? ??????????? ?????? ? ???????????? ??????.",
+      "recommendation": "??????????? ???????, ????? ????????????? ????? ??????? ?????? ? CRM.",
+      "score": 8,
+      "created_at": "2026-04-07T07:30:00Z"
+    },
+    {
+      "deal_id": 1925,
+      "deal_title": "??????? ???? 50??",
+      "deal_url": "https://sapaplast.bitrix24.kz/crm/deal/details/1925/",
+      "manager_id": "8",
+      "manager_label": "?????? ????????",
+      "trigger_type": "overdue_task",
+      "reason": "?????? ??????? ???????, ?????? ??????????, ????????? ??? ?? ?????????.",
+      "recommendation": "????????? ???????, ????????? ??????? ?????? ??????? ? ????????? ????????? ???????.",
+      "score": 8,
+      "created_at": "2026-04-06T13:50:00Z"
+    }
   ]
 }

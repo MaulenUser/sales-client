@@ -46,9 +46,13 @@ export default function HistoryScreen() {
   const [hideError, setHideError] = useState("");
 
   const history = appState?.history || {};
-  const runs = ensureArray(history.runs).filter(
-    (run) => !String(run?.id || run?.run_id || "").startsWith("run-mock-"),
-  );
+  const showMockRuns =
+    appState?.runtime?.mock_fallback ||
+    String(import.meta.env.VITE_MOCK_FALLBACK ?? "true").trim().toLowerCase() !== "false";
+  const runs = ensureArray(history.runs).filter((run) => {
+    if (showMockRuns) return true;
+    return !String(run?.id || run?.run_id || "").startsWith("run-mock-");
+  });
   const launcher = appState?.setup?.analysis_launcher || {};
 
   const openRunReport = async (runId) => {
