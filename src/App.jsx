@@ -11,6 +11,7 @@ import OverviewScreen from "./screens/OverviewScreen.jsx";
 import ManagersScreen from "./screens/ManagersScreen.jsx";
 import CallsScreen from "./screens/CallsScreen.jsx";
 import WhatsAppScreen from "./screens/WhatsAppScreen.jsx";
+import UrgentScreen from "./screens/UrgentScreen.jsx";
 import ExplorerScreen from "./screens/ExplorerScreen.jsx";
 import ReportScreen from "./screens/ReportScreen.jsx";
 import HistoryScreen from "./screens/HistoryScreen.jsx";
@@ -102,7 +103,7 @@ function AppShell() {
               <Route path="/managers" element={<ManagersScreen />} />
               <Route path="/calls" element={<CallsScreen />} />
               <Route path="/whatsapp" element={<WhatsAppScreen />} />
-              <Route path="/urgent" element={<OverviewScreen />} />
+              <Route path="/urgent" element={<UrgentScreen />} />
               <Route path="/lead-leakage" element={<ReportScreen />} />
               <Route path="/growth" element={<ReportScreen />} />
               <Route path="/explorer" element={<ExplorerScreen />} />

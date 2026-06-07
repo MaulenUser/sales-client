@@ -1613,6 +1613,186 @@
     text-align: center;
   }
 
+  .alerts-page {
+    gap: 16px;
+  }
+
+  .alerts-toolbar-note {
+    max-width: 520px;
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.55;
+    text-align: right;
+  }
+
+  .alerts-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .alerts-summary__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 78px;
+    padding: 16px;
+    border: 1px solid var(--surface-border);
+    border-radius: 8px;
+    background: var(--surface-glass);
+  }
+
+  .alerts-summary__item > .material-symbols-outlined {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 7px;
+    color: rgb(240,86,86);
+    background: rgba(240,86,86,0.1);
+    border: 1px solid rgba(240,86,86,0.18);
+    font-size: 19px;
+  }
+
+  .alerts-summary__item div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .alerts-summary__item strong {
+    color: var(--text-strong);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .alerts-summary__item small {
+    color: var(--text-muted);
+    font-size: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .alerts-table {
+    min-width: 1060px;
+  }
+
+  .alerts-table th:nth-child(1) {
+    width: 28%;
+  }
+
+  .alerts-table th:nth-child(2),
+  .alerts-table th:nth-child(3) {
+    width: 36%;
+  }
+
+  .alerts-deal-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 7px;
+  }
+
+  .alerts-risk {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    color: rgb(181,116,18);
+    background: rgba(246,192,60,0.12);
+    border: 1px solid rgba(246,192,60,0.28);
+    font-size: 9px;
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .alerts-risk--critical {
+    color: rgb(240,86,86);
+    background: rgba(240,86,86,0.1);
+    border-color: rgba(240,86,86,0.24);
+  }
+
+  .alerts-deal-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-strong);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+
+  .alerts-deal-title:hover {
+    color: rgb(52,168,90);
+  }
+
+  .alerts-deal-title--plain:hover {
+    color: var(--text-strong);
+  }
+
+  .alerts-deal-title .material-symbols-outlined {
+    color: rgb(52,168,90);
+    font-size: 16px;
+  }
+
+  .alerts-deal-cell small {
+    color: var(--text-faint);
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .alerts-trigger-list,
+  .alerts-action-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .alerts-trigger,
+  .alerts-action {
+    display: grid;
+    grid-template-columns: 22px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .alerts-trigger > .material-symbols-outlined {
+    color: rgb(240,86,86);
+    font-size: 18px;
+    line-height: 1.35;
+  }
+
+  .alerts-action > .material-symbols-outlined {
+    color: rgb(52,168,90);
+    font-size: 17px;
+    line-height: 1.45;
+  }
+
+  .alerts-trigger strong {
+    display: block;
+    margin-bottom: 2px;
+    color: var(--text-strong);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .alerts-trigger p,
+  .alerts-action p {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: 12px;
+    line-height: 1.55;
+  }
+
   /* ── Buttons ──────────────────────── */
   .cta-button {
     @apply inline-flex items-center justify-center px-5 py-2.5 rounded-xl font-semibold font-mono text-[11px] uppercase text-white;
