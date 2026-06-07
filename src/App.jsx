@@ -17,7 +17,7 @@ import HistoryScreen from "./screens/HistoryScreen.jsx";
 import UsageScreen from "./screens/UsageScreen.jsx";
 
 const THEME_STORAGE_KEY = "ai-auditor-theme";
-const DEFAULT_THEME = "dark";
+const DEFAULT_THEME = "light";
 
 function getInitialTheme() {
   if (typeof window === "undefined") return DEFAULT_THEME;
@@ -102,6 +102,9 @@ function AppShell() {
               <Route path="/managers" element={<ManagersScreen />} />
               <Route path="/calls" element={<CallsScreen />} />
               <Route path="/whatsapp" element={<WhatsAppScreen />} />
+              <Route path="/urgent" element={<OverviewScreen />} />
+              <Route path="/lead-leakage" element={<ReportScreen />} />
+              <Route path="/growth" element={<ReportScreen />} />
               <Route path="/explorer" element={<ExplorerScreen />} />
               <Route path="/report" element={<ReportScreen />} />
               <Route path="/history" element={<HistoryScreen />} />

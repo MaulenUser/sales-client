@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 
-const NAV = [
+const NAV_SECTIONS = [
   {
     section: "ПОДГОТОВКА",
     links: [
@@ -10,13 +10,19 @@ const NAV = [
     ],
   },
   {
-    section: "РЕЗУЛЬТАТЫ",
+    section: "АНАЛИТИКА",
     links: [
-      { to: "/report",  icon: "description", label: "Итоговый отчет" },
-      { to: "/history", icon: "history",     label: "История анализов" },
+      { to: "/overview",     icon: "dashboard",      label: "Общий дашборд" },
+      { to: "/whatsapp",     icon: "forum",          label: "Переписки" },
+      { to: "/calls",        icon: "call",           label: "Звонки" },
+      { to: "/urgent",       icon: "warning",        label: "ВНИМАНИЕ / СРОЧНО" },
+      { to: "/lead-leakage", icon: "filter_alt_off", label: "Анализ слива лидов" },
+      { to: "/growth",       icon: "trending_up",    label: "Точки роста / Что делать?" },
     ],
   },
 ];
+
+const HISTORY_LINK = { to: "/history", icon: "history", label: "История анализов" };
 
 function Logo() {
   return (
@@ -32,6 +38,25 @@ function Logo() {
         </linearGradient>
       </defs>
     </svg>
+  );
+}
+
+function SidebarLink({ link }) {
+  const { to, icon, label, primary } = link;
+
+  return (
+    <NavLink
+      key={to}
+      to={to}
+      className={({ isActive }) =>
+        `nav-link${primary ? " nav-link--primary" : ""}${isActive ? " active" : ""}`
+      }
+    >
+      <span className="material-symbols-outlined nav-link__icon">
+        {icon}
+      </span>
+      <span className="nav-link__label">{label}</span>
+    </NavLink>
   );
 }
 
@@ -64,33 +89,31 @@ export default function Sidebar() {
         </div>
       </div>
 
-      <nav style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
-        {NAV.map(({ section, links }) => (
-          <div key={section} style={{ marginBottom: 8 }}>
-            <div style={{
-              fontSize: 11, fontWeight: 600, letterSpacing: "0.1em",
-              color: "var(--text-faint)", padding: "12px 12px 6px",
-              fontFamily: "'JetBrains Mono', monospace",
-              textTransform: "uppercase",
-            }}>
-              {section}
+      <nav style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2, minHeight: 0 }}>
+        <div>
+          {NAV_SECTIONS.map(({ section, links }) => (
+            <div key={section} style={{ marginBottom: 8 }}>
+              <div style={{
+                fontSize: 11, fontWeight: 600, letterSpacing: "0.1em",
+                color: "var(--text-faint)", padding: "12px 12px 6px",
+                fontFamily: "'JetBrains Mono', monospace",
+                textTransform: "uppercase",
+              }}>
+                {section}
+              </div>
+              {links.map((link) => (
+                <SidebarLink key={link.to} link={link} />
+              ))}
             </div>
-            {links.map(({ to, icon, label, primary }) => (
-              <NavLink
-                key={to}
-                to={to}
-                className={({ isActive }) =>
-                  `nav-link${primary ? " nav-link--primary" : ""}${isActive ? " active" : ""}`
-                }
-              >
-                <span className="material-symbols-outlined" style={{ fontSize: 16, width: 20, textAlign: "center" }}>
-                  {icon}
-                </span>
-                {label}
-              </NavLink>
-            ))}
-          </div>
-        ))}
+          ))}
+        </div>
+
+        <div style={{ flex: 1, minHeight: 16 }} />
+
+        <div className="nav-bottom">
+          <div className="nav-divider" />
+          <SidebarLink link={HISTORY_LINK} />
+        </div>
       </nav>
     </aside>
   );
