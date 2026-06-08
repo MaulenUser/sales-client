@@ -31,7 +31,11 @@ const STATUS_META = {
   },
 };
 
-function getManagerName(id) {
+function getManagerName(rowOrId) {
+  const isRow = rowOrId && typeof rowOrId === "object";
+  const name = isRow ? String(rowOrId.manager_name || rowOrId.source?.manager_name || "").trim() : "";
+  if (name) return name;
+  const id = isRow ? rowOrId.manager_id : rowOrId;
   if (id === undefined || id === null || id === "") return "Менеджер не указан";
   return `Менеджер #${id}`;
 }
@@ -134,7 +138,7 @@ function buildManagers(rows) {
         String(row.manager_id || ""),
         {
           id: String(row.manager_id || ""),
-          name: getManagerName(row.manager_id),
+          name: getManagerName(row),
         },
       ])
     ).values(),
@@ -280,7 +284,7 @@ export default function WhatsAppScreen() {
                       <time dateTime={row.created_at || ""}>{formatTableDate(row.created_at)}</time>
                       <small>{formatDate(row.created_at)}</small>
                     </td>
-                    <td className="dialog-table__manager">{getManagerName(row.manager_id)}</td>
+                    <td className="dialog-table__manager">{getManagerName(row)}</td>
                     <td><StatusBadge status={row.dialogue_status} /></td>
                     <td>
                       <AnalysisCell
