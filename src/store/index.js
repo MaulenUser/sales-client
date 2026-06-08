@@ -26,6 +26,31 @@ import {
 } from "../utils/executiveReportAdapter.js";
 import { ensureArray, normalizeRepoPath } from "../utils/index.js";
 
+function hasReportInteractionPayload(report) {
+  return Boolean(
+    report &&
+    (
+      Array.isArray(report.interaction_index) ||
+      Array.isArray(report.whatsapp_interactions) ||
+      Array.isArray(report.call_interactions)
+    )
+  );
+}
+
+function getReportInteractions(report, fallback = []) {
+  const rows = ensureArray(report?.interaction_index);
+  if (rows.length) return rows;
+
+  const splitRows = [
+    ...ensureArray(report?.whatsapp_interactions),
+    ...ensureArray(report?.call_interactions),
+  ];
+  if (splitRows.length) return splitRows;
+  if (hasReportInteractionPayload(report)) return [];
+
+  return ensureArray(fallback);
+}
+
 const useStore = create((set, get) => ({
   appState: null,
   baseSummary: null,
@@ -182,12 +207,13 @@ const useStore = create((set, get) => ({
       const report = run?.executive_report || await fetchExecutiveReport(reportRunId).catch(() => null);
       if (!report) return;
       const summary = buildSummaryFromExecutiveReport(report, baseSummary);
+      const reportInteractions = getReportInteractions(report, baseInteractions);
       set({
         executiveReport: report,
         summary,
-        interactions: ensureArray(baseInteractions),
+        interactions: reportInteractions,
         reportMarkdown: "",
-        selectedId: ensureArray(baseInteractions)[0]?.interaction_id || null,
+        selectedId: reportInteractions[0]?.interaction_id || null,
         filters: {
           search: "",
           channel: "all",
@@ -268,12 +294,20 @@ const useStore = create((set, get) => ({
       : liveMode
       ? null
       : get().summary;
+    const reportInteractions = executiveReport ? getReportInteractions(executiveReport) : [];
     set({
       appState,
       currentTenantId: appState?.tenant_id || getCurrentTenantId(),
       activeRunId: newRunId,
       executiveReport,
       ...(summary ? { summary } : {}),
+      ...(executiveReport
+        ? {
+            baseInteractions: reportInteractions,
+            interactions: reportInteractions,
+            selectedId: reportInteractions[0]?.interaction_id || null,
+          }
+        : {}),
       ...(liveMode && !executiveReport
         ? { summary: null, interactions: [], reportMarkdown: "", selectedId: null }
         : {}),
@@ -338,7 +372,7 @@ const useStore = create((set, get) => ({
         ]);
       const executiveReport = await fetchExecutiveReport().catch(() => null);
 
-      const interactionArr = ensureArray(interactions);
+      const interactionArr = getReportInteractions(executiveReport, interactions);
       const resolvedSummary = executiveReport
         ? buildSummaryFromExecutiveReport(executiveReport, summary)
         : summary;
@@ -438,6 +472,7 @@ const useStore = create((set, get) => ({
     const summary = report
       ? buildSummaryFromExecutiveReport(report, baseSummary)
       : res.summary || get().summary;
+    const reportInteractions = getReportInteractions(report, get().baseInteractions);
     const runId =
       res.run?.id ||
       nextAppState?.history?.latest_run_id ||
@@ -447,7 +482,10 @@ const useStore = create((set, get) => ({
       appState: nextAppState,
       executiveReport: report,
       summary,
+      baseInteractions: reportInteractions,
+      interactions: reportInteractions,
       activeRunId: runId,
+      selectedId: reportInteractions[0]?.interaction_id || null,
       reportMarkdown: "",
     });
     return res.run || nextAppState?.latest_run || null;
@@ -464,6 +502,7 @@ const useStore = create((set, get) => ({
     const summary = report
       ? buildSummaryFromExecutiveReport(report, baseSummary)
       : res.summary || get().summary;
+    const reportInteractions = getReportInteractions(report, get().baseInteractions);
     const runId =
       res.run?.id ||
       nextAppState?.history?.latest_run_id ||
@@ -473,7 +512,10 @@ const useStore = create((set, get) => ({
       appState: nextAppState,
       executiveReport: report,
       summary,
+      baseInteractions: reportInteractions,
+      interactions: reportInteractions,
       activeRunId: runId,
+      selectedId: reportInteractions[0]?.interaction_id || null,
       reportMarkdown: "",
     });
     return res.run || nextAppState?.latest_run || null;
