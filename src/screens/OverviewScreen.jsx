@@ -16,7 +16,14 @@ const RESPONSE_HOURS = ["0:00", "3:00", "6:00", "9:00", "12:00", "15:00", "18:00
 
 function getManagerName(value) {
   if (!value && value !== 0) return "Менеджер не указан";
-  if (typeof value === "object") return value.manager_label || getManagerName(value.manager_id);
+  if (typeof value === "object") {
+    return (
+      value.manager_name ||
+      value.manager_label ||
+      value.source?.manager_name ||
+      getManagerName(value.manager_id ?? value.source?.manager_id)
+    );
+  }
   return `Менеджер #${value}`;
 }
 
@@ -63,11 +70,12 @@ function getTodayLabel(summary) {
 
 function groupRowsByManager(rows) {
   return ensureArray(rows).reduce((acc, row) => {
-    const key = String(row?.manager_id || "unknown");
+    const managerId = row?.manager_id ?? row?.source?.manager_id ?? "";
+    const key = String(managerId || "unknown");
     if (!acc.has(key)) {
       acc.set(key, {
-        manager_id: row?.manager_id || "",
-        manager_label: getManagerName(row?.manager_id),
+        manager_id: managerId,
+        manager_label: getManagerName(row),
         rows: [],
         calls: 0,
         messages: 0,
@@ -225,7 +233,7 @@ function buildTaskRows(interactions, summary) {
     ? taskCandidates.map((row, index) => ({
         id: row.interaction_id || `task-${index}`,
         date: row.created_at,
-        responsible: getManagerName(row.manager_id),
+        responsible: getManagerName(row),
         object: row.primary_topic || row.client_request || row.interaction_id || "Обращение",
         type: String(row.channel || "").toLowerCase() === "call" ? "Связаться" : "Написать",
         icon: String(row.channel || "").toLowerCase() === "call" ? "call" : "chat",
@@ -236,7 +244,7 @@ function buildTaskRows(interactions, summary) {
     : fallback.map((row, index) => ({
         id: row.deal_id || `deal-${index}`,
         date: row.created_at || summary?.generated_at,
-        responsible: row.manager_label || getManagerName(row.manager_id),
+        responsible: getManagerName(row),
         object: row.deal_title || `Сделка #${row.deal_id}`,
         type: "Связаться",
         icon: "call",
@@ -254,7 +262,7 @@ function buildFiles(interactions) {
     .map((row, index) => ({
       id: row.interaction_id || index,
       name: `${String(row.primary_topic || "Файл клиента").slice(0, 36)}.${index % 2 ? "xlsx" : "pdf"}`,
-      owner: getManagerName(row.manager_id),
+      owner: getManagerName(row),
       date: row.created_at,
     }));
   if (rows.length) return rows;
