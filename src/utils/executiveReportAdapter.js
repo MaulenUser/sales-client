@@ -384,6 +384,7 @@ export function buildSummaryFromExecutiveReport(report, baseSummary = {}) {
       ...(baseSummary?.billing_quote || {}),
       matched_deal_count: num(department.total_deals),
     },
+    revenue_summary: report?.revenue_summary || baseSummary?.revenue_summary || {},
     managers: dashboard.by_manager,
     data_quality_notes: ensureArray(report?.data_readiness)
       .filter((item) => item?.status !== "ready")

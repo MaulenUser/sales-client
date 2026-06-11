@@ -31,6 +31,7 @@ export default function BusinessScreen() {
   const [instagramUrl, setInstagramUrl] = useState("");
   const [priceList, setPriceList] = useState("");
   const [averageTicket, setAverageTicket] = useState("");
+  const [monthlySalesPlan, setMonthlySalesPlan] = useState("");
   const [advantages, setAdvantages] = useState("");
   const [promotions, setPromotions] = useState("");
   const [profileSaveStatus, setProfileSaveStatus] = useState("");
@@ -51,6 +52,7 @@ export default function BusinessScreen() {
     setInstagramUrl(profile.instagram_url || "");
     setPriceList(profile.price_list || "");
     setAverageTicket(profile.average_ticket_kzt ? String(profile.average_ticket_kzt) : "");
+    setMonthlySalesPlan(profile.monthly_sales_plan_kzt ? String(profile.monthly_sales_plan_kzt) : "");
     setAdvantages(profile.advantages || "");
     setPromotions(profile.promotions || "");
     setProfileSaveStatus("");
@@ -150,6 +152,7 @@ export default function BusinessScreen() {
         instagram_url: instagramUrl,
         price_list: priceList,
         average_ticket_kzt: averageTicket ? Number(averageTicket) : null,
+        monthly_sales_plan_kzt: monthlySalesPlan ? Number(monthlySalesPlan) : null,
         advantages,
         promotions,
       });
@@ -451,6 +454,21 @@ export default function BusinessScreen() {
                 type="text"
                 value={averageTicket}
                 onChange={(e) => setAverageTicket(e.target.value)}
+                className="bg-input border border-border rounded px-3 py-2 text-foreground"
+              />
+            </label>
+            <label className="flex flex-col gap-2 text-xs text-muted-foreground">
+              <span>
+                План продаж на месяц{" "}
+                <span className="text-[10px] text-muted-foreground/60">
+                  (расчет берется с первого числа каждого месяца)
+                </span>
+              </span>
+              <input
+                type="text"
+                inputMode="decimal"
+                value={monthlySalesPlan}
+                onChange={(e) => setMonthlySalesPlan(e.target.value)}
                 className="bg-input border border-border rounded px-3 py-2 text-foreground"
               />
             </label>

@@ -179,19 +179,22 @@ function buildSourceRows(summary) {
     : [{ label: "Нет данных", value: 0, rate: 100, color: "rgba(255,255,255,0.12)" }];
 }
 
-function buildGoalData(summary) {
-  const snapshot = getSnapshot(summary);
+function buildGoalData(summary, appState) {
   const department = getDepartmentDashboard(summary);
-  const candidates = ensureArray(snapshot?.failed_deal_analysis?.recovery_candidates);
-  const recoveredPotential = sum(candidates.map((row) => row.amount_kzt));
-  const current = safeMoney(department.won_amount_kzt || summary?.crm_context?.won_amount_kzt || recoveredPotential);
-  const averageTicket = Number(summary?.business_profile?.average_ticket_kzt || 0);
-  const dealCount = Number(department.total_deals || summary?.crm_context?.total_deals || 0);
-  const target = Math.max(current, averageTicket * Math.max(dealCount, 1), 7200000);
+  const revenue = summary?.revenue_summary?.department || {};
+  const businessProfile = appState?.setup?.business_profile || summary?.business_profile || {};
+  const current = safeMoney(
+    revenue.paid_amount ||
+      department.won_amount_kzt ||
+      summary?.crm_context?.won_amount_kzt ||
+      0
+  );
+  const target = safeMoney(businessProfile.monthly_sales_plan_kzt);
   return {
     current,
     target,
     rate: target ? (current / target) * 100 : 0,
+    hasTarget: target > 0,
   };
 }
 
@@ -278,9 +281,6 @@ function buildCounterWidgets(summary, interactions) {
   const department = getDepartmentDashboard(summary);
   const callRows = ensureArray(interactions).filter((row) => String(row?.channel || "").toLowerCase() === "call");
   const outgoingCalls = callRows.filter((row) => String(row?.outcome_status || "").includes("no_answer")).length;
-  const completedTasks =
-    metricCount(summary, ["sales_process", "manager_agreed_next_step", "yes_count"]) ||
-    ensureArray(interactions).filter((row) => isTrueLike(row?.manager_agreed_next_step)).length;
   const tasksToDo =
     Number(taskDiscipline.active_task_count || 0) ||
     ensureArray(interactions).filter((row) => ["awaiting_response", "follow_up"].includes(String(row?.outcome_status || ""))).length;
@@ -294,13 +294,6 @@ function buildCounterWidgets(summary, interactions) {
       change: `+${formatNumber(Number(taskDiscipline.deals_with_overdue_tasks || 0))}`,
       note: todayLabel,
       tone: "violet",
-    },
-    {
-      label: "ВЫПОЛНЕННЫЕ ЗАДАЧИ",
-      value: completedTasks,
-      change: `+${formatNumber(completedTasks)}`,
-      note: todayLabel,
-      tone: "green",
     },
     {
       label: "ЗАДАЧИ К ВЫПОЛНЕНИЮ",
@@ -435,7 +428,7 @@ function DonutChart({ rows }) {
 function GaugeWidget({ goal }) {
   const pct = clampRate(goal.rate);
   const needleAngle = -180 + (pct / 100) * 180;
-  const missing = Math.max(0, Number(goal.target || 0) - Number(goal.current || 0));
+  const missing = goal.hasTarget ? Math.max(0, Number(goal.target || 0) - Number(goal.current || 0)) : 0;
   const fillPct = pct > 0 ? Math.max(3, pct) : 0;
 
   return (
@@ -444,7 +437,7 @@ function GaugeWidget({ goal }) {
       <div className="amo-goal-head">
         <div className="amo-tabs">
           <button type="button" className="active">По бюджету</button>
-          <button type="button">По количеству</button>
+          {/* <button type="button">По количеству</button> */}
         </div>
         <span className="amo-goal-chip">{formatPercent(pct)}</span>
       </div>
@@ -493,7 +486,7 @@ function GaugeWidget({ goal }) {
       </div>
       <div className="amo-goal-value">
         <strong>{formatMoney(goal.current)}</strong>
-        <span>из {formatMoney(goal.target)}</span>
+        <span>{goal.hasTarget ? `из ${formatMoney(goal.target)}` : "план не задан"}</span>
       </div>
       <div className="amo-goal-stats">
         <div>
@@ -766,14 +759,14 @@ function TasksTable({ rows, onOpen }) {
 
 export default function OverviewScreen() {
   const navigate = useNavigate();
-  const { summary, interactions, usageSummary, setSelectedId } = useStore();
+  const { appState, summary, interactions, usageSummary, setSelectedId } = useStore();
   const s = summary || {};
   const rows = ensureArray(interactions);
 
   const data = useMemo(() => {
     const counterWidgets = buildCounterWidgets(s, rows);
     const sourceRows = buildSourceRows(s);
-    const goal = buildGoalData(s);
+    const goal = buildGoalData(s, appState);
     const nps = buildNps(s);
     const responseSpeed = getResponseSpeed(s)?.department || {};
     const files = buildFiles(rows);
@@ -795,7 +788,7 @@ export default function OverviewScreen() {
       incomingChannels,
       series,
     };
-  }, [s, rows]);
+  }, [appState, s, rows]);
 
   const openInteraction = (interactionId) => {
     if (interactionId) setSelectedId(interactionId);
@@ -824,23 +817,7 @@ export default function OverviewScreen() {
 
         <DonutChart rows={data.sourceRows} />
 
-        <RankingWidget
-          title="СДЕЛКИ ПО МЕНЕДЖЕРАМ"
-          rows={data.managerDeals}
-          total={sum(data.managerDeals.map((row) => row.value))}
-          totalNote={formatMoney(sum(data.managerDeals.map((row) => row.amount)))}
-        />
-
         <GaugeWidget goal={data.goal} />
-
-        <RankingWidget
-          title="ИСХОДЯЩИЕ СООБЩЕНИЯ ПО МЕНЕДЖЕРАМ"
-          rows={data.outgoingMessages}
-          total={sum(data.outgoingMessages.map((row) => row.value))}
-          totalNote="за сегодня"
-        />
-
-        <FilesWidget files={data.files} />
 
         <ForecastWidget summary={s} />
 
@@ -850,13 +827,11 @@ export default function OverviewScreen() {
           ))}
         </div>
 
-        <NpsWidget nps={data.nps} />
-
         <ChannelListWidget rows={data.incomingChannels} />
 
         <AreaChartWidget series={data.series} responseSpeed={data.responseSpeed} />
 
-        <TasksTable rows={data.taskRows} onOpen={openInteraction} />
+        {/* <TasksTable rows={data.taskRows} onOpen={openInteraction} /> */}
       </section>
     </div>
   );

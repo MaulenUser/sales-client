@@ -1486,6 +1486,38 @@
     white-space: nowrap;
   }
 
+  .dialog-sort-header {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    max-width: 100%;
+    padding: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    cursor: pointer;
+  }
+
+  .dialog-sort-header:hover,
+  .dialog-sort-header.active {
+    color: var(--accent-strong);
+  }
+
+  .dialog-sort-header:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--accent-strong) 38%, transparent);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  .dialog-sort-header .material-symbols-outlined {
+    font-size: 15px;
+    line-height: 1;
+  }
+
   .dialog-table td {
     padding: 15px 16px;
     color: var(--text-soft);

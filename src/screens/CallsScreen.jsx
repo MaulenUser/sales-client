@@ -4,7 +4,6 @@ import { formatDate } from "../utils/format.js";
 import {
   ensureArray,
   isTrueLike,
-  normalizeRepoPath,
   sortRowsByDateDesc,
 } from "../utils/index.js";
 
@@ -34,6 +33,8 @@ const STATUS_META = {
     className: "dialog-status dialog-status--neutral",
   },
 };
+
+const DEFAULT_SORT = { key: "date", direction: "desc" };
 
 function getManagerName(rowOrId) {
   const isRow = rowOrId && typeof rowOrId === "object";
@@ -137,39 +138,6 @@ function getDealHref(row) {
   );
 }
 
-function getRecordingHref(row) {
-  const direct =
-    row?.recording_url ||
-    row?.record_url ||
-    row?.audio_url ||
-    row?.call_record_url ||
-    row?.source?.recording_url ||
-    row?.source?.record_url ||
-    row?.source?.audio_url ||
-    row?.feature?.source?.recording_url ||
-    row?.feature?.source?.record_url ||
-    row?.feature?.source?.audio_url ||
-    "";
-
-  if (direct) {
-    const raw = String(direct);
-    if (/^(https?:|data:|blob:|\.{1,2}\/|\/)/i.test(raw)) return raw;
-    return normalizeRepoPath(raw);
-  }
-
-  const transcriptPath =
-    row?.transcript_file_path ||
-    row?.source?.transcript_file_path ||
-    row?.feature?.source?.transcript_file_path ||
-    "";
-
-  if (!transcriptPath) return "";
-
-  return normalizeRepoPath(transcriptPath)
-    .replace("/transcripts/text/", "/recordings/")
-    .replace(/\.txt$/i, ".mp3");
-}
-
 function buildRows(interactions) {
   return sortRowsByDateDesc(
     ensureArray(interactions)
@@ -180,7 +148,6 @@ function buildRows(interactions) {
         dialogue_status: getCallStatus(row),
         ai_analysis: buildAiAnalysis(row),
         deal_href: getDealHref(row),
-        recording_href: getRecordingHref(row),
       }))
   );
 }
@@ -197,6 +164,55 @@ function buildManagers(rows) {
       ])
     ).values(),
   ].sort((a, b) => a.name.localeCompare(b.name, "ru"));
+}
+
+function getSortValue(row, key) {
+  if (key === "date") return Date.parse(row?.created_at || "") || 0;
+  if (key === "manager") return getManagerName(row).toLowerCase();
+  if (key === "status") return (STATUS_META[row?.dialogue_status]?.label || "").toLowerCase();
+  if (key === "analysis") return String(row?.ai_analysis || "").toLowerCase();
+  if (key === "deal") return Number(Boolean(row?.deal_href));
+  return "";
+}
+
+function sortDialogRows(rows, sortConfig) {
+  const direction = sortConfig.direction === "asc" ? 1 : -1;
+  return [...rows].sort((a, b) => {
+    const av = getSortValue(a, sortConfig.key);
+    const bv = getSortValue(b, sortConfig.key);
+    let result = 0;
+    if (typeof av === "number" && typeof bv === "number") {
+      result = av - bv;
+    } else {
+      result = String(av).localeCompare(String(bv), "ru", { sensitivity: "base" });
+    }
+    if (result === 0) {
+      result = (Date.parse(b?.created_at || "") || 0) - (Date.parse(a?.created_at || "") || 0);
+    }
+    return result * direction;
+  });
+}
+
+function nextSort(current, key) {
+  if (current.key === key) {
+    return { key, direction: current.direction === "asc" ? "desc" : "asc" };
+  }
+  return { key, direction: ["date", "deal"].includes(key) ? "desc" : "asc" };
+}
+
+function SortHeader({ label, sortKey, sortConfig, onSort }) {
+  const active = sortConfig.key === sortKey;
+  const icon = active ? (sortConfig.direction === "asc" ? "arrow_upward" : "arrow_downward") : "unfold_more";
+  return (
+    <button
+      type="button"
+      className={`dialog-sort-header${active ? " active" : ""}`}
+      onClick={() => onSort(sortKey)}
+    >
+      <span>{label}</span>
+      <span className="material-symbols-outlined" aria-hidden="true">{icon}</span>
+    </button>
+  );
 }
 
 function StatusBadge({ status }) {
@@ -221,6 +237,7 @@ export default function CallsScreen() {
   const { interactions } = useStore();
   const [managerFilter, setManagerFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [sortConfig, setSortConfig] = useState(DEFAULT_SORT);
   const [expandedRows, setExpandedRows] = useState(() => new Set());
 
   const rows = useMemo(() => buildRows(interactions), [interactions]);
@@ -232,6 +249,7 @@ export default function CallsScreen() {
       return true;
     });
   }, [rows, managerFilter, statusFilter]);
+  const sortedRows = useMemo(() => sortDialogRows(filteredRows, sortConfig), [filteredRows, sortConfig]);
 
   const statusCounts = useMemo(() => {
     return rows.reduce((acc, row) => {
@@ -247,6 +265,10 @@ export default function CallsScreen() {
       else next.add(rowId);
       return next;
     });
+  };
+
+  const handleSort = (key) => {
+    setSortConfig((prev) => nextSort(prev, key));
   };
 
   return (
@@ -306,6 +328,7 @@ export default function CallsScreen() {
             onClick={() => {
               setManagerFilter("all");
               setStatusFilter("all");
+              setSortConfig(DEFAULT_SORT);
             }}
           >
             Сбросить фильтры
@@ -316,16 +339,15 @@ export default function CallsScreen() {
           <table className="dialog-table">
             <thead>
               <tr>
-                <th>Дата</th>
-                <th>Менеджер</th>
-                <th>Статус</th>
-                <th>AI-Анализ</th>
-                <th>Ссылка на сделку</th>
-                <th>Запись звонка</th>
+                <th><SortHeader label="Дата" sortKey="date" sortConfig={sortConfig} onSort={handleSort} /></th>
+                <th><SortHeader label="Менеджер" sortKey="manager" sortConfig={sortConfig} onSort={handleSort} /></th>
+                <th><SortHeader label="Статус" sortKey="status" sortConfig={sortConfig} onSort={handleSort} /></th>
+                <th><SortHeader label="AI-Анализ" sortKey="analysis" sortConfig={sortConfig} onSort={handleSort} /></th>
+                <th><SortHeader label="Ссылка на сделку" sortKey="deal" sortConfig={sortConfig} onSort={handleSort} /></th>
               </tr>
             </thead>
             <tbody>
-              {filteredRows.map((row) => {
+              {sortedRows.map((row) => {
                 const rowId = row.dialogue_row_id;
                 return (
                   <tr key={rowId}>
@@ -358,27 +380,12 @@ export default function CallsScreen() {
                         )}
                       </div>
                     </td>
-                    <td>
-                      <div className="dialog-links">
-                        {row.recording_href ? (
-                          <a href={row.recording_href} target="_blank" rel="noreferrer">
-                            <span className="material-symbols-outlined">call</span>
-                            Запись
-                          </a>
-                        ) : (
-                          <button type="button" disabled>
-                            <span className="material-symbols-outlined">call</span>
-                            Запись
-                          </button>
-                        )}
-                      </div>
-                    </td>
                   </tr>
                 );
               })}
-              {!filteredRows.length && (
+              {!sortedRows.length && (
                 <tr>
-                  <td colSpan={6}>
+                  <td colSpan={5}>
                     <div className="dialog-empty">
                       Нет звонков под выбранные фильтры.
                     </div>

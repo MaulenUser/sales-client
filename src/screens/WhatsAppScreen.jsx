@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import useStore from "../store/index.js";
 import { formatDate } from "../utils/format.js";
 import { ensureArray, isTrueLike, sortRowsByDateDesc } from "../utils/index.js";
@@ -30,6 +29,8 @@ const STATUS_META = {
     className: "dialog-status dialog-status--neutral",
   },
 };
+
+const DEFAULT_SORT = { key: "date", direction: "desc" };
 
 function getManagerName(rowOrId) {
   const isRow = rowOrId && typeof rowOrId === "object";
@@ -145,6 +146,55 @@ function buildManagers(rows) {
   ].sort((a, b) => a.name.localeCompare(b.name, "ru"));
 }
 
+function getSortValue(row, key) {
+  if (key === "date") return Date.parse(row?.created_at || "") || 0;
+  if (key === "manager") return getManagerName(row).toLowerCase();
+  if (key === "status") return (STATUS_META[row?.dialogue_status]?.label || "").toLowerCase();
+  if (key === "analysis") return String(row?.ai_analysis || "").toLowerCase();
+  if (key === "links") return Number(Boolean(row?.deal_href)) + Number(Boolean(row?.interaction_id));
+  return "";
+}
+
+function sortDialogRows(rows, sortConfig) {
+  const direction = sortConfig.direction === "asc" ? 1 : -1;
+  return [...rows].sort((a, b) => {
+    const av = getSortValue(a, sortConfig.key);
+    const bv = getSortValue(b, sortConfig.key);
+    let result = 0;
+    if (typeof av === "number" && typeof bv === "number") {
+      result = av - bv;
+    } else {
+      result = String(av).localeCompare(String(bv), "ru", { sensitivity: "base" });
+    }
+    if (result === 0) {
+      result = (Date.parse(b?.created_at || "") || 0) - (Date.parse(a?.created_at || "") || 0);
+    }
+    return result * direction;
+  });
+}
+
+function nextSort(current, key) {
+  if (current.key === key) {
+    return { key, direction: current.direction === "asc" ? "desc" : "asc" };
+  }
+  return { key, direction: key === "date" || key === "links" ? "desc" : "asc" };
+}
+
+function SortHeader({ label, sortKey, sortConfig, onSort }) {
+  const active = sortConfig.key === sortKey;
+  const icon = active ? (sortConfig.direction === "asc" ? "arrow_upward" : "arrow_downward") : "unfold_more";
+  return (
+    <button
+      type="button"
+      className={`dialog-sort-header${active ? " active" : ""}`}
+      onClick={() => onSort(sortKey)}
+    >
+      <span>{label}</span>
+      <span className="material-symbols-outlined" aria-hidden="true">{icon}</span>
+    </button>
+  );
+}
+
 function StatusBadge({ status }) {
   const meta = STATUS_META[status] || STATUS_META.attention;
   return <span className={meta.className}>{meta.label}</span>;
@@ -164,10 +214,10 @@ function AnalysisCell({ text, rowId, expanded, onToggle }) {
 }
 
 export default function WhatsAppScreen() {
-  const navigate = useNavigate();
-  const { interactions, setSelectedId } = useStore();
+  const { interactions } = useStore();
   const [managerFilter, setManagerFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [sortConfig, setSortConfig] = useState(DEFAULT_SORT);
   const [expandedRows, setExpandedRows] = useState(() => new Set());
 
   const rows = useMemo(() => buildRows(interactions), [interactions]);
@@ -179,6 +229,7 @@ export default function WhatsAppScreen() {
       return true;
     });
   }, [rows, managerFilter, statusFilter]);
+  const sortedRows = useMemo(() => sortDialogRows(filteredRows, sortConfig), [filteredRows, sortConfig]);
 
   const statusCounts = useMemo(() => {
     return rows.reduce((acc, row) => {
@@ -196,9 +247,8 @@ export default function WhatsAppScreen() {
     });
   };
 
-  const openChat = (row) => {
-    setSelectedId(row.interaction_id);
-    navigate("/explorer");
+  const handleSort = (key) => {
+    setSortConfig((prev) => nextSort(prev, key));
   };
 
   return (
@@ -258,6 +308,7 @@ export default function WhatsAppScreen() {
             onClick={() => {
               setManagerFilter("all");
               setStatusFilter("all");
+              setSortConfig(DEFAULT_SORT);
             }}
           >
             Сбросить фильтры
@@ -268,15 +319,15 @@ export default function WhatsAppScreen() {
           <table className="dialog-table">
             <thead>
               <tr>
-                <th>Дата</th>
-                <th>Менеджер</th>
-                <th>Статус</th>
-                <th>AI-Анализ</th>
-                <th>Ссылки</th>
+                <th><SortHeader label="Дата" sortKey="date" sortConfig={sortConfig} onSort={handleSort} /></th>
+                <th><SortHeader label="Менеджер" sortKey="manager" sortConfig={sortConfig} onSort={handleSort} /></th>
+                <th><SortHeader label="Статус" sortKey="status" sortConfig={sortConfig} onSort={handleSort} /></th>
+                <th><SortHeader label="AI-Анализ" sortKey="analysis" sortConfig={sortConfig} onSort={handleSort} /></th>
+                <th><SortHeader label="Ссылки" sortKey="links" sortConfig={sortConfig} onSort={handleSort} /></th>
               </tr>
             </thead>
             <tbody>
-              {filteredRows.map((row) => {
+              {sortedRows.map((row) => {
                 const rowId = row.interaction_id || `${row.created_at}-${row.manager_id}`;
                 return (
                   <tr key={rowId}>
@@ -307,16 +358,12 @@ export default function WhatsAppScreen() {
                             Сделка
                           </button>
                         )}
-                        <button type="button" onClick={() => openChat(row)}>
-                          <span className="material-symbols-outlined">forum</span>
-                          Чат
-                        </button>
                       </div>
                     </td>
                   </tr>
                 );
               })}
-              {!filteredRows.length && (
+              {!sortedRows.length && (
                 <tr>
                   <td colSpan={5}>
                     <div className="dialog-empty">
