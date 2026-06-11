@@ -6,14 +6,12 @@ import {
   ensureArray,
   isTrueLike,
   clampRate,
-  normalizeRepoPath,
 } from "../utils/index.js";
 import {
   formatNumber,
   formatPercent,
   formatMoney,
   formatMinutes,
-  formatScore,
 } from "../utils/format.js";
 import MiniCard from "../components/shared/MiniCard.jsx";
 
@@ -91,59 +89,6 @@ const GENERATED_SALES_ERRORS = [
   },
 ];
 
-const GENERATED_GROWTH_POINTS = [
-  {
-    title: "Ускорить первый ответ",
-    detail: "Самый быстрый прирост обычно дает сокращение времени реакции на новые лиды.",
-    recommendation: "Настроить SLA 3-5 минут и отдельный мониторинг просрочек.",
-  },
-  {
-    title: "Стандартизировать следующий шаг",
-    detail: "У каждой целевой сделки должен быть понятный следующий контакт или действие.",
-    recommendation: "Ввести правило: нет следующего шага - сделка не считается обработанной.",
-  },
-  {
-    title: "Усилить квалификацию клиента",
-    detail: "Чем точнее выявлена потребность, тем проще предложить релевантное решение.",
-    recommendation: "Добавить вопросы про цель, сроки, бюджет, участников решения и критерии выбора.",
-  },
-  {
-    title: "Разобрать частые причины отказа",
-    detail: "Повторяющиеся отказы показывают, где ломается предложение или процесс продажи.",
-    recommendation: "Сгруппировать проигранные сделки по причинам и разобрать топ-3 на планерке.",
-  },
-  {
-    title: "Контролировать сделки без активности",
-    detail: "Открытые сделки без задач и сообщений быстро превращаются в потерянную выручку.",
-    recommendation: "Выводить их отдельным списком и назначать ответственного за возврат.",
-  },
-  {
-    title: "Улучшить работу с возражениями",
-    detail: "Отказы по цене, срокам и сомнениям требуют единого набора ответов и кейсов.",
-    recommendation: "Собрать базу возражений и отмечать, применяет ли ее менеджер.",
-  },
-  {
-    title: "Проверять обещания менеджеров",
-    detail: "Если обещанный расчет или КП не отправлены, доверие клиента быстро падает.",
-    recommendation: "Сверять обещания из диалогов с задачами, письмами и файлами в CRM.",
-  },
-  {
-    title: "Разделить качество лида и качество работы",
-    detail: "Не все обращения являются продажными, но целевые лиды должны обрабатываться без потерь.",
-    recommendation: "Отдельно считать непрофильные обращения и ошибки по целевым лидам.",
-  },
-  {
-    title: "Ввести короткий чек-лист диалога",
-    detail: "Единый стандарт помогает сравнивать менеджеров и видеть, где проседает процесс.",
-    recommendation: "Оценивать приветствие, вопросы, предложение, возражения и следующий шаг.",
-  },
-  {
-    title: "Сделать регулярный follow-up",
-    detail: "Многие сделки теряются не из-за отказа, а из-за отсутствия повторного касания.",
-    recommendation: "Настроить шаблоны и сроки follow-up для теплых и зависших сделок.",
-  },
-];
-
 function getInsightTitle(item, index) {
   return (
     item?.title ||
@@ -217,42 +162,6 @@ function TrafficStatusBadge({ status, compact = false }) {
       {status?.label || "Нет данных"}
     </span>
   );
-}
-
-function buildRatingComponents(rating) {
-  const raw = ensureArray(rating?.components);
-  const byLabel = new Map(
-    raw.map((item) => [
-      String(item?.label || "").trim().toLowerCase(),
-      item,
-    ]),
-  );
-  const fallbackScore = Number(rating?.score_100 || rating?.value * 10 || 0);
-  const findScore = (...labels) => {
-    for (const label of labels) {
-      const item = byLabel.get(String(label).toLowerCase());
-      if (item) return Number(item.score_100 || 0);
-    }
-    return null;
-  };
-  const pickScore = (...labels) => {
-    const score = findScore(...labels);
-    if (score !== null) return score;
-    return fallbackScore;
-  };
-  const communicationScores = [
-    findScore("Переписки", "WhatsApp"),
-    findScore("Звонки", "Calls"),
-  ].filter((score) => score !== null);
-  const communicationScore = communicationScores.length
-    ? communicationScores.reduce((sum, score) => sum + score, 0) / communicationScores.length
-    : fallbackScore;
-
-  return [
-    { label: "Этапы продаж", score_100: pickScore("Этапы продаж") },
-    { label: "Скорость реакции", score_100: pickScore("Скорость реакции", "Реакция") },
-    { label: "Переписки и звонки", score_100: communicationScore },
-  ];
 }
 
 function inlineMarkdown(v) {
@@ -866,8 +775,6 @@ function StageComplianceManagerTable({ rows, stageColumns }) {
 }
 
 function RecoveryCandidates({ items }) {
-  const navigate = useNavigate();
-  const { setSelectedId } = useStore();
   const rows = ensureArray(items).filter(Boolean);
   if (!rows.length) {
     return (
@@ -886,9 +793,6 @@ function RecoveryCandidates({ items }) {
             </th>
             <th className="px-3 py-2 text-left uppercase tracking-widest text-[9px] text-muted-foreground border-b border-border">
               Комментарий
-            </th>
-            <th className="px-3 py-2 text-right uppercase tracking-widest text-[9px] text-muted-foreground border-b border-border">
-              Действие
             </th>
           </tr>
         </thead>
@@ -921,22 +825,6 @@ function RecoveryCandidates({ items }) {
                 </td>
                 <td className="px-3 py-3 align-top text-muted-foreground leading-6">
                   {item.comment || item.summary || "Нет комментария"}
-                </td>
-                <td className="px-3 py-3 align-top text-right">
-                  {item.interaction_id ? (
-                    <button
-                      className="px-3 py-1.5 bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-widest rounded hover:bg-primary/80 transition-colors"
-                      type="button"
-                      onClick={() => {
-                        setSelectedId(item.interaction_id);
-                        navigate("/explorer");
-                      }}
-                    >
-                      Диалог
-                    </button>
-                  ) : (
-                    <span className="text-muted-foreground">—</span>
-                  )}
                 </td>
               </tr>
             );
@@ -988,10 +876,6 @@ function ReportContent({ summary, markdown }) {
     );
   }
 
-  const rating = snapshot.department_rating || {};
-  const dashboard = snapshot.dashboard || {};
-  const department = dashboard.department || {};
-  const managerRows = ensureArray(dashboard.by_manager);
   const responseSpeed = snapshot.response_speed || {};
   const taskDiscipline = snapshot.task_discipline || {};
   const stageCompliance = snapshot.sales_stage_compliance || {};
@@ -1002,7 +886,6 @@ function ReportContent({ summary, markdown }) {
   const markdownBlock = String(markdown || "").trim();
   const showTechnicalBlocks = false;
 
-  const ratingComponents = buildRatingComponents(rating);
   const managerStageRows = ensureArray(stageCompliance.by_manager);
   const stageColumns = collectStageColumns(stageCompliance.department, managerStageRows);
   const departmentProblems = collectInsightItems(
@@ -1012,30 +895,9 @@ function ReportContent({ summary, markdown }) {
       snapshot.top_department_problems,
     GENERATED_SALES_ERRORS,
   );
-  const departmentGrowthPoints = collectInsightItems(
-    snapshot.department_growth_points ||
-      snapshot.all_department_growth_points ||
-      snapshot.growth_points ||
-      snapshot.top_department_growth_points,
-    GENERATED_GROWTH_POINTS,
-  );
   const responseStatus = getResponseSpeedStatus(
     responseSpeed.department?.average_minutes || 0,
   );
-  const salesRequestCount = ensureArray(summary.managers).reduce(
-    (sum, row) => sum + Number(row?.qualified_count || 0),
-    0,
-  );
-  const totalDealCount =
-    Number(department.total_deals || 0) ||
-    Number(summary.crm_context?.total_deals || 0) ||
-    Number(summary.billing_quote?.matched_deal_count || 0);
-  const totalConversionRate = totalDealCount
-    ? (Number(department.won_deals || 0) / totalDealCount) * 100
-    : 0;
-  const hasCrmWonAmount =
-    Number(department.won_amount_kzt || 0) > 0 ||
-    managerRows.some((row) => Number(row?.won_amount_kzt || 0) > 0);
 
   return (
     <div className="flex flex-col gap-5 max-w-[1380px] w-full mx-auto">
@@ -1048,239 +910,24 @@ function ReportContent({ summary, markdown }) {
           onClose={() => setOpenInsightModal(null)}
         />
       )}
-      {openInsightModal === "growth" && (
-        <InsightListModal
-          title="Все точки роста отдела продаж"
-          subtitle="Расширенный список направлений, которые можно использовать для задач после аудита."
-          items={departmentGrowthPoints}
-          tone="green"
-          onClose={() => setOpenInsightModal(null)}
-        />
-      )}
       <section className="bg-card border border-border rounded p-4">
-        <div className="grid grid-cols-1 xl:grid-cols-[260px_minmax(0,1fr)] gap-4">
-          <div className="rounded border border-border bg-muted/15 px-4 py-3">
-            <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
-              Общий рейтинг отдела
-            </div>
-            <h2 className="font-headline text-4xl font-bold text-foreground leading-none mb-2">
-              {formatScore(rating)}
-            </h2>
-            <p className="text-xs text-muted-foreground leading-5">
-              CRM, этапы, реакция, дисциплина, переписки и звонки.
-            </p>
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
+            Топ-3 проблемы отдела продаж
           </div>
-
-          {ratingComponents.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-6 gap-2">
-              {ratingComponents.map((item, i) => (
-                <article
-                  key={i}
-                  className="rounded border border-border bg-muted/15 px-3 py-3 min-w-0"
-                >
-                  <div className="truncate text-[9px] uppercase tracking-widest text-muted-foreground mb-2">
-                    {item.label || "Компонент"}
-                  </div>
-                  <div className="whitespace-nowrap text-2xl font-semibold leading-none text-foreground">
-                    {`${formatNumber(item.score_100 || 0)} / 100`}
-                  </div>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <div className="rounded border border-border bg-muted/15 p-4 text-xs text-muted-foreground">
-              Компоненты рейтинга недоступны.
-            </div>
-          )}
+          <button
+            type="button"
+            className="rounded border border-border bg-muted/20 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-widest text-muted-foreground transition-colors hover:border-destructive/40 hover:text-foreground active:scale-[0.98]"
+            onClick={() => setOpenInsightModal("problems")}
+          >
+            Остальные ошибки
+          </button>
         </div>
-      </section>
-
-      <section className="bg-card border border-border rounded p-4">
-        <div className="flex items-center justify-between gap-3 mb-4">
-          <div>
-            <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
-              Дашборд
-            </div>
-            <h3 className="text-xl font-headline font-bold text-foreground">
-              Сделки по отделу и менеджерам
-            </h3>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-3 mb-4">
-          {[
-            {
-              label: "Всего сделок",
-              value: formatNumber(totalDealCount),
-              note: "В текущей выборке",
-              noteClass: "text-foreground",
-            },
-            {
-              label: "Сделок в работе",
-              value: formatNumber(department.in_work_deals || 0),
-              note: `из ${formatNumber(department.total_deals || 0)} всех сделок`,
-              noteClass: "text-chart-3",
-            },
-            {
-              label: "Сумма в работе",
-              value: formatMoney(department.in_work_amount_kzt || 0),
-              note: "Потенциал открытых сделок",
-              noteClass: "text-chart-3",
-            },
-            {
-              label: "Успешно",
-              value: formatNumber(department.won_deals || 0),
-              note: "Закрыто в плюс",
-              noteClass: "text-primary",
-            },
-            {
-              label: "Сумма побед",
-              value: formatMoney(department.won_amount_kzt || 0),
-              note: "Общая сумма выигранных сделок",
-              noteClass: "text-chart-4",
-            },
-            {
-              label: "Провалено",
-              value: formatNumber(department.lost_deals || 0),
-              note: `Сумма: ${formatMoney(department.lost_amount_kzt || 0)}`,
-              noteClass: "text-destructive",
-            },
-            {
-              label: "Сумма провалов",
-              value: formatMoney(department.lost_amount_kzt || 0),
-              note: "Сумма проигранных сделок",
-              noteClass: "text-destructive",
-            },
-            {
-              label: "Win rate",
-              value: formatPercent(department.closed_win_rate || 0),
-              note: `${formatNumber(department.closed_deals || 0)} закрытых сделок`,
-              noteClass: "text-primary",
-            },
-            {
-              label: "Конверсия",
-              value: formatPercent(totalConversionRate),
-              note: "Победы от всех сделок",
-              noteClass: totalConversionRate > 0 ? "text-primary" : "text-muted-foreground",
-            },
-            {
-              label: "Заявки в продажу",
-              value: formatNumber(salesRequestCount),
-              note: "Квалифицированный интерес",
-              noteClass: "text-chart-3",
-            },
-          ].map((metric) => (
-            <article
-              key={metric.label}
-              className="rounded border border-border bg-muted/20 px-4 py-3"
-            >
-              <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1.5">
-                {metric.label}
-              </div>
-              <div className="text-3xl leading-none font-light text-foreground mb-2">
-                {metric.value}
-              </div>
-              <div className={`text-xs ${metric.noteClass}`}>{metric.note}</div>
-            </article>
-          ))}
-        </div>
-        <InlineTable
-          columns={[
-            { label: "Менеджер", render: (row) => <ManagerCellButton row={row} /> },
-            {
-              label: "В работе",
-              align: "right",
-              render: (row) => (
-                <span className="text-foreground">{formatNumber(row.in_work_deals || 0)}</span>
-              ),
-            },
-            {
-              label: "Успешно",
-              align: "right",
-              render: (row) => (
-                <span className="text-foreground">{formatNumber(row.won_deals || 0)}</span>
-              ),
-            },
-            {
-              label: "Провалено",
-              align: "right",
-              render: (row) => (
-                <span className="text-foreground">{formatNumber(row.lost_deals || 0)}</span>
-              ),
-            },
-            {
-              label: "Сумма провалов",
-              align: "right",
-              render: (row) => (
-                <span className="text-foreground">{formatMoney(row.lost_amount_kzt || 0)}</span>
-              ),
-            },
-            {
-              label: "Рейтинг",
-              align: "right",
-              render: (row) => (
-                <span
-                  className={`font-bold ${
-                    Number(row.rating?.value || 0) >= 7
-                      ? "text-primary"
-                      : Number(row.rating?.value || 0) >= 5
-                      ? "text-chart-4"
-                      : "text-destructive"
-                  }`}
-                >
-                  {formatScore(row.rating || {})}
-                </span>
-              ),
-            },
-          ]}
-          rows={managerRows}
-          emptyText="Менеджеры не найдены в текущем срезе."
+        <PriorityCards
+          items={snapshot.top_department_problems}
+          emptyText="Проблемы пока не выделены."
+          tone="red"
         />
-        <div className="mt-3 rounded border border-border bg-muted/20 px-3 py-2 text-xs leading-6 text-muted-foreground">
-          {hasCrmWonAmount
-            ? "Сумма побед отображается по данным CRM."
-            : "Сумма побед не найдена в данных CRM. Денежные оценки ниже можно считать примерными и рассчитывать от среднего чека."}
-        </div>
-      </section>
-
-      <section className="grid grid-cols-1 xl:grid-cols-2 gap-5">
-        <article className="bg-card border border-border rounded p-4">
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
-              Топ-3 проблемы отдела продаж
-            </div>
-            <button
-              type="button"
-              className="rounded border border-border bg-muted/20 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-widest text-muted-foreground transition-colors hover:border-destructive/40 hover:text-foreground active:scale-[0.98]"
-              onClick={() => setOpenInsightModal("problems")}
-            >
-              Остальные ошибки
-            </button>
-          </div>
-          <PriorityCards
-            items={snapshot.top_department_problems}
-            emptyText="Проблемы пока не выделены."
-            tone="red"
-          />
-        </article>
-        <article className="bg-card border border-border rounded p-4">
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
-              Топ-3 точки роста отдела продаж
-            </div>
-            <button
-              type="button"
-              className="rounded border border-border bg-muted/20 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-widest text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground active:scale-[0.98]"
-              onClick={() => setOpenInsightModal("growth")}
-            >
-              Остальные точки роста
-            </button>
-          </div>
-          <PriorityCards
-            items={snapshot.top_department_growth_points}
-            emptyText="Точки роста пока не выделены."
-            tone="green"
-          />
-        </article>
       </section>
 
       <section className="grid grid-cols-1 xl:grid-cols-2 gap-5">
@@ -1397,7 +1044,7 @@ function ReportContent({ summary, markdown }) {
           Соблюдение этапов продаж
         </div>
         <p className="text-sm text-muted-foreground leading-7 mb-4">
-          Среднее соблюдение по отделу:{" "}
+          Среднее соблюдение по всему отделу:{" "}
           <strong className="text-foreground">
             {formatPercent(stageCompliance.department?.average_rate || 0)}
           </strong>
@@ -1710,82 +1357,5 @@ export default function ReportScreen() {
     return <EmptyReportState />;
   }
 
-  const s = summary || {};
-  const reportSnapshot = s.report_snapshot || {};
-  const departmentDashboard = reportSnapshot.dashboard?.department || {};
-  const departmentRating = reportSnapshot.department_rating || {};
-  const taskDiscipline = reportSnapshot.task_discipline || {};
-
-  const filters = activeRun?.filters || activeRun?.quote?.filters || {};
-  const periodFrom = String(filters.period_from || "").trim();
-  const periodTo = String(filters.period_to || "").trim();
-  const periodLabel =
-    periodFrom || periodTo
-      ? `${periodFrom || "…"} - ${periodTo || "…"}`
-      : "Текущий период";
-  const ratingValue = Number(departmentRating?.value || 0);
-  const ratingTrend = ratingValue >= 5 ? "↑" : "↓";
-
-  const headerParams = [
-    { label: "Период", value: periodLabel, tone: "text-chart-3" },
-    { label: "Оценка", value: `${formatScore(departmentRating)} ${ratingTrend}`, tone: ratingValue >= 5 ? "text-primary" : "text-destructive" },
-    {
-      label: "Сделки",
-      value: formatNumber(
-        departmentDashboard.in_work_deals || s?.crm_context?.open_deals || 0
-      ),
-      tone: "text-foreground",
-    },
-    {
-      label: "Задачи",
-      value: formatNumber(taskDiscipline.department?.active_task_count || 0),
-      tone: "text-chart-4",
-    },
-    {
-      label: "Ошибки",
-      value: formatNumber(
-        departmentDashboard.lost_deals || s?.crm_context?.lost_deals || 0
-      ),
-      tone: "text-destructive",
-    },
-  ];
-
-  const targetExamples = ensureArray(s.examples?.target_examples).slice(0, 3);
-  const actionableExamples = ensureArray(s.examples?.actionable_examples).slice(0, 3);
-  const awaitingExamples = ensureArray(s.examples?.awaiting_response_examples).slice(0, 3);
-
-  return (
-    <div className="flex flex-col gap-6">
-      <section className="max-w-[1380px] w-full mx-auto">
-        <h2 className="text-[10px] uppercase font-bold tracking-[0.15em] text-muted-foreground mb-4">
-          Параметры отчета
-        </h2>
-        <div className="rounded border border-border bg-card/70 px-3 py-2.5">
-          <div className="flex flex-wrap items-stretch gap-2">
-            {headerParams.map((item) => (
-              <div
-                key={item.label}
-                className="min-w-[170px] flex-1 rounded border border-border bg-muted/20 px-3 py-2"
-              >
-                <div className="text-[9px] uppercase tracking-widest text-muted-foreground mb-1">
-                  {item.label}
-                </div>
-                <div className={`text-sm font-semibold ${item.tone}`}>
-                  {item.value}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="max-w-[1380px] w-full mx-auto">
-        <h2 className="text-[10px] uppercase font-bold tracking-[0.15em] text-muted-foreground mb-4">
-          Содержание отчета
-        </h2>
-        <ReportContent summary={s} markdown={reportMarkdown || ""} />
-      </section>
-
-    </div>
-  );
+  return <ReportContent summary={summary || {}} markdown={reportMarkdown || ""} />;
 }
