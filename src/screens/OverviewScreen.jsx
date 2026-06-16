@@ -796,7 +796,8 @@ export default function OverviewScreen() {
   };
 
   return (
-    <div className="amo-dashboard">
+    <div className="amo-dashboard amo-dashboard--beta">
+      <div className="amo-dashboard__beta-content" aria-hidden="true">
       <div className="amo-dashboard__toolbar">
         <div>
           <span>Рабочий стол</span>
@@ -833,6 +834,17 @@ export default function OverviewScreen() {
 
         {/* <TasksTable rows={data.taskRows} onOpen={openInteraction} /> */}
       </section>
+      </div>
+
+      <div className="amo-dashboard__beta-overlay" role="status" aria-live="polite">
+        <div className="amo-dashboard__beta-message">
+          <span className="material-symbols-outlined amo-dashboard__beta-icon">hourglass_top</span>
+          <div>
+            <span>Бета-тестирование</span>
+            <strong>Скоро будет доступно</strong>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

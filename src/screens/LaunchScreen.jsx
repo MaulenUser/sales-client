@@ -39,6 +39,22 @@ function clampProgressPercent(value) {
   return Math.max(0, Math.min(100, number));
 }
 
+function formatTime(date) {
+  return `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+}
+
+function formatCompletionWindow(progress) {
+  if (!progress || progress.etaSeconds === null || progress.etaSeconds === undefined) {
+    return "Оцениваем время завершения...";
+  }
+  if (progress.etaSeconds <= 0) {
+    return "Завершение в ближайшую минуту";
+  }
+  const expectedAt = new Date(Date.now() + progress.etaSeconds * 1000);
+  const windowEnd = new Date(expectedAt.getTime() + 15 * 60 * 1000);
+  return `Примерное завершение: с ${formatTime(expectedAt)} по ${formatTime(windowEnd)}`;
+}
+
 function normalizeRunProgress(jobOrProgress) {
   const progress = jobOrProgress?.progress || jobOrProgress || null;
   if (!progress || typeof progress !== "object") return null;
@@ -80,6 +96,7 @@ function AuditRunStatusPanel({ runStatus, statusMessage, runProgress, onOpenRepo
   const isError = runStatus === "error";
   const progress = normalizeRunProgress(runProgress);
   const progressPercent = clampProgressPercent(progress?.percent || 0);
+  const completionWindow = isRunning ? formatCompletionWindow(progress) : "";
 
   return (
     <article className="rounded border border-primary/20 bg-primary/[0.035] p-4">
@@ -111,7 +128,14 @@ function AuditRunStatusPanel({ runStatus, statusMessage, runProgress, onOpenRepo
                 ? "Финальный аудит можно открыть"
                 : isError
                 ? "Проверьте запуск аудита"
-                : "Аудит выполняется"}
+                : (
+                  <span className="inline-flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                    <span>Аудит выполняется</span>
+                    <span className="font-body text-sm font-medium text-muted-foreground">
+                      {completionWindow}
+                    </span>
+                  </span>
+                )}
             </h3>
             {!isRunning && (
               <p className="mt-2 text-sm leading-6 text-muted-foreground">
@@ -432,7 +456,7 @@ export default function LaunchScreen() {
                 {availableCategories.length ? (
                   availableCategories.map((cat) => (
                     <option key={cat.id} value={cat.id}>
-                      {cat.label} ({formatNumber(cat.interaction_count || cat.deal_count || 0)})
+                      {cat.label}
                     </option>
                   ))
                 ) : (
