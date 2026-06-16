@@ -44,7 +44,7 @@ export default function Header() {
     <div
       style={{
         display: "flex", justifyContent: "space-between", alignItems: "flex-start",
-        padding: "28px 40px 24px",
+        padding: "18px 40px 16px",
         borderBottom: "1px solid var(--header-border)",
         opacity: mounted ? 1 : 0,
         transform: mounted ? "translateY(0)" : "translateY(-10px)",
@@ -57,14 +57,14 @@ export default function Header() {
     >
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{
-          fontSize: 11, fontWeight: 600, letterSpacing: "0.12em",
-          color: "rgb(52,168,90)", marginBottom: 10,
+          fontSize: 10, fontWeight: 600, letterSpacing: "0.12em",
+          color: "rgb(52,168,90)", marginBottom: 7,
           fontFamily: "'JetBrains Mono', monospace", textTransform: "uppercase",
         }}>
           {meta.eyebrow}
         </div>
         <h1 style={{
-          fontSize: 32, fontWeight: 500, margin: "0 0 10px",
+          fontSize: 26, fontWeight: 500, margin: "0 0 6px",
           letterSpacing: "-0.025em", lineHeight: 1.15, color: "var(--text-strong)",
           fontFamily: "'Inter', 'Outfit', sans-serif",
         }}>
@@ -72,7 +72,7 @@ export default function Header() {
         </h1>
         <p style={{
           fontSize: 14, color: "var(--text-soft)",
-          maxWidth: 560, lineHeight: 1.65, margin: 0,
+          maxWidth: 560, lineHeight: 1.45, margin: 0,
           fontFamily: "'Inter', 'Outfit', sans-serif",
         }}>
           {meta.subtitle}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import useStore from "../store/index.js";
 import { postJson } from "../api/index.js";
@@ -164,6 +164,123 @@ function TrafficStatusBadge({ status, compact = false }) {
   );
 }
 
+const FAILED_DEAL_REASON_TYPES = {
+  non_target: {
+    label: "Лид не целевой",
+    detail: "Сам лид был не целевой.",
+    tone: "neutral",
+  },
+  price_conditions: {
+    label: "Дорого / условия",
+    detail: "Клиент слился, потому что дорого или не устроили условия.",
+    tone: "yellow",
+  },
+  manager_closed_interest: {
+    label: "Интерес сохраняется",
+    detail: "Клиент не дал отказа, но менеджер почему-то провалил сделку.",
+    tone: "red",
+  },
+  unknown: {
+    label: "Нужна проверка",
+    detail: "AI не смог однозначно отнести сделку к одной из трех причин.",
+    tone: "neutral",
+  },
+};
+
+const FAILED_DEAL_REASON_FILTERS = [
+  { value: "all", label: "Все типы" },
+  { value: "non_target", label: "Лид не целевой" },
+  { value: "price_conditions", label: "Дорого / условия" },
+  { value: "manager_closed_interest", label: "Интерес сохраняется" },
+  { value: "unknown", label: "Нужна проверка" },
+];
+
+function normalizeFailedDealReasonType(item) {
+  const explicit = String(
+    item?.failure_category ||
+      item?.failure_reason_type ||
+      item?.reason_type ||
+      item?.reason_bucket ||
+      item?.category ||
+      ""
+  ).toLowerCase();
+
+  if (/(non.?target|not.?target|irrelevant|не.?целев|нецелев|не профиль|не подходит|спам|дубл)/i.test(explicit)) {
+    return "non_target";
+  }
+  if (/(price|condition|expensive|budget|дорог|цен|услов|бюджет|скид|оплат|рассроч)/i.test(explicit)) {
+    return "price_conditions";
+  }
+  if (/(manager|interest|no.?reject|reanimation|follow|интерес|нет отказ|не дал отказ|без отказ|дожим|реанимац)/i.test(explicit)) {
+    return "manager_closed_interest";
+  }
+
+  const text = [
+    item?.reason,
+    item?.failure_reason,
+    item?.failure_comment,
+    item?.comment,
+    item?.summary,
+    item?.priority,
+  ].filter(Boolean).join(" ").toLowerCase();
+
+  if (/(не\s*целев|нецелев|не профиль|не подходит|спам|дубл|ошибочн|не наша)/i.test(text)) {
+    return "non_target";
+  }
+  if (/(дорог|цена|цене|стоимост|услов|бюджет|скид|оплат|рассроч|доставк|срок)/i.test(text)) {
+    return "price_conditions";
+  }
+  if (/(интерес|не дал отказ|нет отказ|без отказ|не отказал|сохраня|подума|верн[её]т|дожим|follow|фоллоу|менеджер|следующ|не назнач)/i.test(text)) {
+    return "manager_closed_interest";
+  }
+
+  return "unknown";
+}
+
+function getRecoveryManagerKey(item) {
+  return String(item?.manager_id || item?.manager_label || "unknown");
+}
+
+function getRecoveryManagerLabel(item) {
+  return item?.manager_label || getManagerName(item?.manager_id);
+}
+
+function FailedDealReasonBadge({ item }) {
+  const type = FAILED_DEAL_REASON_TYPES[normalizeFailedDealReasonType(item)] || FAILED_DEAL_REASON_TYPES.unknown;
+  const tones = {
+    red: "border-destructive/30 bg-destructive/10 text-destructive",
+    yellow: "border-chart-4/30 bg-chart-4/10 text-chart-4",
+    neutral: "border-border bg-muted/20 text-muted-foreground",
+  };
+  return (
+    <div className="flex max-w-[360px] flex-col gap-2">
+      <span className={`w-fit rounded border px-2 py-1 text-[9px] font-semibold uppercase tracking-widest ${tones[type.tone] || tones.neutral}`}>
+        {type.label}
+      </span>
+      <span className="text-sm font-semibold leading-6 text-foreground">
+        {type.detail}
+      </span>
+      {item?.reason ? (
+        <span className="text-[11px] leading-5 text-muted-foreground">
+          Сигналы: {item.reason}
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
+function FailedDealReasonFilterBadge({ type }) {
+  const meta = FAILED_DEAL_REASON_TYPES[type] || FAILED_DEAL_REASON_TYPES.unknown;
+  const className = {
+    non_target: "dialog-status dialog-status--neutral",
+    price_conditions: "dialog-status dialog-status--warning",
+    manager_closed_interest: "dialog-status dialog-status--danger",
+    unknown: "dialog-status dialog-status--neutral",
+  }[type] || "dialog-status dialog-status--neutral";
+
+  return <span className={className}>{meta.label}</span>;
+}
+
 function inlineMarkdown(v) {
   return v
     .replace(/&/g, "&amp;")
@@ -235,20 +352,20 @@ function markdownToHtml(markdown) {
   return html.join("");
 }
 
-function InlineTable({ columns, rows, emptyText = "Нет данных для отображения." }) {
+function InlineTable({ columns, rows, emptyText = "Нет данных для отображения.", compact = false }) {
   const items = ensureArray(rows);
   if (!items.length) {
     return <div className="text-xs text-muted-foreground">{emptyText}</div>;
   }
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full text-xs border-collapse">
+      <table className={`${compact ? "w-auto min-w-[760px]" : "min-w-full"} text-xs border-collapse`}>
         <thead>
           <tr>
-            {columns.map((col) => (
+            {columns.map((col, index) => (
               <th
-                key={col.label}
-                className={`px-3 py-2 text-left uppercase tracking-widest text-[9px] text-muted-foreground border-b border-border ${col.align === "right" ? "text-right" : ""}`}
+                key={col.key || (typeof col.label === "string" ? col.label : index)}
+                className={`px-3 py-2 text-left uppercase tracking-widest text-[9px] text-muted-foreground border-b border-border ${col.align === "right" ? "text-right" : ""} ${col.className || ""}`}
               >
                 {col.label}
               </th>
@@ -258,10 +375,10 @@ function InlineTable({ columns, rows, emptyText = "Нет данных для о
         <tbody>
           {items.map((row, i) => (
             <tr key={i} className="border-b border-border/60 last:border-b-0">
-              {columns.map((col) => (
+              {columns.map((col, index) => (
                 <td
-                  key={col.label}
-                  className={`px-3 py-2 align-top ${col.align === "right" ? "text-right" : ""}`}
+                  key={col.key || (typeof col.label === "string" ? col.label : index)}
+                  className={`px-3 py-2 align-top ${col.align === "right" ? "text-right" : ""} ${col.className || ""}`}
                 >
                   {col.render(row)}
                 </td>
@@ -274,7 +391,7 @@ function InlineTable({ columns, rows, emptyText = "Нет данных для о
   );
 }
 
-function PriorityCards({ items, emptyText, tone = "red" }) {
+function PriorityCards({ items, emptyText, tone = "red", compact = false }) {
   const rows = ensureArray(items).filter(Boolean);
   if (!rows.length) {
     return <div className="text-xs text-muted-foreground">{emptyText}</div>;
@@ -285,13 +402,13 @@ function PriorityCards({ items, emptyText, tone = "red" }) {
     yellow: "border-chart-4/30 bg-chart-4/5",
   };
   return (
-    <div className="grid grid-cols-1 gap-3">
+    <div className={`grid grid-cols-1 ${compact ? "gap-2" : "gap-3"}`}>
       {rows.map((item, index) => (
         <article
           key={index}
-          className={`rounded border ${accent[tone] || accent.red} p-4`}
+          className={`rounded border ${accent[tone] || accent.red} ${compact ? "p-3" : "p-4"}`}
         >
-          <div className="flex items-center justify-between gap-3 mb-2">
+          <div className={`flex items-center justify-between gap-3 ${compact ? "mb-1" : "mb-2"}`}>
             <strong className="text-sm text-foreground">
               {item.title || `Пункт ${index + 1}`}
             </strong>
@@ -299,7 +416,7 @@ function PriorityCards({ items, emptyText, tone = "red" }) {
               Топ {index + 1}
             </span>
           </div>
-          <p className="text-xs text-muted-foreground leading-6">
+          <p className={`text-xs text-muted-foreground ${compact ? "leading-5" : "leading-6"}`}>
             {item.detail || "Нет описания"}
           </p>
         </article>
@@ -776,6 +893,40 @@ function StageComplianceManagerTable({ rows, stageColumns }) {
 
 function RecoveryCandidates({ items }) {
   const rows = ensureArray(items).filter(Boolean);
+  const [managerFilter, setManagerFilter] = useState("all");
+  const [reasonFilter, setReasonFilter] = useState("all");
+
+  const managers = useMemo(() => {
+    const seen = new Set();
+    return rows.reduce((acc, row) => {
+      const id = getRecoveryManagerKey(row);
+      if (seen.has(id)) return acc;
+      seen.add(id);
+      acc.push({ id, name: getRecoveryManagerLabel(row) });
+      return acc;
+    }, []);
+  }, [rows]);
+
+  const filteredRows = useMemo(() => {
+    return rows.filter((row) => {
+      if (managerFilter !== "all" && getRecoveryManagerKey(row) !== managerFilter) {
+        return false;
+      }
+      if (reasonFilter !== "all" && normalizeFailedDealReasonType(row) !== reasonFilter) {
+        return false;
+      }
+      return true;
+    });
+  }, [rows, managerFilter, reasonFilter]);
+
+  const reasonCounts = useMemo(() => {
+    return rows.reduce((acc, row) => {
+      const key = normalizeFailedDealReasonType(row);
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {});
+  }, [rows]);
+
   if (!rows.length) {
     return (
       <div className="text-xs text-muted-foreground">
@@ -784,53 +935,111 @@ function RecoveryCandidates({ items }) {
     );
   }
   return (
-    <div className="overflow-x-auto rounded border border-border">
-      <table className="min-w-full text-xs border-collapse">
-        <thead>
-          <tr>
-            <th className="px-3 py-2 text-left uppercase tracking-widest text-[9px] text-muted-foreground border-b border-border">
-              Ссылка на сделку
-            </th>
-            <th className="px-3 py-2 text-left uppercase tracking-widest text-[9px] text-muted-foreground border-b border-border">
-              Комментарий
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((item, i) => {
-            const dealUrl = resolveDealUrl(item);
-            return (
-              <tr key={i} className="border-b border-border/60 last:border-b-0">
-                <td className="px-3 py-3 align-top">
-                  <div className="flex flex-col gap-1">
-                    {dealUrl ? (
-                      <a
-                        href={dealUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-bold text-primary hover:text-primary/80 underline decoration-primary/50"
-                      >
-                        {getDealLinkLabel(item)}
-                      </a>
-                    ) : (
-                      <span className="font-bold text-foreground">
-                        {getDealLinkLabel(item)}
+    <div className="flex flex-col gap-4">
+      <section className="dialog-toolbar">
+        <div className="dialog-toolbar__copy">
+          <span>AI-анализ проваленных сделок</span>
+          <strong>{filteredRows.length} из {rows.length} сделок</strong>
+        </div>
+        <div className="dialog-filters">
+          <label>
+            <span>Ответственный менеджер</span>
+            <select value={managerFilter} onChange={(event) => setManagerFilter(event.target.value)}>
+              <option value="all">Все менеджеры</option>
+              {managers.map((manager) => (
+                <option key={manager.id} value={manager.id}>
+                  {manager.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button
+            type="button"
+            className="min-h-[38px] rounded border border-border bg-muted/20 px-3 text-[9px] font-semibold uppercase tracking-widest text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground active:scale-[0.98]"
+            onClick={() => {
+              setManagerFilter("all");
+              setReasonFilter("all");
+            }}
+          >
+            Сбросить фильтры
+          </button>
+        </div>
+      </section>
+
+      <section className="dialog-status-strip">
+        {FAILED_DEAL_REASON_FILTERS.filter((item) => item.value !== "all").map((item) => (
+          <button
+            type="button"
+            key={item.value}
+            className={reasonFilter === item.value ? "active" : ""}
+            onClick={() => setReasonFilter(reasonFilter === item.value ? "all" : item.value)}
+          >
+            <FailedDealReasonFilterBadge type={item.value} />
+            <span>{reasonCounts[item.value] || 0}</span>
+          </button>
+        ))}
+      </section>
+
+      <div className="overflow-x-auto rounded border border-border">
+        <table className="min-w-full text-xs border-collapse">
+          <thead>
+            <tr>
+              <th className="px-3 py-2 text-left uppercase tracking-widest text-[9px] text-muted-foreground border-b border-border">
+                Ссылка на сделку
+              </th>
+              <th className="px-3 py-2 text-left uppercase tracking-widest text-[9px] text-muted-foreground border-b border-border">
+                Сделка провалена, потому что
+              </th>
+              <th className="px-3 py-2 text-left uppercase tracking-widest text-[9px] text-muted-foreground border-b border-border">
+                Что делать
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredRows.map((item, i) => {
+              const dealUrl = resolveDealUrl(item);
+              return (
+                <tr key={`${item.deal_id || "deal"}-${i}`} className="border-b border-border/60 last:border-b-0">
+                  <td className="px-3 py-3 align-top">
+                    <div className="flex flex-col gap-1">
+                      {dealUrl ? (
+                        <a
+                          href={dealUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-bold text-primary hover:text-primary/80 underline decoration-primary/50"
+                        >
+                          {getDealLinkLabel(item)}
+                        </a>
+                      ) : (
+                        <span className="font-bold text-foreground">
+                          {getDealLinkLabel(item)}
+                        </span>
+                      )}
+                      <span className="text-[10px] text-muted-foreground">
+                        {getRecoveryManagerLabel(item)}
                       </span>
-                    )}
-                    <span className="text-[10px] text-muted-foreground">
-                      {item.manager_label || getManagerName(item.manager_id)} |{" "}
-                      {item.reason || "Причина не указана"}
-                    </span>
-                  </div>
-                </td>
-                <td className="px-3 py-3 align-top text-muted-foreground leading-6">
-                  {item.comment || item.summary || "Нет комментария"}
+                    </div>
+                  </td>
+                  <td className="px-3 py-3 align-top">
+                    <FailedDealReasonBadge item={item} />
+                  </td>
+                  <td className="px-3 py-3 align-top text-muted-foreground leading-6">
+                    {item.comment || item.summary || "Нет комментария"}
+                  </td>
+                </tr>
+              );
+            })}
+            {!filteredRows.length && (
+              <tr>
+                <td colSpan={3} className="px-3 py-8 text-center text-sm text-muted-foreground">
+                  Нет проваленных сделок под выбранные фильтры.
                 </td>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -876,9 +1085,6 @@ function ReportContent({ summary, markdown }) {
     );
   }
 
-  const responseSpeed = snapshot.response_speed || {};
-  const taskDiscipline = snapshot.task_discipline || {};
-  const stageCompliance = snapshot.sales_stage_compliance || {};
   const lossReasons = snapshot.loss_reasons || {};
   const failedDealAnalysis = snapshot.failed_deal_analysis || {};
   const missedRevenue = snapshot.missed_revenue || {};
@@ -886,17 +1092,12 @@ function ReportContent({ summary, markdown }) {
   const markdownBlock = String(markdown || "").trim();
   const showTechnicalBlocks = false;
 
-  const managerStageRows = ensureArray(stageCompliance.by_manager);
-  const stageColumns = collectStageColumns(stageCompliance.department, managerStageRows);
   const departmentProblems = collectInsightItems(
     snapshot.department_problems ||
       snapshot.all_department_problems ||
       snapshot.problems ||
       snapshot.top_department_problems,
     GENERATED_SALES_ERRORS,
-  );
-  const responseStatus = getResponseSpeedStatus(
-    responseSpeed.department?.average_minutes || 0,
   );
 
   return (
@@ -927,145 +1128,8 @@ function ReportContent({ summary, markdown }) {
           items={snapshot.top_department_problems}
           emptyText="Проблемы пока не выделены."
           tone="red"
+          compact
         />
-      </section>
-
-      <section className="grid grid-cols-1 xl:grid-cols-2 gap-5">
-        <article className="bg-card border border-border rounded p-4">
-          <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
-                Скорость ответа новым лидам
-              </div>
-              <div className="text-sm text-foreground">
-                Среднее по отделу:{" "}
-                <strong>{formatMinutes(responseSpeed.department?.average_minutes || 0)}</strong>
-              </div>
-            </div>
-            <TrafficStatusBadge status={responseStatus} />
-          </div>
-          <p className="text-sm text-muted-foreground leading-7 mb-4">
-            {responseStatus.caption}. Измерено по{" "}
-            {formatNumber(responseSpeed.department?.measured_deals || 0)} из{" "}
-            {formatNumber(responseSpeed.department?.deal_count || 0)} сделок.
-          </p>
-          <InlineTable
-            columns={[
-              { label: "Менеджер", render: (row) => <ManagerCellButton row={row} /> },
-              {
-                label: "Среднее",
-                align: "right",
-                render: (row) => (
-                  <span className="text-foreground">
-                    {formatMinutes(row.average_minutes || 0)}
-                  </span>
-                ),
-              },
-              {
-                label: "Статус",
-                align: "right",
-                render: (row) => (
-                  <TrafficStatusBadge
-                    status={getResponseSpeedStatus(row.average_minutes || 0)}
-                    compact
-                  />
-                ),
-              },
-            ]}
-            rows={responseSpeed.by_manager}
-            emptyText="Нет данных по скорости ответа."
-          />
-        </article>
-
-        <article className="bg-card border border-border rounded p-4">
-          <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
-            Работа с задачами
-          </div>
-          <p className="text-sm text-muted-foreground leading-7 mb-4">
-            В работе {formatNumber(taskDiscipline.department?.in_work_deals || 0)}{" "}
-            сделок. Активных задач{" "}
-            {formatNumber(taskDiscipline.department?.active_task_count || 0)}. Без
-            задач{" "}
-            {formatNumber(taskDiscipline.department?.deals_without_tasks || 0)}, с
-            просрочкой{" "}
-            {formatNumber(
-              taskDiscipline.department?.deals_with_overdue_tasks || 0
-            )}
-            .
-          </p>
-          <InlineTable
-            columns={[
-              { label: "Менеджер", render: (row) => <ManagerCellButton row={row} /> },
-              {
-                label: "В работе",
-                align: "right",
-                render: (row) => (
-                  <span className="text-foreground">
-                    {formatNumber(row.in_work_deals || 0)}
-                  </span>
-                ),
-              },
-              {
-                label: "Активных задач",
-                align: "right",
-                render: (row) => (
-                  <span className="text-primary">
-                    {formatNumber(row.active_task_count || 0)}
-                  </span>
-                ),
-              },
-              {
-                label: "Без задач",
-                align: "right",
-                render: (row) => (
-                  <span className="text-destructive">
-                    {formatNumber(row.deals_without_tasks || 0)}
-                  </span>
-                ),
-              },
-              {
-                label: "Просрочено",
-                align: "right",
-                render: (row) => (
-                  <span className="text-chart-4">
-                    {formatNumber(row.deals_with_overdue_tasks || 0)}
-                  </span>
-                ),
-              },
-            ]}
-            rows={taskDiscipline.by_manager}
-            emptyText="Нет данных по задачам."
-          />
-        </article>
-      </section>
-
-      <section className="bg-card border border-border rounded p-4">
-        <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
-          Соблюдение этапов продаж
-        </div>
-        <p className="text-sm text-muted-foreground leading-7 mb-4">
-          Среднее соблюдение по всему отделу:{" "}
-          <strong className="text-foreground">
-            {formatPercent(stageCompliance.department?.average_rate || 0)}
-          </strong>
-          . Слабое место:{" "}
-          <strong className="text-foreground">
-            {getWeakestStageLabel(stageCompliance.department || {})}
-          </strong>
-          .
-        </p>
-        <div className="grid grid-cols-1 gap-5">
-          <StageComplianceBars stages={stageCompliance.department?.stages} />
-          <div className="rounded border border-border bg-muted/20 p-4">
-            <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-3">
-              По менеджерам
-            </div>
-            <StageComplianceManagerTable
-              rows={managerStageRows}
-              stageColumns={stageColumns}
-            />
-          </div>
-        </div>
       </section>
 
       <section className="grid grid-cols-1 gap-5">
@@ -1084,66 +1148,83 @@ function ReportContent({ summary, markdown }) {
             </strong>{" "}
             AI-разборам.
           </p>
-          <InlineTable
-            columns={[
-              {
-                label: "Причина",
-                render: (row) => (
-                  <span className="text-foreground">{row.name || "Не указано"}</span>
-                ),
-              },
-              {
-                label: "Кол-во",
-                align: "right",
-                render: (row) => (
-                  <span className="text-foreground">{formatNumber(row.count || 0)}</span>
-                ),
-              },
-              {
-                label: "Доля",
-                align: "right",
-                render: (row) => (
-                  <span className="text-foreground">{formatPercent(row.rate || 0)}</span>
-                ),
-              },
-            ]}
-            rows={lossReasons.department?.reasons_top}
-            emptyText="Причины слива пока не определены."
-          />
-          <div className="mt-5 text-[10px] uppercase tracking-widest text-muted-foreground mb-3">
-            По менеджерам
+          <div className="grid grid-cols-1 gap-4">
+            <div className="rounded border border-border bg-muted/10 p-4">
+              <div className="mb-3 text-[10px] uppercase tracking-widest text-primary">
+                По отделу продаж
+              </div>
+              <InlineTable
+                compact
+                columns={[
+                  {
+                    key: "department_reason",
+                    label: "Причина",
+                    className: "min-w-[500px]",
+                    render: (row) => (
+                      <span className="text-foreground">{row.name || "Не указано"}</span>
+                    ),
+                  },
+                  {
+                    key: "department_count",
+                    label: "Кол-во",
+                    align: "right",
+                    className: "w-32",
+                    render: (row) => (
+                      <span className="text-foreground">{formatNumber(row.count || 0)}</span>
+                    ),
+                  },
+                  {
+                    key: "department_rate",
+                    label: "Доля",
+                    align: "right",
+                    className: "w-32",
+                    render: (row) => (
+                      <span className="text-foreground">{formatPercent(row.rate || 0)}</span>
+                    ),
+                  },
+                ]}
+                rows={lossReasons.department?.reasons_top}
+                emptyText="Причины слива пока не определены."
+              />
+            </div>
+
+            <div className="rounded border border-border bg-muted/10 p-4">
+              <div className="mb-3 text-[10px] uppercase tracking-widest text-muted-foreground">
+                По менеджерам
+              </div>
+              <InlineTable
+                columns={[
+                  { label: "Менеджер", render: (row) => <ManagerCellButton row={row} /> },
+                  {
+                    label: "Провалено",
+                    align: "right",
+                    render: (row) => (
+                      <span className="text-foreground">{formatNumber(row.lost_deals || 0)}</span>
+                    ),
+                  },
+                  {
+                    label: "AI-разборов",
+                    align: "right",
+                    render: (row) => (
+                      <span className="text-muted-foreground">
+                        {formatNumber(row.analyzed_failed_interactions || 0)}
+                      </span>
+                    ),
+                  },
+                  {
+                    label: "Главная причина",
+                    render: (row) => (
+                      <span className="text-muted-foreground">
+                        {(ensureArray(row.reasons_top)[0] || {}).name || "Нет AI-данных"}
+                      </span>
+                    ),
+                  },
+                ]}
+                rows={lossReasons.by_manager}
+                emptyText="Нет данных по менеджерам."
+              />
+            </div>
           </div>
-          <InlineTable
-            columns={[
-              { label: "Менеджер", render: (row) => <ManagerCellButton row={row} /> },
-              {
-                label: "Провалено",
-                align: "right",
-                render: (row) => (
-                  <span className="text-foreground">{formatNumber(row.lost_deals || 0)}</span>
-                ),
-              },
-              {
-                label: "AI-разборов",
-                align: "right",
-                render: (row) => (
-                  <span className="text-muted-foreground">
-                    {formatNumber(row.analyzed_failed_interactions || 0)}
-                  </span>
-                ),
-              },
-              {
-                label: "Главная причина",
-                render: (row) => (
-                  <span className="text-muted-foreground">
-                    {(ensureArray(row.reasons_top)[0] || {}).name || "Нет AI-данных"}
-                  </span>
-                ),
-              },
-            ]}
-            rows={lossReasons.by_manager}
-            emptyText="Нет данных по менеджерам."
-          />
         </article>
 
         <article className="bg-card border border-border rounded p-4">
@@ -1151,9 +1232,9 @@ function ReportContent({ summary, markdown }) {
             Анализ проваленных сделок
           </div>
           <p className="text-sm text-muted-foreground leading-7 mb-4">
-            Ниже сделки, которые можно вернуть в работу точечным follow-up. Ссылка
-            ведет в карточку сделки Bitrix24, рядом комментарий — почему ее стоит
-            вернуть в работу.
+            Ниже AI-классификация проваленных сделок: нецелевой лид, отказ из-за
+            цены или условий, либо сделка без явного отказа, где интерес клиента
+            сохранялся, но менеджер закрыл ее в провал.
           </p>
           <RecoveryCandidates items={failedDealAnalysis.recovery_candidates} />
         </article>

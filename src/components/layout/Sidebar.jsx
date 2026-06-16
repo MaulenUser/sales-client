@@ -12,12 +12,17 @@ const NAV_SECTIONS = [
   {
     section: "АНАЛИТИКА",
     links: [
-      { to: "/overview",     icon: "dashboard",      label: "Общий дашборд" },
-      { to: "/whatsapp",     icon: "forum",          label: "Переписки" },
-      { to: "/calls",        icon: "call",           label: "Звонки" },
       { to: "/urgent",       icon: "warning",        label: "ВНИМАНИЕ / СРОЧНО" },
       { to: "/lead-leakage", icon: "filter_alt_off", label: "Анализ слива лидов" },
       { to: "/growth",       icon: "trending_up",    label: "Точки роста / Что делать?" },
+    ],
+  },
+  {
+    section: "БЕТА-ТЕСТИРОВАНИЕ",
+    links: [
+      { to: "/overview",     icon: "dashboard",      label: "Общий дашборд" },
+      { to: "/whatsapp",     icon: "forum",          label: "Переписки" },
+      { to: "/calls",        icon: "call",           label: "Звонки" },
     ],
   },
 ];

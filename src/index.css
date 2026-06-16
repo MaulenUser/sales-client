@@ -255,7 +255,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding: clamp(44px, 8vh, 86px) 32px 32px;
+    padding: clamp(170px, calc(50vh - 110px), 360px) 32px 32px;
     border-radius: 10px;
     background: linear-gradient(
       180deg,
@@ -272,14 +272,14 @@
     align-items: center;
     justify-content: center;
     gap: 14px;
-    padding: 14px 22px 14px 16px;
+    padding: 14px 22px;
     border: 1px solid color-mix(in srgb, rgb(var(--primary)) 22%, var(--surface-border));
     border-radius: 8px;
     background:
       linear-gradient(145deg, rgba(255,255,255,0.045), rgba(255,255,255,0.01)),
       color-mix(in srgb, rgb(var(--card)) 92%, rgb(var(--primary)) 8%);
     box-shadow: 0 14px 34px rgba(0,0,0,0.13);
-    text-align: left;
+    text-align: center;
   }
 
   .amo-dashboard__beta-icon {
