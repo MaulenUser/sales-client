@@ -981,7 +981,12 @@ function RecoveryCandidates({ items }) {
       </section>
 
       <div className="overflow-x-auto rounded border border-border">
-        <table className="min-w-full text-xs border-collapse">
+        <table className="w-full min-w-[900px] table-fixed text-xs border-collapse">
+          <colgroup>
+            <col className="w-[22%]" />
+            <col className="w-[34%]" />
+            <col className="w-[44%]" />
+          </colgroup>
           <thead>
             <tr>
               <th className="px-3 py-2 text-left uppercase tracking-widest text-[9px] text-muted-foreground border-b border-border">
