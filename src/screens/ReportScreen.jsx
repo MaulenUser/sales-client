@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useStore from "../store/index.js";
 import { postJson } from "../api/index.js";
 import {
@@ -509,16 +509,16 @@ function ActionGuide({ items }) {
     );
   }
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <div className="flex flex-col gap-2">
       {rows.map((item, index) => (
         <article
           key={index}
-          className="rounded border border-border bg-muted/30 p-3"
+          className="flex flex-col gap-2 rounded border border-border bg-muted/30 p-4 @2xl:flex-row @2xl:gap-5"
         >
-          <div className="text-[9px] uppercase tracking-widest text-muted-foreground mb-2">
-            Шаг {index + 1}
+          <div className="shrink-0 text-[9px] font-bold uppercase tracking-widest text-primary @2xl:w-32">
+            Рекомендация {index + 1}
           </div>
-          <p className="text-xs text-foreground leading-6">{item}</p>
+          <p className="min-w-0 text-sm leading-6 text-foreground">{item}</p>
         </article>
       ))}
     </div>
@@ -1073,10 +1073,23 @@ function ManagerCellButton({ row }) {
   );
 }
 
-function ReportContent({ summary, markdown }) {
+function ReportContent({ summary, markdown, actionGuideOnly = false, showActionGuide = true }) {
   const snapshot = summary?.report_snapshot || {};
   const [isActionGuideOpen, setIsActionGuideOpen] = useState(false);
   const [openInsightModal, setOpenInsightModal] = useState(null);
+
+  if (actionGuideOnly) {
+    return (
+      <div className="max-w-[1380px] w-full mx-auto">
+        <section className="bg-card border border-border rounded p-4">
+          <div className="mb-3 text-[10px] uppercase tracking-widest text-muted-foreground">
+            Руководство к действию
+          </div>
+          <ActionGuide items={snapshot.action_guide} />
+        </section>
+      </div>
+    );
+  }
 
   if (!Object.keys(snapshot).length) {
     return (
@@ -1287,25 +1300,27 @@ function ReportContent({ summary, markdown }) {
         </p>
       </section>
 
-      <section className="bg-card border border-border rounded p-4">
-        <button
-          type="button"
-          className="w-full flex items-center justify-between gap-3 text-left"
-          onClick={() => setIsActionGuideOpen((prev) => !prev)}
-        >
-          <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
-            Руководство к действию
-          </div>
-          <span className="text-[10px] uppercase tracking-widest text-primary font-bold">
-            {isActionGuideOpen ? "Свернуть −" : "Развернуть +"}
-          </span>
-        </button>
-        {isActionGuideOpen && (
-          <div className="mt-3">
-            <ActionGuide items={snapshot.action_guide} />
-          </div>
-        )}
-      </section>
+      {showActionGuide && (
+        <section className="bg-card border border-border rounded p-4">
+          <button
+            type="button"
+            className="w-full flex items-center justify-between gap-3 text-left"
+            onClick={() => setIsActionGuideOpen((prev) => !prev)}
+          >
+            <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
+              Руководство к действию
+            </div>
+            <span className="text-[10px] uppercase tracking-widest text-primary font-bold">
+              {isActionGuideOpen ? "Свернуть −" : "Развернуть +"}
+            </span>
+          </button>
+          {isActionGuideOpen && (
+            <div className="mt-3">
+              <ActionGuide items={snapshot.action_guide} />
+            </div>
+          )}
+        </section>
+      )}
 
       <FeedbackForm source="report_snapshot" />
 
@@ -1429,6 +1444,7 @@ function EmptyReportState() {
 }
 
 export default function ReportScreen() {
+  const { pathname } = useLocation();
   const { summary, reportMarkdown, getActiveRun, executiveReport } = useStore();
 
   const activeRun = getActiveRun();
@@ -1443,5 +1459,12 @@ export default function ReportScreen() {
     return <EmptyReportState />;
   }
 
-  return <ReportContent summary={summary || {}} markdown={reportMarkdown || ""} />;
+  return (
+    <ReportContent
+      summary={summary || {}}
+      markdown={reportMarkdown || ""}
+      actionGuideOnly={pathname === "/growth"}
+      showActionGuide={pathname !== "/lead-leakage"}
+    />
+  );
 }
