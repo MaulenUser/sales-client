@@ -191,24 +191,27 @@ const useStore = create((set, get) => ({
 
   activateRunData: async (runId) => {
     const { appState, baseSummary, baseInteractions } = get();
-    if (runId) set({ activeRunId: runId });
+    const resolvedRunId = String(runId || get().activeRunId || "").trim();
+    const runs = ensureArray(appState?.history?.runs);
+    const run = runs.find((item) => (
+      String(item?.id || item?.run_id || "").trim() === resolvedRunId
+    )) || (!resolvedRunId ? appState?.latest_run : null);
 
-    const getActiveRun = () => {
-      const id = runId || get().activeRunId;
-      const runs = ensureArray(appState?.history?.runs);
-      return runs.find((r) => r.id === id) || appState?.latest_run || null;
-    };
-
-    const run = getActiveRun();
+    if (!run) {
+      throw new Error(`Отчет ${resolvedRunId || "не выбран"} не найден в истории`);
+    }
 
     if (run?.source === "executive_report" || run?.source === "sales_audit_report") {
       const reportRunId =
         run?.run_id || (run?.id && run.id !== "run-executive-latest" ? run.id : "");
       const report = run?.executive_report || await fetchExecutiveReport(reportRunId).catch(() => null);
-      if (!report) return;
+      if (!report) {
+        throw new Error("Не удалось загрузить выбранный отчет. Обновите страницу и повторите попытку.");
+      }
       const summary = buildSummaryFromExecutiveReport(report, baseSummary);
       const reportInteractions = getReportInteractions(report, baseInteractions);
       set({
+        activeRunId: String(run?.id || run?.run_id || resolvedRunId),
         executiveReport: report,
         summary,
         interactions: reportInteractions,
@@ -222,7 +225,7 @@ const useStore = create((set, get) => ({
           manager: "all",
         },
       });
-      return;
+      return report;
     }
 
     const loadSummary = async () => {
@@ -258,6 +261,7 @@ const useStore = create((set, get) => ({
     ]);
 
     set((s) => ({
+      activeRunId: String(run?.id || run?.run_id || resolvedRunId),
       summary: summary || s.baseSummary,
       interactions: ensureArray(interactions),
       reportMarkdown: markdown || s.reportMarkdown,
@@ -270,6 +274,7 @@ const useStore = create((set, get) => ({
         manager: "all",
       },
     }));
+    return run;
   },
 
   refreshAppState: async () => {

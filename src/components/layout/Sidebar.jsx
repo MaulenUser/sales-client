@@ -6,7 +6,7 @@ const NAV_SECTIONS = [
     section: "ПОДГОТОВКА",
     links: [
       { to: "/business", icon: "business_center", label: "Настройка бизнеса" },
-      { to: "/launch",   icon: "rocket_launch",   label: "Запуск AI аудита", primary: true },
+      { to: "/launch",   icon: "rocket_launch",   label: "Запуск AI аудита" },
     ],
   },
   {
@@ -47,14 +47,14 @@ function Logo() {
 }
 
 function SidebarLink({ link }) {
-  const { to, icon, label, primary } = link;
+  const { to, icon, label } = link;
 
   return (
     <NavLink
       key={to}
       to={to}
       className={({ isActive }) =>
-        `nav-link${primary ? " nav-link--primary" : ""}${isActive ? " active" : ""}`
+        `nav-link${isActive ? " active" : ""}`
       }
     >
       <span className="material-symbols-outlined nav-link__icon">

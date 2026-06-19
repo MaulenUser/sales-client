@@ -194,26 +194,6 @@
     box-shadow: inset 2px 0 0 rgb(52,168,90);
   }
 
-  .nav-link.nav-link--primary {
-    @apply font-medium rounded-xl px-4 py-3;
-    background: linear-gradient(135deg, rgba(52,168,90,0.22) 0%, rgba(24,140,60,0.16) 100%);
-    color: rgb(74,222,128);
-    border: 1px solid rgba(52,168,90,0.2);
-    transition: all 0.2s ease;
-  }
-
-  .nav-link.nav-link--primary:hover {
-    background: linear-gradient(135deg, rgba(52,168,90,0.3) 0%, rgba(24,140,60,0.22) 100%);
-    color: rgb(74,222,128);
-    border-color: rgba(52,168,90,0.3);
-  }
-
-  .nav-link.nav-link--primary.active {
-    background: linear-gradient(135deg, rgba(52,168,90,0.28) 0%, rgba(24,140,60,0.2) 100%);
-    color: rgb(74,222,128);
-    box-shadow: none;
-  }
-
   .nav-bottom {
     padding-top: 12px;
   }
@@ -2170,20 +2150,6 @@
   background: rgba(21,128,61,0.12);
   color: rgb(15,105,49);
   box-shadow: inset 3px 0 0 rgb(21,128,61);
-}
-
-:root[data-theme="light"] .nav-link.nav-link--primary {
-  background: linear-gradient(135deg, rgba(21,128,61,0.16) 0%, rgba(21,128,61,0.1) 100%);
-  border-color: rgba(21,128,61,0.22);
-  color: rgb(15,105,49);
-  font-weight: 700;
-}
-
-:root[data-theme="light"] .nav-link.nav-link--primary:hover,
-:root[data-theme="light"] .nav-link.nav-link--primary.active {
-  background: linear-gradient(135deg, rgba(21,128,61,0.2) 0%, rgba(21,128,61,0.13) 100%);
-  border-color: rgba(21,128,61,0.32);
-  color: rgb(15,105,49);
 }
 
 :root[data-theme="light"] .amo-widget {

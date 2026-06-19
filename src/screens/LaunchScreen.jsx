@@ -357,6 +357,11 @@ export default function LaunchScreen() {
   const handleEstimate = async () => {
     const validationError = validateForm();
     if (validationError) { setStatusMessage(validationError); return; }
+    if (runStatus === "ready") {
+      setRunStatus("idle");
+      setRunProgress(null);
+      setCompletedRunId("");
+    }
     setQuoteStatus("loading");
     setStatusMessage("Считаю объем данных и стоимость запуска...");
     try {
@@ -414,7 +419,7 @@ export default function LaunchScreen() {
 
   const openRunReport = async (runId) => {
     await activateRunData(runId);
-    navigate("/report");
+    navigate("/urgent");
   };
 
   const latestRun = appState?.latest_run || {};
@@ -599,7 +604,7 @@ export default function LaunchScreen() {
         onOpenReport={() => openRunReport(completedRunId || latestRun?.id)}
       />
 
-      {quote ? (
+      {runStatus !== "ready" && (quote ? (
         <article className="bg-muted/30 border border-border rounded-xl p-5 space-y-5">
             <div className="flex flex-wrap gap-6 items-start">
               <div>
@@ -647,7 +652,7 @@ export default function LaunchScreen() {
           количество переписок и звонков, CRM-сделки, период и кнопку запуска
           AI-аудита.
         </article>
-      )}
+      ))}
     </div>
   );
 }
