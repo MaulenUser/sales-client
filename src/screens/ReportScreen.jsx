@@ -1077,6 +1077,7 @@ function ReportContent({ summary, markdown, actionGuideOnly = false, showActionG
   const snapshot = summary?.report_snapshot || {};
   const [isActionGuideOpen, setIsActionGuideOpen] = useState(false);
   const [openInsightModal, setOpenInsightModal] = useState(null);
+  const [lossReasonsView, setLossReasonsView] = useState("department");
 
   if (actionGuideOnly) {
     return (
@@ -1166,8 +1167,35 @@ function ReportContent({ summary, markdown, actionGuideOnly = false, showActionG
             </strong>{" "}
             AI-разборам.
           </p>
-          <div className="grid grid-cols-1 gap-4">
-            <div className="rounded border border-border bg-muted/10 p-4">
+          <div className="rounded border border-border bg-muted/10 p-4">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <div className="inline-flex rounded border border-border bg-card p-1">
+                {[
+                  { value: "department", label: "По отделу" },
+                  { value: "managers", label: "По менеджерам" },
+                ].map((tab) => {
+                  const isActive = lossReasonsView === tab.value;
+                  return (
+                    <button
+                      key={tab.value}
+                      type="button"
+                      className={`min-h-[32px] rounded px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest transition-colors ${
+                        isActive
+                          ? "bg-primary/15 text-primary"
+                          : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
+                      }`}
+                      onClick={() => setLossReasonsView(tab.value)}
+                      aria-pressed={isActive}
+                    >
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {lossReasonsView === "department" ? (
+              <>
               <div className="mb-3 text-[10px] uppercase tracking-widest text-primary">
                 По отделу продаж
               </div>
@@ -1204,9 +1232,9 @@ function ReportContent({ summary, markdown, actionGuideOnly = false, showActionG
                 rows={lossReasons.department?.reasons_top}
                 emptyText="Причины слива пока не определены."
               />
-            </div>
-
-            <div className="rounded border border-border bg-muted/10 p-4">
+              </>
+            ) : (
+              <>
               <div className="mb-3 text-[10px] uppercase tracking-widest text-muted-foreground">
                 По менеджерам
               </div>
@@ -1241,7 +1269,8 @@ function ReportContent({ summary, markdown, actionGuideOnly = false, showActionG
                 rows={lossReasons.by_manager}
                 emptyText="Нет данных по менеджерам."
               />
-            </div>
+              </>
+            )}
           </div>
         </article>
 
