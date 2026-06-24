@@ -291,6 +291,46 @@ function adaptGrowthPoints(report) {
   }));
 }
 
+function adaptDashboardRankings(report) {
+  const rankings = report?.dashboard_rankings || {};
+  return {
+    request_stats: {
+      total_requests: num(rankings?.request_stats?.total_requests),
+      rows: ensureArray(rankings?.request_stats?.rows).map((row) => ({
+        key: row?.key || row?.label || "",
+        label: row?.label || "Запрос не распознан",
+        count: num(row?.count),
+        rate: num(row?.rate),
+        channels: row?.channels || {},
+        examples: ensureArray(row?.examples),
+      })),
+    },
+    failure_stats: {
+      failed_deals_analyzed: num(rankings?.failure_stats?.failed_deals_analyzed),
+      manager_declared_reasons_trusted: Boolean(rankings?.failure_stats?.manager_declared_reasons_trusted),
+      rows: ensureArray(rankings?.failure_stats?.rows).map((row) => ({
+        key: row?.key || row?.label || "",
+        label: row?.label || "Причина не распознана",
+        count: num(row?.count),
+        rate: num(row?.rate),
+        examples: ensureArray(row?.examples),
+        sources: row?.sources || {},
+      })),
+    },
+    successful_sources: {
+      successful_deals: num(rankings?.successful_sources?.successful_deals),
+      rows: ensureArray(rankings?.successful_sources?.rows).map((row) => ({
+        key: row?.key || row?.label || "",
+        label: row?.label || "Источник не указан",
+        count: num(row?.count),
+        amount: num(row?.amount),
+        rate: num(row?.rate),
+        examples: ensureArray(row?.examples),
+      })),
+    },
+  };
+}
+
 export function buildExecutiveReportRun(report) {
   if (!report) return null;
   const scope = report.scope || {};
@@ -356,6 +396,7 @@ export function buildSummaryFromExecutiveReport(report, baseSummary = {}) {
   const missedRevenue = adaptMissedRevenue(report);
   const topProblems = adaptProblems(report);
   const topGrowthPoints = adaptGrowthPoints(report);
+  const dashboardRankings = adaptDashboardRankings(report);
   const department = dashboard.department || {};
 
   return {
@@ -401,6 +442,7 @@ export function buildSummaryFromExecutiveReport(report, baseSummary = {}) {
       loss_reasons: adaptLossReasons(report),
       failed_deal_analysis: adaptFailedDeals(report),
       missed_revenue: missedRevenue,
+      dashboard_rankings: dashboardRankings,
       top_department_problems: topProblems,
       department_problems: topProblems,
       top_department_growth_points: topGrowthPoints,

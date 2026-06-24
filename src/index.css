@@ -621,6 +621,65 @@
     background: linear-gradient(90deg, rgba(246,192,60,0.95), rgba(52,168,90,0.9));
   }
 
+  .amo-widget--dashboard-ranking {
+    grid-column: span 4;
+    min-height: 230px;
+  }
+
+  .amo-dashboard-ranking {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .amo-dashboard-ranking__row {
+    min-width: 0;
+  }
+
+  .amo-dashboard-ranking__line,
+  .amo-dashboard-ranking__meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .amo-dashboard-ranking__line span {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--text-strong);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .amo-dashboard-ranking__line strong {
+    flex: 0 0 auto;
+    color: rgb(22,220,126);
+    font-size: 12px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .amo-dashboard-ranking__meta {
+    margin-top: 3px;
+    color: var(--text-muted);
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  .amo-dashboard-ranking__meta em {
+    flex: 0 0 auto;
+    color: var(--text-faint);
+    font-style: normal;
+    font-variant-numeric: tabular-nums;
+  }
+
   .amo-goal-head {
     display: flex;
     align-items: center;
@@ -2226,6 +2285,7 @@
   }
 
   .amo-counter-cluster,
+  .amo-widget--dashboard-ranking,
   .amo-widget--chart,
   .amo-widget--list,
   .amo-widget--gauge,
@@ -2260,6 +2320,7 @@
   .amo-widget--gauge,
   .amo-widget--files,
   .amo-widget--nps,
+  .amo-widget--dashboard-ranking,
   .amo-widget--forecast,
   .amo-widget--wide-chart,
   .amo-widget--tasks {
@@ -2295,6 +2356,7 @@
   .amo-widget--gauge,
   .amo-widget--files,
   .amo-widget--nps,
+  .amo-widget--dashboard-ranking,
   .amo-widget--forecast,
   .amo-widget--wide-chart,
   .amo-widget--tasks {

@@ -50,6 +50,10 @@ function getResponseSpeed(summary) {
   return getSnapshot(summary)?.response_speed || {};
 }
 
+function getDashboardRankings(summary) {
+  return getSnapshot(summary)?.dashboard_rankings || {};
+}
+
 function metricCount(summary, path, fallback = 0) {
   const value = path.reduce((acc, key) => acc?.[key], summary);
   return Number(value || fallback || 0);
@@ -177,6 +181,40 @@ function buildSourceRows(summary) {
         color: SOURCE_COLORS[index % SOURCE_COLORS.length],
       }))
     : [{ label: "Нет данных", value: 0, rate: 100, color: "rgba(255,255,255,0.12)" }];
+}
+
+function buildCustomerRequestRows(summary) {
+  const ranking = getDashboardRankings(summary)?.request_stats || {};
+  return ensureArray(ranking.rows).map((row) => ({
+    id: row.key || row.label,
+    label: row.label,
+    value: Number(row.count || 0),
+    rate: Number(row.rate || 0),
+    meta: `${formatPercent(row.rate || 0)} от запросов`,
+  }));
+}
+
+function buildFailureReasonRows(summary) {
+  const ranking = getDashboardRankings(summary)?.failure_stats || {};
+  return ensureArray(ranking.rows).map((row) => ({
+    id: row.key || row.label,
+    label: row.label,
+    value: Number(row.count || 0),
+    rate: Number(row.rate || 0),
+    meta: `${formatPercent(row.rate || 0)} от провалов`,
+  }));
+}
+
+function buildSuccessfulSourceRows(summary) {
+  const ranking = getDashboardRankings(summary)?.successful_sources || {};
+  return ensureArray(ranking.rows).map((row) => ({
+    id: row.key || row.label,
+    label: row.label,
+    value: Number(row.count || 0),
+    amount: Number(row.amount || 0),
+    rate: Number(row.rate || 0),
+    meta: row.amount ? formatMoney(row.amount) : `${formatPercent(row.rate || 0)} от успешных`,
+  }));
 }
 
 function buildGoalData(summary, appState) {
@@ -351,6 +389,39 @@ function CounterCard({ widget, compact = false }) {
       <div className="amo-counter__footer">
         {widget.change && <span className="amo-counter__change">{widget.change}</span>}
         <span>{widget.note}</span>
+      </div>
+    </article>
+  );
+}
+
+function DashboardRankingWidget({ title, rows, total, totalLabel, valueLabel = "шт." }) {
+  const safeRows = ensureArray(rows);
+  const max = Math.max(...safeRows.map((row) => Number(row.value || 0)), 1);
+  return (
+    <article className="amo-widget amo-widget--dashboard-ranking">
+      <div className="amo-widget__head">
+        <div className="amo-widget__title">{title}</div>
+        <div className="amo-widget__total amo-widget__total--small">
+          <strong>{formatNumber(total || sum(safeRows.map((row) => row.value)))}</strong>
+          <span>{totalLabel}</span>
+        </div>
+      </div>
+      <div className="amo-dashboard-ranking">
+        {(safeRows.length ? safeRows : [{ id: "empty", label: "Нет данных", value: 0, rate: 0, meta: "0%" }]).slice(0, 6).map((row) => (
+          <div className="amo-dashboard-ranking__row" key={`${title}-${row.id || row.label}`}>
+            <div className="amo-dashboard-ranking__line">
+              <span>{row.label}</span>
+              <strong>{formatNumber(row.value)} {valueLabel}</strong>
+            </div>
+            <div className="amo-dashboard-ranking__meta">
+              <span>{row.meta || formatPercent(row.rate || rate(row.value, max))}</span>
+              <em>{formatPercent(row.rate || rate(row.value, max))}</em>
+            </div>
+            <div className="amo-ranking__bar">
+              <span style={{ width: `${clampRate(row.rate || rate(row.value, max))}%` }} />
+            </div>
+          </div>
+        ))}
       </div>
     </article>
   );
@@ -774,6 +845,10 @@ export default function OverviewScreen() {
     const managerDeals = buildManagerDealRows(s, rows);
     const outgoingMessages = buildOutgoingMessageRows(s, rows);
     const incomingChannels = buildIncomingChannels(s, rows);
+    const customerRequests = buildCustomerRequestRows(s);
+    const failureReasons = buildFailureReasonRows(s);
+    const successfulSources = buildSuccessfulSourceRows(s);
+    const dashboardRankings = getDashboardRankings(s);
     const series = buildResponseSeries(rows);
     return {
       counterWidgets,
@@ -786,6 +861,10 @@ export default function OverviewScreen() {
       managerDeals,
       outgoingMessages,
       incomingChannels,
+      customerRequests,
+      failureReasons,
+      successfulSources,
+      dashboardRankings,
       series,
     };
   }, [appState, s, rows]);
@@ -796,8 +875,7 @@ export default function OverviewScreen() {
   };
 
   return (
-    <div className="amo-dashboard amo-dashboard--beta">
-      <div className="amo-dashboard__beta-content" aria-hidden="true">
+    <div className="amo-dashboard">
       <div className="amo-dashboard__toolbar">
         <div>
           <span>Рабочий стол</span>
@@ -820,6 +898,27 @@ export default function OverviewScreen() {
 
         <GaugeWidget goal={data.goal} />
 
+        <DashboardRankingWidget
+          title="Статистика запросов"
+          rows={data.customerRequests}
+          total={data.dashboardRankings?.request_stats?.total_requests}
+          totalLabel="запросов"
+        />
+
+        <DashboardRankingWidget
+          title="Статистика провалов"
+          rows={data.failureReasons}
+          total={data.dashboardRankings?.failure_stats?.failed_deals_analyzed}
+          totalLabel="сделок"
+        />
+
+        <DashboardRankingWidget
+          title="Источники успешных сделок"
+          rows={data.successfulSources}
+          total={data.dashboardRankings?.successful_sources?.successful_deals}
+          totalLabel="сделок"
+        />
+
         <ForecastWidget summary={s} />
 
         <div className="amo-counter-cluster">
@@ -834,17 +933,6 @@ export default function OverviewScreen() {
 
         {/* <TasksTable rows={data.taskRows} onOpen={openInteraction} /> */}
       </section>
-      </div>
-
-      <div className="amo-dashboard__beta-overlay" role="status" aria-live="polite">
-        <div className="amo-dashboard__beta-message">
-          <span className="material-symbols-outlined amo-dashboard__beta-icon">hourglass_top</span>
-          <div>
-            <span>Бета-тестирование</span>
-            <strong>Скоро будет доступно</strong>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
